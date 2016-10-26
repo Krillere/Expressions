@@ -1,0 +1,11 @@
+
+bool := "true" | "false" | bool boolOperator bool | "(" bool ")"
+boolOperator := "AND" | "OR"
+
+number := (0-9) number | "-" number | ε
+
+// TODO:
+varDecl := "var " varname "=" (bool | number) ";"
+
+varname := (a-Z) varname2
+varname2 := (a-Z) varname2 | (0-9) varname2 | ε
