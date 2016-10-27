@@ -1,11 +1,59 @@
+Grundlæggende: Char, Int, Float, String (implicit [Char])
 
-bool := "true" | "false" | bool boolOperator bool | "(" bool ")"
-boolOperator := "AND" | "OR"
+Alt er expressions og skal returnere noget.
+Et subset af funktioner vil have side conditions og kan derfor ikke returnere noget, f.eks. print/echo og IO.
+Disse vil kun pille ved noget eksternt, og ikke ændre program state.
 
-number := (0-9) number | "-" number | ε
+[1, 2, 3, 4, 5]
+first 1
+last 5
 
-// TODO:
-varDecl := "var " varname "=" (bool | number) ";"
 
-varname := (a-Z) varname2
-varname2 := (a-Z) varname2 | (0-9) varname2 | ε
+
+define myFunction: Int a Int b Int c Int d -> Int
+{
+  if a+b > 2 ? a+b : c+d
+}
+
+define myListFunction: [Int] ints -> Int
+{
+  first ints
+}
+
+define divide: Int a Int b -> Int
+{
+  a / b
+}
+
+
+// asds
+define split: String str, Char c -> [String]
+{
+  let fChar = (first str), rest = (rest str) {
+
+  }
+}
+
+let Int a = 2, Int b = 3
+{
+
+}
+
+switch 1 > 2 ? "asd"
+: 1 = 2 ? "derp"
+: 1 < 2 ? "yeps"
+: else "fuck"
+
+
+EBNF:
+
+
+switch := "switch" case ":" "else" res
+case := expr "?" res {cases}
+cases := ":" case
+
+func := "define" name ": " pars " -> " type block
+pars := type name | type name ", " pars
+block := "{" "}"
+
+program := func program | E

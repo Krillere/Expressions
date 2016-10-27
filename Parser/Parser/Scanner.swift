@@ -9,30 +9,49 @@
 import Foundation
 
 enum TokenType {
-    case boolLiteral // AND|OR
-    case boolOperator // true|false
-    case letter // (a-Z)
     case lpar // "("
     case rpar // ")"
-    case none // Fuck.
-    case number // (0-9)
-    case string // (a-Z)+
-    case equal // "="
-    case numOperator // + - * /
-    case keyword_var // "var"
+    case lcurly // {
+    case rcurly // }
+    case lsquare // [
+    case rsquare // ]
+    
+    case boolLiteral    // AND|OR
+    case boolOperator   // true|false
+    case letter         // (a-Z)
+    
+    case number         // (0-9)
+    case string         // (a-Z)+
+    case equal          // "="
+    case numOperator    // + - * /
+    case keyword_define // "define"
+    case semicolon      // ;
+    case keyword_if     // "if"
+    case keyword_else   // "else"
+    case colon          // :
+    case questionMark   // "?"
+    case returns        // "->"
+    case comma          // ,
+    case numCompOperator // > < >= <= ==
+    
+    case none           // Fuck.
 }
 
-class Token {
+class Token : CustomStringConvertible {
     var content:String = ""
     var type:TokenType = .none
     
-    init(cont: String, type: TokenType) {
+    init(cont: String, type: TokenType, charIndex: Int) {
         self.content = cont
         self.type = type
     }
     
-    static func emptyToken() -> Token {
-        return Token(cont: "", type: .none)
+    static func emptyToken(_ index: Int) -> Token {
+        return Token(cont: "", type: .none, charIndex: index)
+    }
+    
+    var description: String {
+        return "Token: \(self.type) - '\(self.content)'"
     }
 }
 
@@ -43,15 +62,29 @@ class Scanner {
     
     private var input:[UInt16] = []
     private var inputIndex = 0
-    private var token:Token = Token.emptyToken()
+    private var token:Token = Token.emptyToken(0)
     
     private var char:UnicodeScalar = " "
     private var ident:UnicodeScalar = " "
     private var string:String = ""
     private var intValue:Int = 0
     
+    private var allTokens:[Token] = []
+    private var tokenIndex:Int = 0
+    
     init(input: String) {
         self.input = Array(input.utf16)
+        self.fetchAllTokens()
+    }
+    
+    private func fetchAllTokens() {
+        var tmpToken = Token.emptyToken(0)
+        
+        repeat {
+            tmpToken = intGetToken()
+            allTokens.append(tmpToken)
+        }
+        while tmpToken.type != .none
     }
     
     // Finder næste char
@@ -94,7 +127,7 @@ class Scanner {
             tmp.append(Character(char))
             char = get()
         }
-        while letters.contains(char)
+        while letters.contains(char) || digits.contains(char)
         
         if inputIndex >= input.count-1 { }
         else {
@@ -135,19 +168,35 @@ class Scanner {
     // Finder token ud fra string
     private func parseString() -> Token? {
         
+        var type:TokenType = .string
+        
         switch string {
             case "true", "false":
-                return Token(cont: string, type: .boolLiteral)
+                type = .boolLiteral
+            break
             
             case "OR", "AND":
-                return Token(cont: string, type: .boolOperator)
+                type = .boolOperator
+            break
             
-            case "var":
-                return Token(cont: string, type: .keyword_var)
+            case "define":
+                type = .keyword_define
+            break
+            
+            case "if":
+                type = .keyword_if
+            break
+            
+            case "else":
+                type = .keyword_else
+            break
             
             default:
-                return Token(cont: string, type: .string)
+                type = .string
+            break
         }
+        
+        return Token(cont: string, type: type, charIndex: inputIndex)
     }
     
     
@@ -158,8 +207,36 @@ class Scanner {
         }
     }
     
-    // Fortsætter læsningen
     func getToken() -> Token {
+        if tokenIndex > allTokens.count-1 {
+            return Token.emptyToken(-1)
+        }
+        
+        let token = allTokens[tokenIndex]
+        tokenIndex += 1
+        
+        return token
+    }
+    
+    func getCurToken() -> Token {
+        if tokenIndex > allTokens.count-1 {
+            return Token.emptyToken(-1)
+        }
+        
+        return allTokens[tokenIndex]
+    }
+    
+    func peekToken(num: Int = 0) -> Token {
+        if tokenIndex+num > allTokens.count-1 {
+            return Token.emptyToken(-1)
+        }
+        
+        let token = allTokens[tokenIndex+num]
+        return token
+    }
+    
+    // Fortsætter læsningen
+    private func intGetToken() -> Token {
         // Fjern whitespace
         while(inputIndex < input.count) {
             let tmpChar = UnicodeScalar(input[inputIndex])
@@ -172,7 +249,7 @@ class Scanner {
         }
         
         if inputIndex > input.count-1 {
-            return Token.emptyToken()
+            return Token.emptyToken(inputIndex)
         }
         
         char = get() // Hent nuværende karakter
@@ -180,7 +257,7 @@ class Scanner {
         if letters.contains(char) { // Bogstav
             string = getString()
             
-            token = Token(cont: string, type: .string)
+            token = Token(cont: string, type: .string, charIndex: inputIndex)
             
             if let token = parseString() {
                 self.token = token
@@ -188,47 +265,99 @@ class Scanner {
         }
         else if digits.contains(char) { // Tal
             intValue = getNumber()
-            token = Token(cont: String(intValue), type: .number)
+            token = Token(cont: String(intValue), type: .number, charIndex: inputIndex)
         }
         else { // Special karakterer
             switch char {
             case "(":
-                token = Token(cont: "(", type: .lpar)
+                token = Token(cont: "(", type: .lpar, charIndex: inputIndex)
                 break
                 
             case ")":
-                token = Token(cont: ")", type: .rpar)
+                token = Token(cont: ")", type: .rpar, charIndex: inputIndex)
                 break
             
-            case "-": // Undersøg kontekst. Den kan stå i midten af en expression, eller foran et nummer
+            case "-": // Undersøg kontekst. Den kan stå i midten af en expression, eller foran et nummer eller evt. returns
                 char = get()
+                
                 if digits.contains(char) {
                     intValue = getNumber()
-                    token = Token(cont: "-"+String(intValue), type: .number)
+                    token = Token(cont: "-"+String(intValue), type: .number, charIndex: inputIndex)
+                }
+                else if char == ">" { // returns
+                    token = Token(cont: ">", type: .returns, charIndex: inputIndex)
                 }
                 else { // I en expression
-                    token = Token(cont: "-", type: .numOperator)
+                    token = Token(cont: "-", type: .numOperator, charIndex: inputIndex)
                 }
                 break
                 
             case "=":
-                token = Token(cont: "=", type: .equal)
+                token = Token(cont: "=", type: .equal, charIndex: inputIndex)
                 break
                 
             case "+":
-                token = Token(cont: "+", type: .numOperator)
+                token = Token(cont: "+", type: .numOperator, charIndex: inputIndex)
                 break
                 
             case "*":
-                token = Token(cont: "*", type: .numOperator)
+                token = Token(cont: "*", type: .numOperator, charIndex: inputIndex)
                 break
                 
-            case "/":
-                token = Token(cont: "/", type: .numOperator)
+            case "/": // Kommentar eller divider? (TODO)
+                char = get()
+                
+                if char == "/" {
+                    print("Kommentar")
+                }
+                else {
+                    inputIndex -= 1
+                    token = Token(cont: "/", type: .numOperator, charIndex: inputIndex)
+                }
+                break
+                
+            case ";":
+                token = Token(cont: ";", type: .semicolon, charIndex: inputIndex)
+                break
+                
+            case "?":
+                token = Token(cont: "?", type: .questionMark, charIndex: inputIndex)
+            break
+                
+            case ":":
+                token = Token(cont: ":", type: .colon, charIndex: inputIndex)
+            break
+                
+            case "{":
+                token = Token(cont: "{", type: .lcurly, charIndex: inputIndex)
+            break
+                
+            case "}":
+                token = Token(cont: "}", type: .rcurly, charIndex: inputIndex)
+            break
+                
+            case "[":
+                token = Token(cont: "[", type: .lsquare, charIndex: inputIndex)
+            break
+                
+            case "]":
+                token = Token(cont: "]", type: .rsquare, charIndex: inputIndex)
+            break
+                
+            case ",":
+                token = Token(cont: ",", type: .comma, charIndex: inputIndex)
+            break
+                
+            case "<":
+                token = Token(cont: "<", type: .numCompOperator, charIndex: inputIndex)
+            break
+                
+            case ">":
+                token = Token(cont: ">", type: .numCompOperator, charIndex: inputIndex)
                 break
                 
             default:
-                token = Token.emptyToken()
+                token = Token.emptyToken(inputIndex)
                 break
             }
         }

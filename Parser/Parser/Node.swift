@@ -17,6 +17,6 @@ class Node {
     init() { }
 }
 
-class VarDeclNode {
+class ErrorNode : Node {
     
 }

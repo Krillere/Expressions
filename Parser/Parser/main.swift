@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+/*
 var nums:[String] = [
     "1 + 2",
     "(1 + 2)*3",
@@ -46,15 +46,21 @@ for test in bools {
     print("Bool parset: "+String(describing: ps.bool()))
     print("\n")
 }
+*/
 
-var varDecls:[String] = [
-    "var myVar = 1;"
+var funcs:[String] = [
+    "define myFunc: Int a -> Int { }",
+    "define mFunc2: Int a, Int b -> Int { }",
+    "define split: String str, Char c -> [String] { }",
+    "define f1: [String] lst -> String { }",
+    "define flatten: [[String]] lsts -> [String] { }",
+    "define m: Int a, Int b -> Int { if a > b { a } { b } }",
 ]
 
-for test in varDecls {
-    print("Kører test på: '\(test)'")
-    let sc = Scanner(input: test)
-    let ps = Parser(scanner: sc)
-    print("Decl parset: "+String(describing: ps.varDecl()))
+for f in funcs {
+    print("Kører test på: '\(f)")
+    let ps = Parser(input: f)
+    ps.run()
+    
     print("\n")
 }
