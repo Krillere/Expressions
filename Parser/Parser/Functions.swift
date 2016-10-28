@@ -43,3 +43,17 @@ class ParameterNode : Node, CustomStringConvertible  {
 class BlockNode : Node {
     var expression:Node?
 }
+
+class FunctionCallNode : Node, CustomStringConvertible {
+    var identifier:String?
+    var parameters:[Node] = []
+    
+    init(identifier: String, parameters: [Node]) {
+        self.identifier = identifier
+        self.parameters = parameters
+    }
+    
+    var description: String {
+        return "Kald: \(identifier!), med "+String(parameters.count)+" parametre!"
+    }
+}

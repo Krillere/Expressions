@@ -1,0 +1,30 @@
+define test: Int a, Int b -> Int {
+  5
+}
+
+define min: Int a, Int b -> Int {
+  if a < b { a } { b }
+}
+
+define max: Int a, Int b -> Int {
+  if a > b { a } { b }
+}
+
+define letTest: Int a -> Int {
+  let Int b = a + 1 {
+    b
+  }
+}
+
+define recursion: Int a, Char b -> Char {
+  recursion(a+1, b)
+}
+
+define recursionSwitch: Int start, Int stop -> Int {
+  if start == stop { 1 }
+                   { recursionSwitch(start+1, stop) }
+}
+
+define main: -> Int {
+
+}

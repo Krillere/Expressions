@@ -9,10 +9,10 @@ first 1
 last 5
 
 
-
+Examples:
 define myFunction: Int a Int b Int c Int d -> Int
 {
-  if a+b > 2 ? a+b : c+d
+if a+b > 2 { a+b } { c+d }
 }
 
 define myListFunction: [Int] ints -> Int
@@ -26,10 +26,10 @@ define divide: Int a Int b -> Int
 }
 
 
-// asds
+# Comment
 define split: String str, Char c -> [String]
 {
-  let fChar = (first str), rest = (rest str) {
+  let Char fChar = (first str), String rest = (rest str) {
 
   }
 }
@@ -47,24 +47,31 @@ switch 1 > 2 ? "asd"
 
 EBNF:
 
-expression := if
+program := func program | E
+
+func := "define" name ": " pars " -> " type block
+
+pars := type name | type name ", " pars
+block := "{" expr "}"
+
+expr := if
 | varname
-| expr compOp expr
-| expr numOp expr
-| expr boolOp expr
+| expr op expr
 | "(" expr ")"
 | switch
 | boolLit
 | number
+| call
 
-if := "if" boolExpression block block
+op := AND | OR | * | / | + | - | < | > | <= | >= | ==
 
-switch := "switch" case ":" "else" res
-case := expr "?" res {cases}
+if := "if" expr block block
+
+switch := "switch" case ":" "else" expr
+case := expr "?" expr {cases}
 cases := ":" case
 
-func := "define" name ": " pars " -> " type block
-pars := type name | type name ", " pars
-block := "{" "}"
+call := name "(" passPars ")"
+passPars := expr | expr "," passPars
 
-program := func program | E
+

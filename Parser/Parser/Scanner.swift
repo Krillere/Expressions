@@ -17,26 +17,26 @@ enum TokenType {
     case rsquare // ]
     
     case boolLiteral   // true|false
-    case letter         // (a-Z)
     
     case op // AND | OR | * | + | / | - | < | > | <= | >= | ==
     
     case number         // (0-9)
     case string         // (a-Z)+
     
-    case equal          // "="
+    case equal          // =
     case semicolon      // ;
     case colon          // :
-    case questionMark   // "?"
-    case returns        // "->"
+    case questionMark   // ?
+    case returns        // ->
     case comma          // ,
     
     case keyword_if     // "if"
     case keyword_else   // "else"
     case keyword_define // "define"
     case keyword_let    // "let"
+    case keyword_switch // "switch"
     
-    case none           // Fuck.
+    case none           // EOF som regel
 }
 
 class Token : CustomStringConvertible {
@@ -61,6 +61,7 @@ class Token : CustomStringConvertible {
 class Scanner {
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
+    private let otherNameChars = CharacterSet(charactersIn: "'-_")
     private let keywords = ["var"]
     
     private var input:[UInt16] = []
@@ -130,7 +131,7 @@ class Scanner {
             tmp.append(Character(char))
             char = get()
         }
-        while letters.contains(char) || digits.contains(char)
+        while letters.contains(char) || digits.contains(char) || otherNameChars.contains(char)
         
         if inputIndex >= input.count-1 { }
         else {
@@ -302,7 +303,15 @@ class Scanner {
                 break
                 
             case "=":
-                token = Token(cont: "=", type: .equal, charIndex: inputIndex)
+                let tmp = get()
+                
+                if tmp == "=" {
+                    token = Token(cont: "==", type: .op, charIndex: inputIndex)
+                }
+                else {
+                    inputIndex -= 1
+                    token = Token(cont: "=", type: .equal, charIndex: inputIndex)
+                }
                 break
                 
             case "+":

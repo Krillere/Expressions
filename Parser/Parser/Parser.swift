@@ -36,6 +36,9 @@ class Parser {
         }
         
         print("Fundet: \(functions.count) funktioner!")
+        for f in functions {
+            print(f.identifier)
+        }
     }
     
     private func error(_ reason: String) {
@@ -146,6 +149,11 @@ class Parser {
         return ret
     }
 
+    private func isNextOp() -> Bool {
+        let tmp = scanner.peekToken()
+        return tmp.type == .op
+    }
+    
     // Parser en expression (Største type af alle)
     private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
@@ -162,27 +170,36 @@ class Parser {
         
         // Variabler
         var opNode:Node?
-        if tmpToken.type == .string { // Variabelnavn (identifier)
+        if tmpToken.type == .string { // Variabelnavn (identifier) eller evt. funktionskald?
             let stringToken = scanner.getToken()
-            let variableNode = VariableNode(identifier: stringToken.content)
             
-            // Skal der ske mere?
-            let tmp = scanner.peekToken()
-            
-            if tmp.type != .op {
-                return variableNode
+            let funcCheck = scanner.peekToken()
+            if funcCheck.type == .lpar {
+                let funcNode = parseFunctionCall(stringToken.content)
+                
+                if !isNextOp() {
+                    return funcNode
+                }
+                
+                opNode = funcNode
             }
+            else {
+                let variableNode = VariableNode(identifier: stringToken.content)
             
-            opNode = variableNode
+                // Skal der ske mere?
+                if !isNextOp() {
+                    return variableNode
+                }
+                
+                opNode = variableNode
+            }
         }
         else if tmpToken.type == .number { // Tal literal
             let numToken = scanner.getToken()
             let node = NumberLiteralNode(number: numToken.numberValue!)
             
             // Op?
-            let tmp = scanner.peekToken()
-            
-            if tmp.type != .op {
+            if !isNextOp() {
                 return node
             }
             
@@ -193,9 +210,7 @@ class Parser {
             let node = BooleanLiteralNode(value: boolToken.content)
             
             // Op?
-            let tmp = scanner.peekToken()
-            
-            if tmp.type != .op {
+            if !isNextOp() {
                 return node
             }
             
@@ -258,6 +273,37 @@ class Parser {
             
             //print("Parameter lavet med type: \(type), navn: \(name.content)")
             res.append(LetVariableNode(type: type, value: value))
+        }
+        
+        return res
+    }
+    
+    // MARK: Kald
+    func parseFunctionCall(_ identifier: String) -> FunctionCallNode {
+        let _ = scanner.getToken() // lpar
+        
+        let pars:[Node] = parseFunctionCallParameters()
+        
+        let _ = scanner.getToken() // rpar
+        
+        return FunctionCallNode(identifier: identifier, parameters: pars)
+    }
+    
+    func parseFunctionCallParameters() -> [Node] {
+        var res:[Node] = []
+        
+        while scanner.peekToken().type != .rpar {
+            if scanner.peekToken().type == .none {
+                error("Error in function call. Parameters all fucked up.")
+                break
+            }
+            
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
+            
+            let val = parseExpression()
+            
+            //print("Parameter lavet med type: \(type), navn: \(name.content)")
+            res.append(val)
         }
         
         return res

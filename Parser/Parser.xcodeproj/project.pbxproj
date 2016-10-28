@@ -15,6 +15,7 @@
 		AAA69AD71DBC2C84000917D8 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA69AD61DBC2C84000917D8 /* Scanner.swift */; };
 		AAA69ADB1DBCD511000917D8 /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA69ADA1DBCD511000917D8 /* Numbers.swift */; };
 		AADC1F9F1DC2412C00742135 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADC1F9E1DC2412C00742135 /* Functions.swift */; };
+		AAEABFE01DC3A65200989910 /* example.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEABFDF1DC3A65200989910 /* example.expr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +27,16 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		AAEABFDE1DC3A64600989910 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				AAEABFE01DC3A65200989910 /* example.expr in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -40,6 +51,7 @@
 		AAA69AD91DBC3052000917D8 /* ENBF.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ENBF.txt; sourceTree = "<group>"; };
 		AAA69ADA1DBCD511000917D8 /* Numbers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Numbers.swift; sourceTree = "<group>"; };
 		AADC1F9E1DC2412C00742135 /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		AAEABFDF1DC3A65200989910 /* example.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example.expr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +68,7 @@
 		AA8D8BAE1DB7CAA60036E69B = {
 			isa = PBXGroup;
 			children = (
+				AAEABFDF1DC3A65200989910 /* example.expr */,
 				AA8D8BB91DB7CAA60036E69B /* Parser */,
 				AA8D8BB81DB7CAA60036E69B /* Products */,
 			);
@@ -103,6 +116,7 @@
 				AA8D8BB31DB7CAA60036E69B /* Sources */,
 				AA8D8BB41DB7CAA60036E69B /* Frameworks */,
 				AA8D8BB51DB7CAA60036E69B /* CopyFiles */,
+				AAEABFDE1DC3A64600989910 /* CopyFiles */,
 			);
 			buildRules = (
 			);
