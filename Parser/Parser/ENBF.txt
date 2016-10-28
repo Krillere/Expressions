@@ -47,6 +47,17 @@ switch 1 > 2 ? "asd"
 
 EBNF:
 
+expression := if
+| varname
+| expr compOp expr
+| expr numOp expr
+| expr boolOp expr
+| "(" expr ")"
+| switch
+| boolLit
+| number
+
+if := "if" boolExpression block block
 
 switch := "switch" case ":" "else" res
 case := expr "?" res {cases}

@@ -46,7 +46,7 @@ for test in bools {
     print("Bool parset: "+String(describing: ps.bool()))
     print("\n")
 }
-*/
+
 
 var funcs:[String] = [
     "define myFunc: Int a -> Int { }",
@@ -64,3 +64,8 @@ for f in funcs {
     
     print("\n")
 }
+
+ */
+let example = try String(contentsOfFile: "/Users/Christian/Desktop/example.expr")
+let ps = Parser(input: example)
+ps.run()

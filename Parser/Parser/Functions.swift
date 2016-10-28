@@ -40,7 +40,6 @@ class ParameterNode : Node, CustomStringConvertible  {
     }
 }
 
-
 class BlockNode : Node {
     var expression:Node?
 }

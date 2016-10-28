@@ -16,23 +16,25 @@ enum TokenType {
     case lsquare // [
     case rsquare // ]
     
-    case boolLiteral    // AND|OR
-    case boolOperator   // true|false
+    case boolLiteral   // true|false
     case letter         // (a-Z)
+    
+    case op // AND | OR | * | + | / | - | < | > | <= | >= | ==
     
     case number         // (0-9)
     case string         // (a-Z)+
+    
     case equal          // "="
-    case numOperator    // + - * /
-    case keyword_define // "define"
     case semicolon      // ;
-    case keyword_if     // "if"
-    case keyword_else   // "else"
     case colon          // :
     case questionMark   // "?"
     case returns        // "->"
     case comma          // ,
-    case numCompOperator // > < >= <= ==
+    
+    case keyword_if     // "if"
+    case keyword_else   // "else"
+    case keyword_define // "define"
+    case keyword_let    // "let"
     
     case none           // Fuck.
 }
@@ -40,6 +42,7 @@ enum TokenType {
 class Token : CustomStringConvertible {
     var content:String = ""
     var type:TokenType = .none
+    var numberValue:Int?
     
     init(cont: String, type: TokenType, charIndex: Int) {
         self.content = cont
@@ -176,7 +179,7 @@ class Scanner {
             break
             
             case "OR", "AND":
-                type = .boolOperator
+                type = .op
             break
             
             case "define":
@@ -189,6 +192,10 @@ class Scanner {
             
             case "else":
                 type = .keyword_else
+            break
+            
+            case "let":
+                type = .keyword_let
             break
             
             default:
@@ -266,6 +273,7 @@ class Scanner {
         else if digits.contains(char) { // Tal
             intValue = getNumber()
             token = Token(cont: String(intValue), type: .number, charIndex: inputIndex)
+            token.numberValue = intValue
         }
         else { // Special karakterer
             switch char {
@@ -279,16 +287,17 @@ class Scanner {
             
             case "-": // Undersøg kontekst. Den kan stå i midten af en expression, eller foran et nummer eller evt. returns
                 char = get()
-                
+
                 if digits.contains(char) {
                     intValue = getNumber()
                     token = Token(cont: "-"+String(intValue), type: .number, charIndex: inputIndex)
+                    token.numberValue = intValue
                 }
                 else if char == ">" { // returns
                     token = Token(cont: ">", type: .returns, charIndex: inputIndex)
                 }
                 else { // I en expression
-                    token = Token(cont: "-", type: .numOperator, charIndex: inputIndex)
+                    token = Token(cont: "-", type: .op, charIndex: inputIndex)
                 }
                 break
                 
@@ -297,23 +306,19 @@ class Scanner {
                 break
                 
             case "+":
-                token = Token(cont: "+", type: .numOperator, charIndex: inputIndex)
+                token = Token(cont: "+", type: .op, charIndex: inputIndex)
                 break
                 
             case "*":
-                token = Token(cont: "*", type: .numOperator, charIndex: inputIndex)
+                token = Token(cont: "*", type: .op, charIndex: inputIndex)
                 break
                 
-            case "/": // Kommentar eller divider? (TODO)
-                char = get()
+            case "#":
+                print("Kommentar!")
+            break
                 
-                if char == "/" {
-                    print("Kommentar")
-                }
-                else {
-                    inputIndex -= 1
-                    token = Token(cont: "/", type: .numOperator, charIndex: inputIndex)
-                }
+            case "/":
+                token = Token(cont: "/", type: .op, charIndex: inputIndex)
                 break
                 
             case ";":
@@ -349,12 +354,24 @@ class Scanner {
             break
                 
             case "<":
-                token = Token(cont: "<", type: .numCompOperator, charIndex: inputIndex)
+                let test = peekToken()
+                if test.type == .equal {
+                    token = Token(cont: "<=", type: .op, charIndex: inputIndex)
+                }
+                else {
+                    token = Token(cont: "<", type: .op, charIndex: inputIndex)
+                }
             break
                 
             case ">":
-                token = Token(cont: ">", type: .numCompOperator, charIndex: inputIndex)
-                break
+                let test = peekToken()
+                if test.type == .equal {
+                    token = Token(cont: ">=", type: .op, charIndex: inputIndex)
+                }
+                else {
+                    token = Token(cont: ">", type: .op, charIndex: inputIndex)
+                }
+            break
                 
             default:
                 token = Token.emptyToken(inputIndex)

@@ -20,19 +20,25 @@ class ParserError {
 
 class Parser {
     var scanner:Scanner!
-    var rootNode:Node?
     var errors:[ParserError] = []
     
     init(input: String) {
         self.scanner = Scanner(input: input)
     }
     
+    // Parser alle funktioner
     func run() {
-        let node = parseFunction()
-        print("Resultat fra parser: "+String(describing:node))
+        var functions:[FunctionNode] = []
+        
+        while scanner.peekToken().type != .none {
+            let node = parseFunction()
+            functions.append(node)
+        }
+        
+        print("Fundet: \(functions.count) funktioner!")
     }
     
-    func error(_ reason: String) {
+    private func error(_ reason: String) {
         let error = ParserError(reason: reason, token: scanner.getCurToken())
         errors.append(error)
         
@@ -40,7 +46,7 @@ class Parser {
     }
     
     // MARK: Funktioner
-    func parseFunction() -> FunctionNode {
+    private func parseFunction() -> FunctionNode {
         let token = scanner.getToken()
         if token.type != .keyword_define {
             error("Expected 'define' keyword!")
@@ -62,8 +68,30 @@ class Parser {
         return fc
     }
     
-    // Blocks
-    func parseBlock() -> BlockNode {
+    // Parametre til funktion:   type name, type name ...
+    private func parseParameters() -> [ParameterNode] {
+        var res:[ParameterNode] = []
+        
+        while scanner.peekToken().type != .returns {
+            if scanner.peekToken().type == .none {
+                error("Error in function declaration. Parameters all fucked up.")
+                break
+            }
+            
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
+            
+            let type = parseType()
+            let name = scanner.getToken()
+            
+            //print("Parameter lavet med type: \(type), navn: \(name.content)")
+            res.append(ParameterNode(type: type, name: name.content))
+        }
+        
+        return res
+    }
+    
+    // Blocks { expr }
+    private func parseBlock() -> BlockNode {
         
         let ssquare = scanner.getToken()
         if ssquare.type != .lcurly {
@@ -79,32 +107,13 @@ class Parser {
         let block = BlockNode()
         block.expression = parseExpression()
         
+        let _ = scanner.getToken() // } i block
+        
         return block
     }
     
-    // Parametre
-    func parseParameters() -> [ParameterNode] {
-        var res:[ParameterNode] = []
-        
-        while scanner.peekToken().type != .returns {
-            if scanner.peekToken().type == .none {
-                error("Error in function declaration, parameter stuff")
-                break
-            }
-            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
-            
-            let type = parseType()
-            let name = scanner.getToken()
-            
-            //print("Parameter lavet med type: \(type), navn: \(name.content)")
-            res.append(ParameterNode(type: type, name: name.content))
-        }
-        
-        return res
-    }
-    
-    // Type
-    func parseType() -> String {
+    // Type [String], [[[[[String]]]]], Int, osv.
+    private func parseType() -> String {
         let token = scanner.getToken()
         
         // Direkte navngiven type
@@ -137,113 +146,120 @@ class Parser {
         return ret
     }
 
-    func parseExpression() -> Node {
+    // Parser en expression (Største type af alle)
+    private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
         
-        if tmpToken.type == .keyword_if {
-            print("Block indeholder if-statement")
+        print("Parser expression som starter med: \(tmpToken)")
+        
+        // Typer (if, let)
+        if tmpToken.type == .keyword_if { // If-else
             return parseIf()
+        }
+        else if tmpToken.type == .keyword_let { // let vars block
+            return parseLet()
+        }
+        
+        // Variabler
+        var opNode:Node?
+        if tmpToken.type == .string { // Variabelnavn (identifier)
+            let stringToken = scanner.getToken()
+            let variableNode = VariableNode(identifier: stringToken.content)
+            
+            // Skal der ske mere?
+            let tmp = scanner.peekToken()
+            
+            if tmp.type != .op {
+                return variableNode
+            }
+            
+            opNode = variableNode
+        }
+        else if tmpToken.type == .number { // Tal literal
+            let numToken = scanner.getToken()
+            let node = NumberLiteralNode(number: numToken.numberValue!)
+            
+            // Op?
+            let tmp = scanner.peekToken()
+            
+            if tmp.type != .op {
+                return node
+            }
+            
+            opNode = node
+        }
+        else if tmpToken.type == .boolLiteral { // Bool literal
+            let boolToken = scanner.getToken()
+            let node = BooleanLiteralNode(value: boolToken.content)
+            
+            // Op?
+            let tmp = scanner.peekToken()
+            
+            if tmp.type != .op {
+                return node
+            }
+            
+            opNode = node
+        }
+        
+        if let opNode = opNode {
+            let opToken = scanner.getToken()
+            let op = OperatorNode(op: opToken.content)
+            
+            let expr2 = parseExpression()
+            return ExpressionNode(op: op, loperand: opNode, roperand: expr2)
         }
         
         return Node()
     }
     
     
-    func parseIf() -> IfElseNode {
-        let _ = scanner.getToken()
+    // MARK: Specielle expressions
+    // Parser if-else node
+    private func parseIf() -> IfElseNode {
+        let _ = scanner.getToken() // keyword "if"
         
         let ifExpr = parseExpression()
+        print("Condition i if: \(ifExpr)")
+        
+        print("Parser if-blok:")
         let ifBlock = parseBlock()
+        
+        print("Parser else-blok:")
         let elseBlock = parseBlock()
         
         let retNode = IfElseNode(cond: ifExpr, ifBlock: ifBlock, elseBlock: elseBlock)
         return retNode
     }
     
-    
-    // MARK: Tal og bools
-    func numberExpression() -> NumberNode {
-        let token = scanner.getToken()
+    // let Int a = 2, String c = "fuck this"
+    private func parseLet() -> LetNode {
+        let _ = scanner.getToken() // keyword let
         
-        if token.type == .lpar { // Start på expression
-            let expr = ParNumberExprNode(cont: numberExpression())
-            let nt = scanner.getToken()
-            
-            if nt.type == .none {
-                return expr
-            }
-            else if nt.type == .numOperator {
-                let op = NumberOpNode(op: nt.content)
-                let operand2 = numberExpression()
-                
-                let expr = NumberExprNode(op: op,
-                                          op1: expr,
-                                          op2: operand2)
-                return expr
-            }
-        }
-        else if token.type == .number {
-            let lit = NumberLitNode(value: token.content)
-            let nt = scanner.getToken()
-            
-            if nt.type == .rpar || nt.type == .none {
-                return lit
-            }
-            else if nt.type == .numOperator {
-                let op = NumberOpNode(op: nt.content)
-                let operand2 = numberExpression()
-                
-                let expr = NumberExprNode(op: op,
-                                          op1: lit,
-                                          op2: operand2)
-                return expr
-            }
-        }
+        let vars = parseLetVariables()
+        let block = parseBlock()
         
-        error("Something went wrong ved number")
-        return NumberNode(value: "Error")
+        return LetNode(vars: vars, block: block)
     }
     
-    func bool() -> BoolNode {
-        let token = scanner.getToken()
+    private func parseLetVariables() -> [LetVariableNode] {
+        var res:[LetVariableNode] = []
         
-        if token.type == .lpar { // Start på expression
-            let parExpr = ParBoolExprNode(cont: bool())
-            let nt = scanner.getToken()
+        while scanner.peekToken().type != .lcurly {
+            if scanner.peekToken().type == .none {
+                error("Error in function declaration. Parameters all fucked up.")
+                break
+            }
             
-            if nt.type == .none {
-                return parExpr
-            }
-            else if nt.type == .boolOperator {
-                let op = BoolOpNode(op: nt.content)
-                let operand2 = bool()
-                
-                let expr = BoolExprNode(op: op,
-                                        op1: parExpr,
-                                        op2: operand2)
-                return expr
-            }
-        }
-        else if token.type == .boolLiteral { // Literal
-            let lit = BoolLitNode(value: token.content)
-            let nt = scanner.getToken()
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
-            if nt.type == .rpar || nt.type == .none { // true) eller true
-                return lit
-            }
-            else if nt.type == .boolOperator { // OP bool
-                let op = BoolOpNode(op: nt.content)
-                let operand2 = bool()
-                
-                let expr = BoolExprNode(op: op,
-                                        op1: lit,
-                                        op2: operand2)
-                return expr
-            }
+            let type = parseType()
+            let value = parseExpression()
+            
+            //print("Parameter lavet med type: \(type), navn: \(name.content)")
+            res.append(LetVariableNode(type: type, value: value))
         }
         
-        error("Something went wrong ved bool.")
-        return BoolNode(value: "Error")
+        return res
     }
-    
 }
