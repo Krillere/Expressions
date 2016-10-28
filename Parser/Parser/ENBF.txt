@@ -12,12 +12,12 @@ last 5
 Examples:
 define myFunction: Int a Int b Int c Int d -> Int
 {
-if a+b > 2 { a+b } { c+d }
+  if a+b > 2 { a+b } { c+d }
 }
 
 define myListFunction: [Int] ints -> Int
 {
-  first ints
+  first(ints)
 }
 
 define divide: Int a Int b -> Int
@@ -38,6 +38,11 @@ let Int a = 2, Int b = 3
 {
 
 }
+Bliver til:
+{
+    int a = 2;
+    int b = 3;
+}
 
 switch 1 > 2 ? "asd"
 : 1 = 2 ? "derp"
@@ -47,7 +52,7 @@ switch 1 > 2 ? "asd"
 
 EBNF:
 
-program := func program | E
+program := [func] // Liste af func's
 
 func := "define" name ": " pars " -> " type block
 

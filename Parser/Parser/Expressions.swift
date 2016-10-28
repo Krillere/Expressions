@@ -9,6 +9,57 @@
 import Foundation
 
 
+class FunctionNode : Node {
+    var identifier:String?
+    var block:BlockNode?
+    var pars:[ParameterNode] = []
+    var retType:String?
+    
+    init(identifier: String, pars: [ParameterNode], ret: String, block: BlockNode) {
+        self.identifier = identifier
+        self.pars = pars
+        self.retType = ret
+        self.block = block
+        
+        print("Funktion lavet: '\(identifier)', parametre: \(pars), returnerer: \(ret)")
+    }
+    
+    override init() { }
+}
+
+class ParameterNode : Node, CustomStringConvertible  {
+    var type: String?
+    var name: String?
+    
+    init(type: String, name: String) {
+        self.type = type
+        self.name = name
+    }
+    
+    var description: String {
+        return "'"+type!+" "+name!+"'"
+    }
+}
+
+class BlockNode : Node {
+    var expression:Node?
+}
+
+class FunctionCallNode : Node, CustomStringConvertible {
+    var identifier:String?
+    var parameters:[Node] = []
+    
+    init(identifier: String, parameters: [Node]) {
+        self.identifier = identifier
+        self.parameters = parameters
+    }
+    
+    var description: String {
+        return "Kald: \(identifier!), med "+String(parameters.count)+" parametre!"
+    }
+}
+
+
 // MARK: Literals og variabler
 class VariableNode : Node, CustomStringConvertible {
     var identifier:String?
@@ -102,20 +153,22 @@ class LetNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "Nope."
+        return "Let: \(vars)"
     }
 }
 
 class LetVariableNode : Node, CustomStringConvertible {
     var type:String?
     var value:Node?
+    var name:String?
     
-    init(type: String, value: Node) {
+    init(type: String, name: String, value: Node) {
         self.type = type
         self.value = value
+        self.name = name
     }
     
     var description: String {
-        return self.type!+" = "+String(describing: value)
+        return "'"+self.type!+" "+self.name!+" = "+String(describing: value)+"'"
     }
 }

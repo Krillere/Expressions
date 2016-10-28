@@ -11,7 +11,7 @@ define max: Int a, Int b -> Int {
 }
 
 define letTest: Int a -> Int {
-  let Int b = a + 1 {
+  let Int b = 1 {
     b
   }
 }
@@ -26,5 +26,5 @@ define recursionSwitch: Int start, Int stop -> Int {
 }
 
 define main: -> Int {
-
+  0
 }

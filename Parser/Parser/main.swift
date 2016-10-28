@@ -10,7 +10,12 @@ import Foundation
 
 if let p = Bundle.main.path(forResource: "example", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
+    
     let ps = Parser(input: cont)
     ps.run()
 
+    if let program = ps.getProgram() {
+        let generator = CodeGenerator(program: program)
+        generator.generate()
+    }
 }

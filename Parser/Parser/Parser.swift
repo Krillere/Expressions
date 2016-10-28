@@ -19,8 +19,9 @@ class ParserError {
 }
 
 class Parser {
-    var scanner:Scanner!
-    var errors:[ParserError] = []
+    private var scanner:Scanner!
+    private var errors:[ParserError] = []
+    private var program:ProgramNode?
     
     init(input: String) {
         self.scanner = Scanner(input: input)
@@ -28,6 +29,36 @@ class Parser {
     
     // Parser alle funktioner
     func run() {
+        let program = parseProgram()
+        self.program = program
+        
+        print("Fundet: \(program.functions.count) funktioner!")
+        for f in program.functions {
+            print(f.identifier)
+        }
+        
+        print("Errors: \(errors)")
+    }
+    
+    // Getters
+    func getErrors() -> [ParserError] {
+        return self.errors
+    }
+    
+    func getProgram() -> ProgramNode? {
+        return self.program
+    }
+    
+    
+    private func error(_ reason: String) {
+        let error = ParserError(reason: reason, token: scanner.getCurToken())
+        errors.append(error)
+        
+        print("ERROR: "+reason)
+    }
+    
+    // Program
+    private func parseProgram() -> ProgramNode {
         var functions:[FunctionNode] = []
         
         while scanner.peekToken().type != .none {
@@ -35,17 +66,7 @@ class Parser {
             functions.append(node)
         }
         
-        print("Fundet: \(functions.count) funktioner!")
-        for f in functions {
-            print(f.identifier)
-        }
-    }
-    
-    private func error(_ reason: String) {
-        let error = ParserError(reason: reason, token: scanner.getCurToken())
-        errors.append(error)
-        
-        print("ERROR: "+reason)
+        return ProgramNode(functions: functions)
     }
     
     // MARK: Funktioner
@@ -59,6 +80,9 @@ class Parser {
         // Navn og :
         let nt = scanner.getToken()
         let funcName = nt.content
+        
+        ParserTables.functions.append(funcName) // Gem funktionsnavn så vi kan tjekke i TypeChecker
+        
         let _ = scanner.getToken() // Kolon før parameters
         
         // Parametre og ->
@@ -269,10 +293,12 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let type = parseType()
+            let name = scanner.getToken().content
+            let _ = scanner.getToken()
             let value = parseExpression()
             
-            //print("Parameter lavet med type: \(type), navn: \(name.content)")
-            res.append(LetVariableNode(type: type, value: value))
+            print("Parameter lavet med type: \(type), navn: \(name)")
+            res.append(LetVariableNode(type: type, name: name, value: value))
         }
         
         return res

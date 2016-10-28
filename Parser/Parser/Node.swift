@@ -11,6 +11,7 @@ import Foundation
 enum CompilerError : Error {
     case ScannerError
     case ParserError
+    case TypeError
 }
 
 class Node {
@@ -19,4 +20,12 @@ class Node {
 
 class ErrorNode : Node {
     
+}
+
+class ProgramNode : Node {
+    var functions:[FunctionNode] = []
+    
+    init(functions: [FunctionNode]) {
+        self.functions = functions
+    }
 }
