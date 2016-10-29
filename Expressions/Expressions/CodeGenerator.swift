@@ -190,6 +190,10 @@ class CodeGenerator {
             retString += createParenthesisExpression(expr: (expr as! ParenthesesExpression))
         break
             
+        case is StringLiteralNode:
+            retString += "\""+(expr as! StringLiteralNode).content!+"\""
+        break
+            
         default:
             retString += ""
             break

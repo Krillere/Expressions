@@ -237,6 +237,18 @@ class LetVariableNode : Node, CustomStringConvertible {
     }
 }
 
+class StringLiteralNode : Node, CustomStringConvertible {
+    var content:String?
+    
+    init(content: String) {
+        self.content = content
+    }
+    
+    var description: String {
+        return "\""+self.content!+"\""
+    }
+}
+
 // MARK: switch
 class SwitchNode : Node {
     var cases:[SwitchCaseNode] = []
@@ -271,3 +283,21 @@ class SwitchCaseNode : Node, CustomStringConvertible {
 }
 
 class ElseNode : Node { }
+
+class TypeNode : Node, CustomStringConvertible {
+    var fullString:String?
+    var clearType:String?
+    var numNested:Int?
+    
+    override init() { }
+    
+    init(full: String, type: String, nestedLevel: Int) {
+        self.fullString = full
+        self.clearType = type
+        self.numNested = nestedLevel
+    }
+    
+    var description: String {
+        return self.fullString!
+    }
+}

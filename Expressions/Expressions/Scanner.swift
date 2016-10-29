@@ -22,6 +22,7 @@ enum TokenType {
     
     case number         // (0-9)
     case string         // (a-Z)+
+    case stringLiteral  // "(.*)"
     
     case equal          // =
     case semicolon      // ;
@@ -188,6 +189,17 @@ class Scanner {
         return tmp
     }
     
+    private func getStringLiteralContent() -> String {
+        var stringContent = ""
+        
+        char = get()
+        while char != "\"" {
+            stringContent.append(Character(char))
+            char = get()
+        }
+        
+        return stringContent
+    }
     
     
     // Finder token ud fra string
@@ -232,14 +244,8 @@ class Scanner {
         return Token(cont: string, type: type, charIndex: inputIndex)
     }
     
-    
-    // Printer fra nuværende char og fremad
-    func printRest() {
-        for i in inputIndex ..< input.count {
-            print(UnicodeScalar(input[i]))
-        }
-    }
-    
+
+    // Returnerer token og tilføjer til index
     func getToken() -> Token {
         if tokenIndex > allTokens.count-1 {
             return Token.emptyToken(-1)
@@ -250,15 +256,9 @@ class Scanner {
         
         return token
     }
+
     
-    func getCurToken() -> Token {
-        if tokenIndex > allTokens.count-1 {
-            return Token.emptyToken(-1)
-        }
-        
-        return allTokens[tokenIndex]
-    }
-    
+    // Lader brugeren kigge 'num' tokens frem (0 som default)
     func peekToken(num: Int = 0) -> Token {
         if tokenIndex+num > allTokens.count-1 {
             return Token.emptyToken(-1)
@@ -438,6 +438,11 @@ class Scanner {
                     inputIndex -= 1
                     token = Token(cont: "!", type: .op, charIndex: inputIndex)
                 }
+            break
+                
+            case "\"":
+                let stringLit = getStringLiteralContent()
+                token = Token(cont: stringLit, type: .stringLiteral, charIndex: inputIndex)
             break
                 
             default:

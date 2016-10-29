@@ -62,7 +62,7 @@ class Parser {
     private func error(_ reason: String) {
         self.errorOccurred = true
         
-        let error = ParserError(reason: reason, token: scanner.getCurToken())
+        let error = ParserError(reason: reason, token: scanner.peekToken())
         errors.append(error)
         
         print("ERROR: "+reason)
@@ -106,7 +106,7 @@ class Parser {
         
         let retType = parseType()
         
-        let fc = FunctionNode(identifier: funcName, pars: pars, ret: retType, block: parseBlock())
+        let fc = FunctionNode(identifier: funcName, pars: pars, ret: retType.fullString!, block: parseBlock())
         return fc
     }
     
@@ -126,7 +126,7 @@ class Parser {
             let name = scanner.getToken()
             
             //print("Parameter lavet med type: \(type), navn: \(name.content)")
-            res.append(ParameterNode(type: type, name: name.content))
+            res.append(ParameterNode(type: type.fullString!, name: name.content))
         }
         
         return res
@@ -154,16 +154,20 @@ class Parser {
     }
     
     // Type [String], [[[[[String]]]]], Int, osv.
-    private func parseType() -> String {
+    private func parseType() -> TypeNode {
         let token = scanner.getToken()
         
         // Direkte navngiven type
         if token.type == .string {
-            return token.content
+            return TypeNode(full: token.content, type: token.content, nestedLevel: 0)
         }
         
-        var ret = token.content
+        let ret = TypeNode()
+        
         var metName = false
+        
+        var lParCount = 0
+        var rParCount = 0
         
         while true {
             let tmp = scanner.peekToken()
@@ -172,17 +176,31 @@ class Parser {
                     metName = true
                 }
                 else {
+                    ret.clearType = tmp.content
                     break
                 }
+            }
+            
+            if tmp.type == .lpar {
+                lParCount += 1
+            }
+            if tmp.type == .rpar {
+                rParCount += 1
             }
             
             if tmp.type != .lsquare && tmp.type != .string && tmp.type != .rsquare {
                 break
             }
             
-            let tok = scanner.getToken()
-            ret.append(tok.content)
+            let _ = scanner.getToken()
+            //tokenContent.append(tok.content)
         }
+        
+        if lParCount != rParCount {
+            error("Number of square brackets does not match.")
+        }
+        
+        ret.numNested = lParCount
         
         return ret
     }
@@ -285,6 +303,16 @@ class Parser {
             
             opNode = parexp
         }
+        else if tmpToken.type == .stringLiteral {
+            let _ = scanner.getToken()
+            let expr = StringLiteralNode(content: tmpToken.content)
+            
+            if !isNextOp() {
+                return expr
+            }
+            
+            opNode = expr
+        }
         
         if let opNode = opNode {
             let opToken = scanner.getToken()
@@ -337,7 +365,7 @@ class Parser {
             let _ = scanner.getToken()
             let value = parseExpression()
             
-            res.append(LetVariableNode(type: type, name: name, value: value))
+            res.append(LetVariableNode(type: type.fullString!, name: name, value: value))
         }
         
         return res

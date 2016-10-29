@@ -17,6 +17,7 @@ block := "{" expr "}"
 
 expr := if
 | varname
+| string
 | expr op expr
 | "(" expr ")"
 | switch
@@ -26,6 +27,7 @@ expr := if
 
 number := (0-9)+ | (0-9)+.(0-9)+ | -number
 boolLit := "true" | "false"
+string := """ (.*) """
 
 op := AND | OR | * | / | + | - | < | > | <= | >= | == | !=
 
