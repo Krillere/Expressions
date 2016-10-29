@@ -12,6 +12,10 @@ class CodeGenerator {
     private var internalCode:String = ""
     private var program:ProgramNode?
     
+    private var curFunctionPars:String?
+    private var curFunctionRet:String?
+    private var funcDecls:[String] = []
+    
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string"]
     
     init(program: ProgramNode) {
@@ -26,11 +30,26 @@ class CodeGenerator {
             emitFunction(function: function)
         }
         
+        
+        // Imports og declarations og shitz
+        var decls = "// Prototypes \n"
+        for dec in funcDecls {
+            decls += dec+";\n"
+        }
+        decls += "\n\n// Generated:\n"
+        internalCode = decls+internalCode
         print("Code: \(internalCode)")
     }
     
     private func emit(_ str: String) {
         internalCode += str
+    }
+    
+    var letIndex:Int = 0
+    var ifIndex:Int = 0
+    
+    private func appendFuncAfter(appFunc: String) {
+        
     }
     
     // Generer funktioner
@@ -40,86 +59,155 @@ class CodeGenerator {
             let type = typeConversions[retType],
             let block = function.block else { return }
         
+        let pars = createFunctionParameters(pars: function.pars)
+        self.curFunctionPars = pars
+        self.curFunctionRet = type
+        
+        funcDecls.append(type+" "+identifier+"("+pars+")")
+        
         emit("\n"+type+" ") // int
         emit(identifier) // main
-        emitFunctionParameters(pars: function.pars) // ( T1 p1, T2 p2 ... )
-        emitBlock(block: block) // { exprs }
+        emit("("+pars+")")
+        emit(createFunctionBlock(block: block))
     }
     
-    // Laver parametre til funktionserklæring
-    private func emitFunctionParameters(pars: [ParameterNode]) {
-        emit("(")
+    // Laver string med funktionsparametre (bruges senere)
+    private func createFunctionParameters(pars: [ParameterNode]) -> String {
+        var str = ""
         
         for n in 0 ..< pars.count {
             let par = pars[n]
             guard let tmpType = par.type, let type = typeConversions[tmpType], let name = par.name else { continue }
-            emit(type+" "+name)
+            str += type+" "+name
             
             if n != pars.count-1 {
-                emit(", ")
+                str += ", "
             }
         }
         
-        emit(")")
+        return str
     }
-    
+
     // Laver en blok
-    private func emitBlock(block: BlockNode) {
-        emit(" { \n")
+    private func createBlock(block: BlockNode) -> String {
+        var str = "{"
         
         if let expr = block.expression {
-            emitExpression(expr: expr)
+            str += createExpression(expr: expr)
         }
         
-        emit("}")
+        str += "}"
+        return str
     }
     
-    private func emitExpression(expr: Node) {
+    private func createFunctionBlock(block: BlockNode) -> String {
+        
+        var str = "{"
+        str += " return "
+        str += createExpression(expr: block.expression!)
+        str += "}"
+        
+        return str
+    }
+    
+    private func createExpression(expr: Node) -> String {
         switch expr {
         case is IfElseNode:
-            emitIfElseNode(ifElse: (expr as! IfElseNode))
-            break
+            return createIfElseNode(ifElse: (expr as! IfElseNode))
             
         case is LetNode:
-            emitLetNode(letN: (expr as! LetNode))
-        break
+            return createLetNode(letN: (expr as! LetNode))
             
+        case is ExpressionNode:
+            return createExpressionNode(expr: (expr as! ExpressionNode))
+            
+        // Literals
         case is NumberLiteralNode:
-            emit(String(describing: (expr as! NumberLiteralNode).number!))
-        break
+            return String(describing: (expr as! NumberLiteralNode).number!)
             
-        
+        case is VariableNode:
+            if let id = (expr as! VariableNode).identifier {
+                return id
+            }
+            break
+            
+        case is BooleanLiteralNode:
+            return (expr as! BooleanLiteralNode).value
+            
+        case is FunctionCallNode:
+            return createFunctionCall(call: (expr as! FunctionCallNode))
             
         default:
-            break
+            return ""
         }
+        
+        return ""
     }
     
-    private func emitIfElseNode(ifElse: IfElseNode) {
-        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition else { return }
+    private func createExpressionNode(expr: ExpressionNode) -> String {
+         guard let op = expr.op, let ops = op.op, let lop = expr.loperand, let rop = expr.roperand else { return "" }
         
-        emit("if(")
-        emitExpression(expr: cond)
-        emit(")")
-        emitBlock(block: iblock)
-        emit(" else ")
-        emitBlock(block: eblock)
+        var str = ""
+        str += createExpression(expr: lop)
+        str += " "
+        str += ops
+        str += " "
+        str += createExpression(expr: rop)
+        
+        return str
     }
     
-    private func emitLetNode(letN: LetNode) {
-        guard let block = letN.block, let bexpr = block.expression else { return }
+    private func createFunctionCall(call: FunctionCallNode) -> String {
+        guard let identifer = call.identifier else { return "" }
+        var str = ""
         
-        emit("{")
+        str += identifer
+        str += "("
+        
+        for n in 0 ..< call.parameters.count {
+            let par = call.parameters[n]
+            str += createExpression(expr: par)
+            
+            if n != call.parameters.count-1 {
+                str += ", "
+            }
+        }
+        
+        str += ")"
+        
+        return str
+    }
+    
+    private func createIfElseNode(ifElse: IfElseNode) -> String {
+        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition else { return "" }
+        var str = ""
+        
+        str += "if("
+        str += createExpression(expr: cond)
+        str += ")"
+        str += createBlock(block: iblock)
+        str += " else "
+        str += createBlock(block: eblock)
+        
+        return str
+    }
+    
+    private func createLetNode(letN: LetNode) -> String {
+        guard let block = letN.block, let bexpr = block.expression else { return "" }
+        var str = ""
+        
+        str += "{"
         for v in letN.vars {
             guard let ttype = v.type, let type = typeConversions[ttype], let name = v.name, let expr = v.value else { continue }
-            
-            emit(type+" "+name+" = ") // int myVar =
-            emitExpression(expr: expr) // 1
-            emit(";\n") // ;
+            str += type+" "+name+" = "
+            str += createExpression(expr: expr)
+            str += ";\n"
         }
         
-        emitExpression(expr: bexpr)
+        str += createExpression(expr: bexpr)
         
-        emit("}")
+        str += "}"
+        
+        return str
     }
 }

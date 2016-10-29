@@ -86,11 +86,11 @@ class NumberLiteralNode : Node, CustomStringConvertible {
 }
 
 class BooleanLiteralNode : Node, CustomStringConvertible {
-    var value:Bool = false
+    var value:String = "false"
     
     init(value: String) {
         if value == "true" {
-            self.value = true
+            self.value = value
         }
     }
     
