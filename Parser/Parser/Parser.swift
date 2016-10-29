@@ -33,10 +33,6 @@ class Parser {
         self.program = program
         
         print("Fundet: \(program.functions.count) funktioner!")
-        for f in program.functions {
-            print(f.identifier)
-        }
-        
         print("Errors: \(errors)")
     }
     

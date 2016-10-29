@@ -12,8 +12,9 @@ class CodeGenerator {
     private var internalCode:String = ""
     private var program:ProgramNode?
     
-    private var curFunctionPars:String?
-    private var curFunctionRet:String?
+    private var curFunctionPars:String = ""
+    private var curFunctionParsList:[ParameterNode] = []
+    private var curFunctionRet:String = ""
     private var funcDecls:[String] = []
     
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string"]
@@ -38,7 +39,11 @@ class CodeGenerator {
         }
         decls += "\n\n// Generated:\n"
         internalCode = decls+internalCode
-        print("Code: \(internalCode)")
+        for f in afterFuncs {
+            internalCode += "\n"+f+"\n"
+        }
+        print("Code:")
+        print(internalCode)
     }
     
     private func emit(_ str: String) {
@@ -47,9 +52,10 @@ class CodeGenerator {
     
     var letIndex:Int = 0
     var ifIndex:Int = 0
+    var afterFuncs:[String] = []
     
     private func appendFuncAfter(appFunc: String) {
-        
+        self.afterFuncs.append(appFunc)
     }
     
     // Generer funktioner
@@ -59,9 +65,11 @@ class CodeGenerator {
             let type = typeConversions[retType],
             let block = function.block else { return }
         
+        
         let pars = createFunctionParameters(pars: function.pars)
         self.curFunctionPars = pars
         self.curFunctionRet = type
+        self.curFunctionParsList = function.pars
         
         funcDecls.append(type+" "+identifier+"("+pars+")")
         
@@ -105,7 +113,7 @@ class CodeGenerator {
         var str = "{"
         str += " return "
         str += createExpression(expr: block.expression!)
-        str += "}"
+        str += "; }"
         
         return str
     }
@@ -194,20 +202,41 @@ class CodeGenerator {
     
     private func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block, let bexpr = block.expression else { return "" }
-        var str = ""
         
-        str += "{"
+        // Lav intern funktion til let blok
+        let intFuncName:String = "_internalLetBlock"+String(self.letIndex)
+        let intFuncDef:String = self.curFunctionRet+" "+intFuncName+"("+self.curFunctionPars+")"
+        self.funcDecls.append(intFuncDef)
+        self.letIndex += 1
+        
+        // Lav funktionens indhold
+        var intFunc = intFuncDef+"{"
+        
         for v in letN.vars {
             guard let ttype = v.type, let type = typeConversions[ttype], let name = v.name, let expr = v.value else { continue }
-            str += type+" "+name+" = "
-            str += createExpression(expr: expr)
-            str += ";\n"
+            intFunc += type+" "+name+" = "
+            intFunc += createExpression(expr: expr)
+            intFunc += ";\n"
         }
         
-        str += createExpression(expr: bexpr)
+        intFunc += createExpression(expr: bexpr)
+        intFunc += "}"
         
-        str += "}"
+        self.appendFuncAfter(appFunc: intFunc)
         
-        return str
+        // Lav intern funktions kald og returner denne
+        var calPars = ""
+        for n in 0 ..< self.curFunctionParsList.count {
+            let p = self.curFunctionParsList[n]
+            calPars += p.name!
+            
+            if n != self.curFunctionParsList.count-1 {
+                calPars += ", "
+            }
+        }
+        
+        let intFuncCall = intFuncName+"("+calPars+")"
+        
+        return intFuncCall
     }
 }

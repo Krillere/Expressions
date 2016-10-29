@@ -25,6 +25,12 @@ define recursionSwitch: Int start, Int stop -> Int {
                    { recursionSwitch(start+1, stop) }
 }
 
+define moreLet: -> Int {
+  let Int a = 2, Int b = 3 {
+    a+b
+  }
+}
+
 define main: -> Int {
   0
 }
