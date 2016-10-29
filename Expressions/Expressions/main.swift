@@ -8,16 +8,24 @@
 
 import Foundation
 
-if let p = Bundle.main.path(forResource: "example4", ofType: "expr") {
-    let cont = try String(contentsOfFile: p)
-    
-    let ps = Parser(input: cont)
+func compile(code: String) {
+    let ps = Parser(input: code)
     ps.run()
-
+    
+    let errs = ps.getErrors()
+    if errs.count != 0 {
+        print("Stopper grundet errors.")
+        return
+    }
+    
     if let program = ps.getProgram() {
         let generator = CodeGenerator(program: program)
         generator.generate()
     }
+}
+if let p = Bundle.main.path(forResource: "example5", ofType: "expr") {
+    let cont = try String(contentsOfFile: p)
+    compile(code: cont)
 }
 else {
     print("Ingen fil fundet..")

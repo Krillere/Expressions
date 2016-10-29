@@ -4,11 +4,6 @@ Alt er expressions og skal returnere noget.
 Et subset af funktioner vil have side conditions og kan derfor ikke returnere noget, f.eks. print/echo og IO.
 Disse vil kun pille ved noget eksternt, og ikke ændre program state.
 
-[1, 2, 3, 4, 5]
-first 1
-last 5
-
-
 Examples:
 define myFunction: Int a Int b Int c Int d -> Int
 {
@@ -34,20 +29,14 @@ define split: String str, Char c -> [String]
   }
 }
 
-let Int a = 2, Int b = 3
-{
+let Int a = 2, Int b = 3 {
 
 }
-Bliver til:
-{
-    int a = 2;
-    int b = 3;
-}
 
-switch 1 > 2 ? "asd"
-: 1 = 2 ? "derp"
-: 1 < 2 ? "yeps"
-: else "fuck"
+switch  1 > 2 { "asd" }
+        1 = 2 { "derp" }
+        1 < 2 { "yeps" }
+        else { "fuck" }
 
 
 EBNF:
@@ -72,9 +61,9 @@ op := AND | OR | * | / | + | - | < | > | <= | >= | ==
 
 if := "if" expr block block
 
-switch := "switch" case ":" "else" expr
-case := expr "?" expr {cases}
-cases := ":" case
+switch := "switch" cases "else" expr
+cases := case | case cases
+case := expr block
 
 call := name "(" passPars ")"
 passPars := expr | expr "," passPars

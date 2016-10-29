@@ -233,3 +233,38 @@ class LetVariableNode : Node, CustomStringConvertible {
         return "'"+self.type!+" "+self.name!+" = "+String(describing: value)+"'"
     }
 }
+
+// MARK: switch
+class SwitchNode : Node {
+    var cases:[SwitchCaseNode] = []
+    
+    init(cases: [SwitchCaseNode]) {
+        super.init()
+        
+        self.cases = cases
+        for c in self.cases {
+            c.parent = self
+        }
+    }
+}
+
+class SwitchCaseNode : Node, CustomStringConvertible {
+    var expr:Node?
+    var block:BlockNode?
+    
+    init(expr: Node, block: BlockNode) {
+        super.init()
+        
+        self.expr = expr
+        self.block = block
+        
+        self.expr?.parent = self
+        self.block?.parent = self
+    }
+    
+    var description: String {
+        return "Switch case!"
+    }
+}
+
+class ElseNode : Node { }

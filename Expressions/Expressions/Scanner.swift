@@ -43,7 +43,8 @@ enum TokenType {
 class Token : CustomStringConvertible {
     var content:String = ""
     var type:TokenType = .none
-    var numberValue:Int?
+    var intValue:Int?
+    var floatValue:Float?
     
     init(cont: String, type: TokenType, charIndex: Int) {
         self.content = cont
@@ -63,8 +64,7 @@ class Scanner {
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
     private let otherNameChars = CharacterSet(charactersIn: "'-_")
-    private let keywords = ["var"]
-    
+
     private var input:[UInt16] = []
     private var inputIndex = 0
     private var token:Token = Token.emptyToken(0)
@@ -73,6 +73,7 @@ class Scanner {
     private var ident:UnicodeScalar = " "
     private var string:String = ""
     private var intValue:Int = 0
+    private var floatValue:Float = 0
     
     private var allTokens:[Token] = []
     private var tokenIndex:Int = 0
@@ -103,8 +104,9 @@ class Scanner {
         return tmp
     }
     
+    
     // Henter tal fra index
-    private func getNumber() -> Int {
+    private func getNumberString() -> String {
         var tmp:String = ""
         
         repeat {
@@ -114,14 +116,18 @@ class Scanner {
             }
             char = get()
         }
-        while digits.contains(char)
+        while digits.contains(char) || char == "."
         
         if inputIndex >= input.count-1 { }
         else {
             inputIndex -= 1
         }
         
-        return Int(tmp)!
+        return tmp//Int(tmp)!
+    }
+    
+    private func isFloating(test: String) -> Bool {
+        return test.contains(".")
     }
     
     // Henter streng fra index
@@ -141,6 +147,7 @@ class Scanner {
         
         return tmp
     }
+    
     
     // Henter navn fra index (char efterfulgt af chars eller tal)
     private func getName() -> String {
@@ -200,6 +207,10 @@ class Scanner {
                 type = .keyword_let
             break
             
+            case "switch":
+                type = .keyword_switch
+            break
+            
             default:
                 type = .string
             break
@@ -244,7 +255,7 @@ class Scanner {
         return token
     }
     
-    // Fortsætter læsningen
+    // Finder næste token, bruges kun internt
     private func intGetToken() -> Token {
         // Fjern whitespace
         while(inputIndex < input.count) {
@@ -273,9 +284,19 @@ class Scanner {
             }
         }
         else if digits.contains(char) { // Tal
-            intValue = getNumber()
-            token = Token(cont: String(intValue), type: .number, charIndex: inputIndex)
-            token.numberValue = intValue
+            let intS = getNumberString()
+            if isFloating(test: intS) {
+                floatValue = Float(intS)!
+                
+                token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
+                token.floatValue = floatValue
+            }
+            else {
+                intValue = Int(intS)!
+                
+                token = Token(cont: String(intValue), type: .number, charIndex: inputIndex)
+                token.intValue = intValue
+            }
         }
         else { // Special karakterer
             switch char {
@@ -291,9 +312,19 @@ class Scanner {
                 char = get()
 
                 if digits.contains(char) {
-                    intValue = getNumber()
-                    token = Token(cont: "-"+String(intValue), type: .number, charIndex: inputIndex)
-                    token.numberValue = intValue
+                    let intS = getNumberString()
+                    if isFloating(test: intS) {
+                        floatValue = Float(intS)!
+                        
+                        token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
+                        token.floatValue = floatValue
+                    }
+                    else {
+                        intValue = Int(intS)!
+                        
+                        token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
+                        token.intValue = intValue
+                    }
                 }
                 else if char == ">" { // returns
                     token = Token(cont: ">", type: .returns, charIndex: inputIndex)

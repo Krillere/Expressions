@@ -122,6 +122,9 @@ class CodeGenerator {
             else if par is ParenthesesExpression {
                 return false
             }
+            else if par is SwitchNode {
+                return false
+            }
             else {
                 tmpNode = par
             }
@@ -137,6 +140,9 @@ class CodeGenerator {
         }
         else if expr is LetNode {
             return createLetNode(letN: (expr as! LetNode))
+        }
+        else if expr is SwitchNode {
+            return createSwitchNode(node: (expr as! SwitchNode))
         }
         
         var retString = ""
@@ -195,6 +201,33 @@ class CodeGenerator {
         var str = "("
         str += createExpression(expr: expr.expression!)
         str += ")"
+        return str
+    }
+    
+    // Laver switch
+    func createSwitchNode(node: SwitchNode) -> String {
+        var str = ""
+        
+        for n in 0 ..< node.cases.count {
+            let c = node.cases[n]
+            
+            if !(c.expr is ElseNode) { // Almindelig
+                
+                if n != 0 {
+                    str += " else"
+                }
+                
+                str += " if("
+                str += createExpression(expr: c.expr!)
+                str += ")"
+                str += createBlock(block: c.block!)
+            }
+            else { // Sjovt nok, else!
+                str += " else "
+                str += createBlock(block: c.block!)
+            }
+        }
+        
         return str
     }
     

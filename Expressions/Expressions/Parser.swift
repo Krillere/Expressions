@@ -32,6 +32,18 @@ class Parser {
         let program = parseProgram()
         self.program = program
         
+        var hasEntry = false
+        for f in ParserTables.functions {
+            if f == "main" {
+                hasEntry = true
+                break
+            }
+        }
+        
+        if !hasEntry {
+            errors.append(ParserError(reason: "No entry point found!", token: Token(cont: "", type: .none, charIndex: -1)))
+        }
+        
         print("Fundet: \(program.functions.count) funktioner!")
         print("Errors: \(errors)")
     }
@@ -172,10 +184,12 @@ class Parser {
         return ret
     }
 
+    // Er det næste udtryk en operator?
     private func isNextOp() -> Bool {
         let tmp = scanner.peekToken()
         return tmp.type == .op
     }
+    
     
     // Parser en expression (Største type af alle)
     private func parseExpression() -> Node {
@@ -189,6 +203,13 @@ class Parser {
         }
         else if tmpToken.type == .keyword_let { // let vars block
             return parseLet()
+        }
+        else if tmpToken.type == .keyword_switch { // Snedig if-else
+            return parseSwitch()
+        }
+        else if tmpToken.type == .keyword_else {
+            let _ = scanner.getToken() // Fjern 'else'
+            return ElseNode()
         }
         
         // Variabler
@@ -219,7 +240,7 @@ class Parser {
         }
         else if tmpToken.type == .number { // Tal literal
             let numToken = scanner.getToken()
-            let node = NumberLiteralNode(number: numToken.numberValue!)
+            let node = NumberLiteralNode(number: numToken.intValue!)
             
             // Op?
             if !isNextOp() {
@@ -271,12 +292,7 @@ class Parser {
         let _ = scanner.getToken() // keyword "if"
         
         let ifExpr = parseExpression()
-        print("Condition i if: \(ifExpr)")
-        
-        print("Parser if-blok:")
         let ifBlock = parseBlock()
-        
-        print("Parser else-blok:")
         let elseBlock = parseBlock()
         
         let retNode = IfElseNode(cond: ifExpr, ifBlock: ifBlock, elseBlock: elseBlock)
@@ -309,12 +325,33 @@ class Parser {
             let _ = scanner.getToken()
             let value = parseExpression()
             
-            print("Parameter lavet med type: \(type), navn: \(name)")
             res.append(LetVariableNode(type: type, name: name, value: value))
         }
         
         return res
     }
+    
+    
+    private func parseSwitch() -> SwitchNode {
+        let _ = scanner.getToken() // keyword switch
+        
+        var cases:[SwitchCaseNode] = []
+        
+        while scanner.peekToken().type != .none {
+            let condition = parseExpression()
+            let block = parseBlock()
+            
+            let c = SwitchCaseNode(expr: condition, block: block)
+            cases.append(c)
+            
+            if condition is ElseNode {
+                break
+            }
+        }
+        
+        return SwitchNode(cases: cases)
+    }
+    
     
     // MARK: Kald
     func parseFunctionCall(_ identifier: String) -> FunctionCallNode {
@@ -330,17 +367,18 @@ class Parser {
     func parseFunctionCallParameters() -> [Node] {
         var res:[Node] = []
         
+        // Kør til vi rammer )
         while scanner.peekToken().type != .rpar {
             if scanner.peekToken().type == .none {
                 error("Error in function call. Parameters all fucked up.")
                 break
             }
             
+            // Ignorer og fjern komma
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let val = parseExpression()
             
-            //print("Parameter lavet med type: \(type), navn: \(name.content)")
             res.append(val)
         }
         
