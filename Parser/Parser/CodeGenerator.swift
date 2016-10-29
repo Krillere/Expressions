@@ -11,10 +11,7 @@ import Foundation
 class CodeGenerator {
     private var internalCode:String = ""
     private var program:ProgramNode?
-    
-    private var curFunctionPars:String = ""
-    private var curFunctionParsList:[ParameterNode] = []
-    private var curFunctionRet:String = ""
+
     private var funcDecls:[String] = []
     
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string"]
@@ -39,9 +36,7 @@ class CodeGenerator {
         }
         decls += "\n\n// Generated:\n"
         internalCode = decls+internalCode
-        for f in afterFuncs {
-            internalCode += "\n"+f+"\n"
-        }
+        
         print("Code:")
         print(internalCode)
     }
@@ -49,15 +44,7 @@ class CodeGenerator {
     private func emit(_ str: String) {
         internalCode += str
     }
-    
-    var letIndex:Int = 0
-    var ifIndex:Int = 0
-    var afterFuncs:[String] = []
-    
-    private func appendFuncAfter(appFunc: String) {
-        self.afterFuncs.append(appFunc)
-    }
-    
+
     // Generer funktioner
     private func emitFunction(function: FunctionNode) {
         guard let retType = function.retType,
@@ -67,10 +54,6 @@ class CodeGenerator {
         
         
         let pars = createFunctionParameters(pars: function.pars)
-        self.curFunctionPars = pars
-        self.curFunctionRet = type
-        self.curFunctionParsList = function.pars
-        
         funcDecls.append(type+" "+identifier+"("+pars+")")
         
         emit("\n"+type+" ") // int
@@ -110,46 +93,97 @@ class CodeGenerator {
     
     private func createFunctionBlock(block: BlockNode) -> String {
         
-        var str = "{"
-        str += " return "
+        var str = "{\n"
         str += createExpression(expr: block.expression!)
-        str += "; }"
+        str += "\n}\n"
         
         return str
     }
     
+    private func shouldReturn(node: Node) -> Bool {
+        
+        var tmpNode:Node = node
+        while tmpNode.parent != nil {
+            let par = tmpNode.parent!
+            if par is BlockNode {
+                return true
+            }
+            else if par is IfElseNode {
+                return false
+            }
+            else if par is LetNode {
+                return false
+            }
+            else if par is ParameterNode {
+                return false
+            }
+            else if par is ExpressionNode {
+                return false
+            }
+            else if par is FunctionCallNode {
+                return false
+            }
+            else {
+                tmpNode = par
+            }
+        }
+        
+        return false
+    }
+    
     private func createExpression(expr: Node) -> String {
-        switch expr {
-        case is IfElseNode:
+        if expr is IfElseNode {
             return createIfElseNode(ifElse: (expr as! IfElseNode))
-            
-        case is LetNode:
+        }
+        else if expr is LetNode {
             return createLetNode(letN: (expr as! LetNode))
-            
+        }
+        
+        var retString = ""
+        
+        let shouldRet = shouldReturn(node: expr)
+        if shouldRet {
+            retString = "return "
+            //print("Returnerer: \(expr)")
+        }
+        else {
+            //print("Returnerer IKKE: \(expr)")
+        }
+        
+        switch expr {
         case is ExpressionNode:
-            return createExpressionNode(expr: (expr as! ExpressionNode))
+            retString += createExpressionNode(expr: (expr as! ExpressionNode))
+        break
             
         // Literals
         case is NumberLiteralNode:
-            return String(describing: (expr as! NumberLiteralNode).number!)
+            retString += String(describing: (expr as! NumberLiteralNode).number!)
+        break
             
         case is VariableNode:
             if let id = (expr as! VariableNode).identifier {
-                return id
+                retString += id
             }
-            break
+        break
             
         case is BooleanLiteralNode:
-            return (expr as! BooleanLiteralNode).value
+            retString += (expr as! BooleanLiteralNode).value
+        break
             
         case is FunctionCallNode:
-            return createFunctionCall(call: (expr as! FunctionCallNode))
+            retString += createFunctionCall(call: (expr as! FunctionCallNode))
+        break
             
         default:
-            return ""
+            retString += ""
+            break
         }
         
-        return ""
+        if shouldRet {
+            retString += ";"
+        }
+        
+        return retString
     }
     
     private func createExpressionNode(expr: ExpressionNode) -> String {
@@ -192,9 +226,9 @@ class CodeGenerator {
         
         str += "if("
         str += createExpression(expr: cond)
-        str += ")"
+        str += ")\n"
         str += createBlock(block: iblock)
-        str += " else "
+        str += "\n else "
         str += createBlock(block: eblock)
         
         return str
@@ -203,40 +237,20 @@ class CodeGenerator {
     private func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block, let bexpr = block.expression else { return "" }
         
-        // Lav intern funktion til let blok
-        let intFuncName:String = "_internalLetBlock"+String(self.letIndex)
-        let intFuncDef:String = self.curFunctionRet+" "+intFuncName+"("+self.curFunctionPars+")"
-        self.funcDecls.append(intFuncDef)
-        self.letIndex += 1
-        
+
         // Lav funktionens indhold
-        var intFunc = intFuncDef+"{"
+        var str = "{"
         
         for v in letN.vars {
             guard let ttype = v.type, let type = typeConversions[ttype], let name = v.name, let expr = v.value else { continue }
-            intFunc += type+" "+name+" = "
-            intFunc += createExpression(expr: expr)
-            intFunc += ";\n"
+            str += type+" "+name+" = "
+            str += createExpression(expr: expr)
+            str += ";\n"
         }
         
-        intFunc += createExpression(expr: bexpr)
-        intFunc += "}"
+        str += createExpression(expr: bexpr)
+        str += "}"
         
-        self.appendFuncAfter(appFunc: intFunc)
-        
-        // Lav intern funktions kald og returner denne
-        var calPars = ""
-        for n in 0 ..< self.curFunctionParsList.count {
-            let p = self.curFunctionParsList[n]
-            calPars += p.name!
-            
-            if n != self.curFunctionParsList.count-1 {
-                calPars += ", "
-            }
-        }
-        
-        let intFuncCall = intFuncName+"("+calPars+")"
-        
-        return intFuncCall
+        return str
     }
 }

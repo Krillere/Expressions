@@ -56,13 +56,17 @@ class Parser {
     // Program
     private func parseProgram() -> ProgramNode {
         var functions:[FunctionNode] = []
+        let program = ProgramNode()
         
         while scanner.peekToken().type != .none {
             let node = parseFunction()
+            node.parent = program
             functions.append(node)
         }
         
-        return ProgramNode(functions: functions)
+        program.functions = functions
+        
+        return program
     }
     
     // MARK: Funktioner
@@ -127,8 +131,7 @@ class Parser {
             return BlockNode()
         }
         
-        let block = BlockNode()
-        block.expression = parseExpression()
+        let block = BlockNode(expr: parseExpression())
         
         let _ = scanner.getToken() // } i block
         

@@ -16,10 +16,17 @@ class FunctionNode : Node {
     var retType:String?
     
     init(identifier: String, pars: [ParameterNode], ret: String, block: BlockNode) {
+        super.init()
+        
         self.identifier = identifier
         self.pars = pars
         self.retType = ret
         self.block = block
+        
+        self.block?.parent = self
+        for p in pars {
+            p.parent = self
+        }
         
         print("Funktion lavet: '\(identifier)', parametre: \(pars), returnerer: \(ret)")
     }
@@ -43,6 +50,15 @@ class ParameterNode : Node, CustomStringConvertible  {
 
 class BlockNode : Node {
     var expression:Node?
+    
+    override init() { }
+    
+    init(expr: Node) {
+        super.init()
+        
+        self.expression = expr
+        self.expression?.parent = self
+    }
 }
 
 class FunctionCallNode : Node, CustomStringConvertible {
@@ -50,8 +66,15 @@ class FunctionCallNode : Node, CustomStringConvertible {
     var parameters:[Node] = []
     
     init(identifier: String, parameters: [Node]) {
+        super.init()
+        
+        
         self.identifier = identifier
         self.parameters = parameters
+        
+        for p in self.parameters {
+            p.parent = self
+        }
     }
     
     var description: String {
@@ -118,9 +141,15 @@ class ExpressionNode : Node, CustomStringConvertible {
     var roperand: Node?
     
     init(op: OperatorNode, loperand: Node, roperand: Node) {
+        super.init()
+        
         self.op = op
         self.loperand = loperand
         self.roperand = roperand
+        
+        self.op?.parent = self
+        self.loperand?.parent = self
+        self.roperand?.parent = self
     }
     
     var description: String {
@@ -135,9 +164,15 @@ class IfElseNode : Node {
     var elseBlock:BlockNode?
     
     init(cond: Node, ifBlock: BlockNode, elseBlock: BlockNode) {
+        super.init()
+        
         self.condition = cond
         self.ifBlock = ifBlock
         self.elseBlock = elseBlock
+        
+        self.condition?.parent = self
+        self.ifBlock?.parent = self
+        self.elseBlock?.parent = self
     }
 }
 
@@ -148,8 +183,15 @@ class LetNode : Node, CustomStringConvertible {
     var block:BlockNode?
     
     init(vars: [LetVariableNode], block: BlockNode) {
+        super.init()
+        
         self.vars = vars
         self.block = block
+        
+        self.block?.parent = self
+        for v in vars {
+            v.parent = self
+        }
     }
     
     var description: String {
@@ -163,9 +205,13 @@ class LetVariableNode : Node, CustomStringConvertible {
     var name:String?
     
     init(type: String, name: String, value: Node) {
+        super.init()
+        
         self.type = type
         self.value = value
         self.name = name
+        
+        self.value?.parent = self
     }
     
     var description: String {

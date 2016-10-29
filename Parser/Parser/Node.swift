@@ -15,6 +15,8 @@ enum CompilerError : Error {
 }
 
 class Node {
+    var parent:Node?
+    
     init() { }
 }
 
@@ -24,8 +26,4 @@ class ErrorNode : Node {
 
 class ProgramNode : Node {
     var functions:[FunctionNode] = []
-    
-    init(functions: [FunctionNode]) {
-        self.functions = functions
-    }
 }

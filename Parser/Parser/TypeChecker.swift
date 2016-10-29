@@ -17,6 +17,6 @@ class TypeChecker {
     
     func run() {
         guard let program = self.program else { return }
-        
+        let _ = program
     }
 }
