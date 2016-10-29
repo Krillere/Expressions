@@ -105,6 +105,7 @@ class CodeGenerator {
         var tmpNode:Node = node
         while tmpNode.parent != nil {
             let par = tmpNode.parent!
+            
             if par is BlockNode {
                 return true
             }

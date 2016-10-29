@@ -43,7 +43,7 @@
 /* Begin PBXFileReference section */
 		AA01C3A61DC2898A009706A3 /* Expressions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
 		AA3E913C1DBF642600FB7B56 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
-		AA8D8BB71DB7CAA60036E69B /* Parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Parser; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA8D8BB71DB7CAA60036E69B /* Expressions */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Expressions; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA8D8BBA1DB7CAA60036E69B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		AAA69AD21DBC2C11000917D8 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		AAA69AD61DBC2C84000917D8 /* Scanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				AAEABFDF1DC3A65200989910 /* example.expr */,
-				AA8D8BB91DB7CAA60036E69B /* Parser */,
+				AA8D8BB91DB7CAA60036E69B /* Expressions */,
 				AA8D8BB81DB7CAA60036E69B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,12 +77,12 @@
 		AA8D8BB81DB7CAA60036E69B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA8D8BB71DB7CAA60036E69B /* Parser */,
+				AA8D8BB71DB7CAA60036E69B /* Expressions */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AA8D8BB91DB7CAA60036E69B /* Parser */ = {
+		AA8D8BB91DB7CAA60036E69B /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
 				AAA69AD91DBC3052000917D8 /* ENBF.txt */,
@@ -94,6 +94,7 @@
 				AAEABFE31DC3B35700989910 /* TypeChecker.swift */,
 				AAEABFE51DC3B88800989910 /* CodeGenerator.swift */,
 			);
+			name = Expressions;
 			path = Parser;
 			sourceTree = "<group>";
 		};
@@ -109,9 +110,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA8D8BB61DB7CAA60036E69B /* Parser */ = {
+		AA8D8BB61DB7CAA60036E69B /* Expressions */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA8D8BBE1DB7CAA60036E69B /* Build configuration list for PBXNativeTarget "Parser" */;
+			buildConfigurationList = AA8D8BBE1DB7CAA60036E69B /* Build configuration list for PBXNativeTarget "Expressions" */;
 			buildPhases = (
 				AA8D8BB31DB7CAA60036E69B /* Sources */,
 				AA8D8BB41DB7CAA60036E69B /* Frameworks */,
@@ -122,9 +123,9 @@
 			);
 			dependencies = (
 			);
-			name = Parser;
+			name = Expressions;
 			productName = Parser;
-			productReference = AA8D8BB71DB7CAA60036E69B /* Parser */;
+			productReference = AA8D8BB71DB7CAA60036E69B /* Expressions */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +145,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AA8D8BB21DB7CAA60036E69B /* Build configuration list for PBXProject "Parser" */;
+			buildConfigurationList = AA8D8BB21DB7CAA60036E69B /* Build configuration list for PBXProject "Expressions" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -156,7 +157,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AA8D8BB61DB7CAA60036E69B /* Parser */,
+				AA8D8BB61DB7CAA60036E69B /* Expressions */,
 			);
 		};
 /* End PBXProject section */
@@ -289,7 +290,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AA8D8BB21DB7CAA60036E69B /* Build configuration list for PBXProject "Parser" */ = {
+		AA8D8BB21DB7CAA60036E69B /* Build configuration list for PBXProject "Expressions" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA8D8BBC1DB7CAA60036E69B /* Debug */,
@@ -298,7 +299,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA8D8BBE1DB7CAA60036E69B /* Build configuration list for PBXNativeTarget "Parser" */ = {
+		AA8D8BBE1DB7CAA60036E69B /* Build configuration list for PBXNativeTarget "Expressions" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA8D8BBF1DB7CAA60036E69B /* Debug */,
