@@ -27,8 +27,6 @@ class FunctionNode : Node {
         for p in pars {
             p.parent = self
         }
-        
-        print("Funktion lavet: '\(identifier)', parametre: \(pars), returnerer: \(ret)")
     }
     
     override init() { }
@@ -97,14 +95,19 @@ class VariableNode : Node, CustomStringConvertible {
 }
 
 class NumberLiteralNode : Node, CustomStringConvertible {
-    var number:Int?
+    var intValue:Int?
+    var floatValue:Float?
+    
+    init(number: Float) {
+        self.floatValue = number
+    }
     
     init(number: Int) {
-        self.number = number
+        self.intValue = number
     }
     
     var description: String {
-        return String(describing: number)
+        return "Tal"
     }
 }
 

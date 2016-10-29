@@ -22,6 +22,7 @@ class Parser {
     private var scanner:Scanner!
     private var errors:[ParserError] = []
     private var program:ProgramNode?
+    private var errorOccurred = false
     
     init(input: String) {
         self.scanner = Scanner(input: input)
@@ -59,6 +60,8 @@ class Parser {
     
     
     private func error(_ reason: String) {
+        self.errorOccurred = true
+        
         let error = ParserError(reason: reason, token: scanner.getCurToken())
         errors.append(error)
         
@@ -195,9 +198,8 @@ class Parser {
     private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
         
-        print("Parser expression som starter med: \(tmpToken)")
         
-        // Typer (if, let)
+        // Typer (if, let, switch)
         if tmpToken.type == .keyword_if { // If-else
             return parseIf()
         }
@@ -240,11 +242,21 @@ class Parser {
         }
         else if tmpToken.type == .number { // Tal literal
             let numToken = scanner.getToken()
-            let node = NumberLiteralNode(number: numToken.intValue!)
+            var node:NumberLiteralNode?
+            
+            if numToken.floatValue != nil {
+                node = NumberLiteralNode(number: numToken.floatValue!)
+            }
+            else if numToken.intValue != nil {
+                node = NumberLiteralNode(number: numToken.intValue!)
+            }
+            else {
+                error("The fuck..")
+            }
             
             // Op?
             if !isNextOp() {
-                return node
+                return node!
             }
             
             opNode = node

@@ -4,40 +4,7 @@ Alt er expressions og skal returnere noget.
 Et subset af funktioner vil have side conditions og kan derfor ikke returnere noget, f.eks. print/echo og IO.
 Disse vil kun pille ved noget eksternt, og ikke ændre program state.
 
-Examples:
-define myFunction: Int a Int b Int c Int d -> Int
-{
-  if a+b > 2 { a+b } { c+d }
-}
-
-define myListFunction: [Int] ints -> Int
-{
-  first(ints)
-}
-
-define divide: Int a Int b -> Int
-{
-  a / b
-}
-
-
-# Comment
-define split: String str, Char c -> [String]
-{
-  let Char fChar = (first str), String rest = (rest str) {
-
-  }
-}
-
-let Int a = 2, Int b = 3 {
-
-}
-
-switch  1 > 2 { "asd" }
-        1 = 2 { "derp" }
-        1 < 2 { "yeps" }
-        else { "fuck" }
-
+Examples in folder 'Code examples (Tests)'
 
 EBNF:
 
@@ -57,7 +24,10 @@ expr := if
 | number
 | call
 
-op := AND | OR | * | / | + | - | < | > | <= | >= | ==
+number := (0-9)+ | (0-9)+.(0-9)+ | -number
+boolLit := "true" | "false"
+
+op := AND | OR | * | / | + | - | < | > | <= | >= | == | !=
 
 if := "if" expr block block
 

@@ -163,7 +163,13 @@ class CodeGenerator {
             
         // Literals
         case is NumberLiteralNode:
-            retString += String(describing: (expr as! NumberLiteralNode).number!)
+            let exp = (expr as! NumberLiteralNode)
+            if exp.floatValue != nil {
+                retString += String(exp.floatValue!)
+            }
+            else if exp.intValue != nil {
+                retString += String(exp.intValue!)
+            }
         break
             
         case is VariableNode:

@@ -116,7 +116,20 @@ class Scanner {
             }
             char = get()
         }
-        while digits.contains(char) || char == "."
+        while digits.contains(char)
+        
+        if char == "." { // But wait, there's more!
+            tmp.append(".")
+            
+            repeat {
+                if digits.contains(char) {
+                    let c = Character(char)
+                    tmp.append(c)
+                }
+                char = get()
+            }
+            while digits.contains(char)
+        }
         
         if inputIndex >= input.count-1 { }
         else {

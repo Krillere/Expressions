@@ -23,6 +23,7 @@ func compile(code: String) {
         generator.generate()
     }
 }
+
 if let p = Bundle.main.path(forResource: "example5", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
     compile(code: cont)
