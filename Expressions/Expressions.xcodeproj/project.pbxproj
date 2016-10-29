@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */; };
 		AAEAC0291DC4E9E200989910 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0201DC4E9E200989910 /* Expressions.swift */; };
 		AAEAC02B1DC4E9E200989910 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0221DC4E9E200989910 /* main.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
 		AAEAC0151DC4E9CA00989910 /* Expressions */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Expressions; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		AAEAC0201DC4E9E200989910 /* Expressions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
+				AAB4EE941DC518520035F875 /* ScopeChecker.swift */,
 			);
 			name = Checking;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				AAEAC02C1DC4E9E200989910 /* Node.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
 				AAEAC02D1DC4E9E200989910 /* Parser.swift in Sources */,
+				AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */,
 				AAEAC0291DC4E9E200989910 /* Expressions.swift in Sources */,
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,

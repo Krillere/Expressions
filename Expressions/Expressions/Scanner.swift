@@ -325,7 +325,7 @@ class Scanner {
                 char = get()
 
                 if digits.contains(char) {
-                    let intS = getNumberString()
+                    let intS = "-"+getNumberString()
                     if isFloating(test: intS) {
                         floatValue = Float(intS)!
                         
