@@ -16,7 +16,7 @@ class CodeGenerator {
     private var declaredFunctions:[String] = []
     
     // Ting der skal ændres direkte
-    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string"]
+    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool"]
     private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
     
     
@@ -39,6 +39,8 @@ class CodeGenerator {
         for dec in declaredFunctions {
             decls += dec+";\n"
         }
+        internalCode = decls+internalCode
+        
         
         // Stdlib
         do {
@@ -50,7 +52,7 @@ class CodeGenerator {
         catch { }
         
         decls += "\n\n// Generated:\n"
-        internalCode = decls+internalCode
+        
         
         print("Code:")
         print(internalCode)
@@ -135,6 +137,9 @@ class CodeGenerator {
             else if par is SwitchNode {
                 return false
             }
+            else if par is ArrayLiteralNode {
+                return false
+            }
             else {
                 tmpNode = par
             }
@@ -160,7 +165,6 @@ class CodeGenerator {
         let shouldRet = shouldReturn(node: expr)
         if shouldRet {
             retString = "return "
-            //print("Returnerer: \(expr)")
         }
         else {
             //print("Returnerer IKKE: \(expr)")
@@ -204,6 +208,10 @@ class CodeGenerator {
             retString += "\""+(expr as! StringLiteralNode).content!+"\""
         break
             
+        case is ArrayLiteralNode:
+            retString += createArrayLiteral(lit: (expr as! ArrayLiteralNode))
+        break
+            
         default:
             retString += ""
             break
@@ -214,6 +222,25 @@ class CodeGenerator {
         }
         
         return retString
+    }
+    
+    func createArrayLiteral(lit: ArrayLiteralNode) -> String {
+        var str = ""
+        
+        str += "["
+        
+        for n in 0 ..< lit.contents.count {
+            let expr = lit.contents[n]
+            str += createExpression(expr: expr)
+            
+            if n != lit.contents.count-1 {
+                str += ", "
+            }
+        }
+        
+        str += "]"
+        
+        return str
     }
     
     // Laver par expression - "(" expr ")"
@@ -317,9 +344,8 @@ class CodeGenerator {
 
         // Lav funktionens indhold
         var str = "{"
-        
         for v in letN.vars {
-            guard let ttype = v.type, let type = typeConversions[ttype], let name = v.name, let expr = v.value else { continue }
+            guard let ttype = v.type, let type = typeConversions[ttype.clearType!], let name = v.name, let expr = v.value else { continue }
             str += type+" "+name+" = "
             str += createExpression(expr: expr)
             str += ";\n"

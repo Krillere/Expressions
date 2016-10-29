@@ -1,57 +1,81 @@
 // Standard library
 #include <iostream>
 #include <vector>
-using namespace std;
 
 template<typename T>
-T first(const vector<T> obj) {
+T first(const std::vector<T> obj) {
     return obj[0];
 }
 
-char first(string str) {
+char first(std::string str) {
     return str[0];
 }
 
 template<typename T>
-T last(const vector<T> obj) {
+T last(const std::vector<T> obj) {
     
 }
 
-char last(string str) {
+char last(std::string str) {
     return str[str.size()-1];
 }
 
 template<typename T>
-int length(const vector<T> obj) {
+size_t length(const std::vector<T> obj) {
     return obj.size();
 }
 
-int length(string str) {
+size_t length(std::string str) {
     return str.size();
 }
 
 template<typename T>
-vector<T> reverse(const vector<T> obj) {
-    vector<T> tmp(obj);
+std::vector<T> reverse(const std::vector<T> obj) {
+    std::vector<T> tmp(obj);
     std::reverse(tmp.begin(), tmp.end());
     return tmp;
 }
 
-string reverse(string str) {
-    string tmp = str;
+std::string reverse(std::string str) {
+    std::string tmp = str;
     std::reverse(tmp.begin(), tmp.end());
     return tmp;
 }
 
 template<typename T>
-T get(const vector<T> obj, int index) {
+T get(const std::vector<T> obj, int index) {
     return obj[index];
 }
 
-char get(string str, int index) {
+char get(std::string str, int index) {
     return str[index];
 }
 
+template<typename T>
+std::vector<T> tail(const std::vector<T> obj) {
+    std::vector<T> tmp(obj);
+    tmp.erase(tmp.begin());
+    return tmp;
+}
+
+std::string tail(std::string str) {
+    std::string tmp(str);
+    tmp.erase(tmp.begin());
+    return tmp;
+}
+
+template<typename T>
+std::vector<T> init(const std::vector<T> obj) {
+    std::vector<T> tmp(obj);
+    tmp.erase(tmp.end());
+    return tmp;
+}
+
+std::string init(std::string str) {
+    std::string tmp(str);
+    tmp.erase(tmp.end());
+    return tmp;
+}
 
 /*
  Basics:
@@ -61,10 +85,11 @@ char get(string str, int index) {
  reverse(lst)
  get(lst, n)
  
- take(lst, n)
- 
- tail(lst) = ALT ANDET END FØRSTE
  init(lst) = ALT ANDET END SIDSTE
+ tail(lst) = ALT ANDET END FØRSTE
+ 
+ // Mangler:
+ take(lst, n)
  
  null(lst) = { if length(lst) == 0 { true } { false } }
  

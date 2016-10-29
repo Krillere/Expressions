@@ -12,3 +12,7 @@ define stringTest: String str -> Char {
 }
 
 # Comment here
+
+define ifTest: -> Int {
+    if (1 > 2) OR true { 1 } { 2 }
+}

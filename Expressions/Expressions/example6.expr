@@ -1,0 +1,12 @@
+# Array test
+define main: -> Int {
+  let [Int] myAr = [1, 2, 3, 4, 4+1] {
+    length(myAr)
+  }
+}
+
+#define test: -> Int {
+#    let Int a = 1 {
+#        a
+#    }
+#}

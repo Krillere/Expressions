@@ -125,7 +125,6 @@ class Parser {
             let type = parseType()
             let name = scanner.getToken()
             
-            //print("Parameter lavet med type: \(type), navn: \(name.content)")
             res.append(ParameterNode(type: type.fullString!, name: name.content))
         }
         
@@ -162,6 +161,7 @@ class Parser {
             return TypeNode(full: token.content, type: token.content, nestedLevel: 0)
         }
         
+        // Et array af en art, fix!
         let ret = TypeNode()
         
         var metName = false
@@ -169,14 +169,18 @@ class Parser {
         var lParCount = 0
         var rParCount = 0
         
+        
+        var fullTypeName:String = token.content
+        var clearTypeName:String = ""
+        
         while true {
             let tmp = scanner.peekToken()
             if tmp.type == .string {
                 if !metName {
+                    clearTypeName = tmp.content
                     metName = true
                 }
                 else {
-                    ret.clearType = tmp.content
                     break
                 }
             }
@@ -189,18 +193,22 @@ class Parser {
             }
             
             if tmp.type != .lsquare && tmp.type != .string && tmp.type != .rsquare {
+
                 break
             }
             
-            let _ = scanner.getToken()
-            //tokenContent.append(tok.content)
+            let tok = scanner.getToken()
+            fullTypeName.append(tok.content)
         }
         
         if lParCount != rParCount {
             error("Number of square brackets does not match.")
         }
         
+        ret.fullString = fullTypeName
         ret.numNested = lParCount
+        ret.clearType = clearTypeName
+    
         
         return ret
     }
@@ -232,7 +240,7 @@ class Parser {
             return ElseNode()
         }
         
-        // Variabler
+        // Variabler og literals
         var opNode:Node?
         if tmpToken.type == .string { // Variabelnavn (identifier) eller evt. funktionskald?
             let stringToken = scanner.getToken()
@@ -313,6 +321,9 @@ class Parser {
             
             opNode = expr
         }
+        else if tmpToken.type  == .lsquare {
+            return parseArrayLiteral()
+        }
         
         if let opNode = opNode {
             let opToken = scanner.getToken()
@@ -324,9 +335,32 @@ class Parser {
         
         return Node()
     }
-    
-    
+
     // MARK: Specielle expressions
+    func parseArrayLiteral() -> ArrayLiteralNode {
+        let _ = scanner.getToken() // [
+        
+        var literalNodes:[Node] = []
+        
+        while scanner.peekToken().type != .rsquare {
+            if scanner.peekToken().type == .none {
+                error("Error in array literal.")
+                break
+            }
+            
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
+            
+            let expr = parseExpression()
+            literalNodes.append(expr)
+        }
+        
+        let _ = scanner.getToken()
+        
+        let lit = ArrayLiteralNode(nodes: literalNodes)
+        return lit
+    }
+
+    
     // Parser if-else node
     private func parseIf() -> IfElseNode {
         let _ = scanner.getToken() // keyword "if"
@@ -342,13 +376,14 @@ class Parser {
     // let Int a = 2, String c = "fuck this"
     private func parseLet() -> LetNode {
         let _ = scanner.getToken() // keyword let
-        
+
         let vars = parseLetVariables()
         let block = parseBlock()
         
         return LetNode(vars: vars, block: block)
     }
     
+    // Parser variabler i en let
     private func parseLetVariables() -> [LetVariableNode] {
         var res:[LetVariableNode] = []
         
@@ -362,16 +397,19 @@ class Parser {
             
             let type = parseType()
             let name = scanner.getToken().content
-            let _ = scanner.getToken()
+
+            let _ = scanner.getToken() // =
             let value = parseExpression()
+
+            let vNode = LetVariableNode(type: type, name: name, value: value)
             
-            res.append(LetVariableNode(type: type.fullString!, name: name, value: value))
+            res.append(vNode)
         }
         
         return res
     }
     
-    
+    // Parser en switch, lidt ligesom en række if's
     private func parseSwitch() -> SwitchNode {
         let _ = scanner.getToken() // keyword switch
         

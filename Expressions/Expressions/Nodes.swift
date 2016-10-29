@@ -1,12 +1,32 @@
 //
-//  Expressions.swift
+//  Node.swift
 //  Parser
 //
-//  Created by Christian Lundtofte on 27/10/2016.
+//  Created by Christian Lundtofte on 23/10/2016.
 //  Copyright © 2016 Christian Lundtofte. All rights reserved.
 //
 
 import Foundation
+
+enum CompilerError : Error {
+    case ScannerError
+    case ParserError
+    case TypeError
+}
+
+class Node {
+    var parent:Node?
+    
+    init() { }
+}
+
+class ErrorNode : Node {
+    
+}
+
+class ProgramNode : Node {
+    var functions:[FunctionNode] = []
+}
 
 
 class FunctionNode : Node {
@@ -77,6 +97,25 @@ class FunctionCallNode : Node, CustomStringConvertible {
     
     var description: String {
         return "Kald: \(identifier!), med "+String(parameters.count)+" parametre!"
+    }
+}
+
+// Type erklæring
+class TypeNode : Node, CustomStringConvertible {
+    var fullString:String?
+    var clearType:String?
+    var numNested:Int?
+    
+    override init() { }
+    
+    init(full: String, type: String, nestedLevel: Int) {
+        self.fullString = full
+        self.clearType = type
+        self.numNested = nestedLevel
+    }
+    
+    var description: String {
+        return String(describing: self.fullString)
     }
 }
 
@@ -218,11 +257,11 @@ class LetNode : Node, CustomStringConvertible {
 }
 
 class LetVariableNode : Node, CustomStringConvertible {
-    var type:String?
+    var type:TypeNode?
     var value:Node?
     var name:String?
     
-    init(type: String, name: String, value: Node) {
+    init(type: TypeNode, name: String, value: Node) {
         super.init()
         
         self.type = type
@@ -233,7 +272,7 @@ class LetVariableNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "'"+self.type!+" "+self.name!+" = "+String(describing: value)+"'"
+        return "'"+String(describing: self.type!)+" "+self.name!+" = "+String(describing: value)+"'"
     }
 }
 
@@ -246,6 +285,36 @@ class StringLiteralNode : Node, CustomStringConvertible {
     
     var description: String {
         return "\""+self.content!+"\""
+    }
+}
+
+class ArrayLiteralNode : Node, CustomStringConvertible {
+    var contents:[Node] = []
+    
+    init(nodes: [Node]) {
+        super.init()
+        
+        self.contents = nodes
+        
+        for c in self.contents {
+            c.parent = self
+        }
+    }
+    
+    var description: String {
+        var str = "["
+        
+        for n in 0 ..< self.contents.count {
+            let node = self.contents[n]
+            str += String(describing: node)
+            
+            if n != self.contents.count-1 {
+                str += ", "
+            }
+        }
+        
+        str += "]"
+        return str
     }
 }
 
@@ -263,6 +332,7 @@ class SwitchNode : Node {
     }
 }
 
+// En case i switch (cond block)
 class SwitchCaseNode : Node, CustomStringConvertible {
     var expr:Node?
     var block:BlockNode?
@@ -282,22 +352,7 @@ class SwitchCaseNode : Node, CustomStringConvertible {
     }
 }
 
+// Node der stopper switch
 class ElseNode : Node { }
 
-class TypeNode : Node, CustomStringConvertible {
-    var fullString:String?
-    var clearType:String?
-    var numNested:Int?
-    
-    override init() { }
-    
-    init(full: String, type: String, nestedLevel: Int) {
-        self.fullString = full
-        self.clearType = type
-        self.numNested = nestedLevel
-    }
-    
-    var description: String {
-        return self.fullString!
-    }
-}
+
