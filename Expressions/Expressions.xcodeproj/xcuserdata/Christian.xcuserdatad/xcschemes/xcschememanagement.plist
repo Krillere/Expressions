@@ -7,12 +7,12 @@
 		<key>Expressions.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>AA8D8BB61DB7CAA60036E69B</key>
+		<key>AAEAC0141DC4E9CA00989910</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA8D8BB61DB7CAA60036E69B"
+               BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
                BuildableName = "Expressions"
                BlueprintName = "Expressions"
                ReferencedContainer = "container:Expressions.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA8D8BB61DB7CAA60036E69B"
+            BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
             BuildableName = "Expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA8D8BB61DB7CAA60036E69B"
+            BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
             BuildableName = "Expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA8D8BB61DB7CAA60036E69B"
+            BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
             BuildableName = "Expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
