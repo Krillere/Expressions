@@ -39,6 +39,16 @@ class CodeGenerator {
         for dec in declaredFunctions {
             decls += dec+";\n"
         }
+        
+        // Stdlib
+        do {
+            if let path = Bundle.main.path(forResource: "std", ofType: "cpp") {
+                let stdFuncs = try String(contentsOfFile: path)
+                internalCode = stdFuncs+internalCode
+            }
+        }
+        catch { }
+        
         decls += "\n\n// Generated:\n"
         internalCode = decls+internalCode
         

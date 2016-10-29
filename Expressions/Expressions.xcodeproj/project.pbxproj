@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
+		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
+		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */; };
 		AAEAC0291DC4E9E200989910 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0201DC4E9E200989910 /* Expressions.swift */; };
 		AAEAC02B1DC4E9E200989910 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0221DC4E9E200989910 /* main.swift */; };
@@ -33,6 +35,7 @@
 				AAEAC03D1DC4ED0800989910 /* example2.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
 				AAEAC0411DC4F17800989910 /* example4.expr in CopyFiles */,
+				AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */,
 				AAEAC03F1DC4EE6F00989910 /* example3.expr in CopyFiles */,
 				AAEAC0431DC4FE3700989910 /* example5.expr in CopyFiles */,
 			);
@@ -42,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
+		AAB4EE961DC52DE80035F875 /* std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std.cpp; sourceTree = "<group>"; };
 		AAEAC0151DC4E9CA00989910 /* Expressions */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Expressions; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		AAEAC0201DC4E9E200989910 /* Expressions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
+				AAB4EE961DC52DE80035F875 /* std.cpp */,
 			);
 			name = Codegen;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 				AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */,
 				AAEAC02C1DC4E9E200989910 /* Node.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
+				AAB4EE971DC52DE80035F875 /* std.cpp in Sources */,
 				AAEAC02D1DC4E9E200989910 /* Parser.swift in Sources */,
 				AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */,
 				AAEAC0291DC4E9E200989910 /* Expressions.swift in Sources */,
