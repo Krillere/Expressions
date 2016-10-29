@@ -15,17 +15,21 @@
 		AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0251DC4E9E200989910 /* ParserTables.swift */; };
 		AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0261DC4E9E200989910 /* Scanner.swift */; };
 		AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0271DC4E9E200989910 /* TypeChecker.swift */; };
+		AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0321DC4E9EF00989910 /* example1.expr */; };
+		AAEAC03D1DC4ED0800989910 /* example2.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0341DC4EBE800989910 /* example2.expr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AAEAC0131DC4E9CA00989910 /* CopyFiles */ = {
+		AAEAC03B1DC4ED0300989910 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			dstPath = "";
+			dstSubfolderSpec = 7;
 			files = (
+				AAEAC03D1DC4ED0800989910 /* example2.expr in CopyFiles */,
+				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -39,8 +43,9 @@
 		AAEAC0251DC4E9E200989910 /* ParserTables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTables.swift; sourceTree = "<group>"; };
 		AAEAC0261DC4E9E200989910 /* Scanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		AAEAC0271DC4E9E200989910 /* TypeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeChecker.swift; sourceTree = "<group>"; };
-		AAEAC0311DC4E9EA00989910 /* ENBF.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ENBF.txt; sourceTree = "<group>"; };
-		AAEAC0321DC4E9EF00989910 /* example.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example.expr; sourceTree = "<group>"; };
+		AAEAC0311DC4E9EA00989910 /* ENBF.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ENBF.txt; path = Expressions/ENBF.txt; sourceTree = "<group>"; };
+		AAEAC0321DC4E9EF00989910 /* example1.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example1.expr; sourceTree = "<group>"; };
+		AAEAC0341DC4EBE800989910 /* example2.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example2.expr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +62,7 @@
 		AAEAC00C1DC4E9CA00989910 = {
 			isa = PBXGroup;
 			children = (
+				AAEAC0311DC4E9EA00989910 /* ENBF.txt */,
 				AAEAC0171DC4E9CA00989910 /* Expressions */,
 				AAEAC0161DC4E9CA00989910 /* Products */,
 			);
@@ -73,15 +79,11 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
-				AAEAC0321DC4E9EF00989910 /* example.expr */,
-				AAEAC0311DC4E9EA00989910 /* ENBF.txt */,
+				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
-				AAEAC0331DC4E9FD00989910 /* Parser nodes */,
-				AAEAC0261DC4E9E200989910 /* Scanner.swift */,
-				AAEAC0241DC4E9E200989910 /* Parser.swift */,
-				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
-				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
-				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
+				AAEAC0361DC4EC0000989910 /* Scanner and Parser */,
+				AAEAC0371DC4EC0D00989910 /* Typecheck and optimization */,
+				AAEAC0381DC4EC1700989910 /* Codegen */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -95,6 +97,42 @@
 			name = "Parser nodes";
 			sourceTree = "<group>";
 		};
+		AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */ = {
+			isa = PBXGroup;
+			children = (
+				AAEAC0321DC4E9EF00989910 /* example1.expr */,
+				AAEAC0341DC4EBE800989910 /* example2.expr */,
+			);
+			name = "Code examples (Tests)";
+			sourceTree = "<group>";
+		};
+		AAEAC0361DC4EC0000989910 /* Scanner and Parser */ = {
+			isa = PBXGroup;
+			children = (
+				AAEAC0331DC4E9FD00989910 /* Parser nodes */,
+				AAEAC0261DC4E9E200989910 /* Scanner.swift */,
+				AAEAC0241DC4E9E200989910 /* Parser.swift */,
+				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
+			);
+			name = "Scanner and Parser";
+			sourceTree = "<group>";
+		};
+		AAEAC0371DC4EC0D00989910 /* Typecheck and optimization */ = {
+			isa = PBXGroup;
+			children = (
+				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
+			);
+			name = "Typecheck and optimization";
+			sourceTree = "<group>";
+		};
+		AAEAC0381DC4EC1700989910 /* Codegen */ = {
+			isa = PBXGroup;
+			children = (
+				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
+			);
+			name = Codegen;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -104,7 +142,7 @@
 			buildPhases = (
 				AAEAC0111DC4E9CA00989910 /* Sources */,
 				AAEAC0121DC4E9CA00989910 /* Frameworks */,
-				AAEAC0131DC4E9CA00989910 /* CopyFiles */,
+				AAEAC03B1DC4ED0300989910 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -299,6 +337,7 @@
 				AAEAC01E1DC4E9CA00989910 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

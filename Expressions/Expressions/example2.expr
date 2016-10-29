@@ -1,0 +1,9 @@
+define diff: Int a, Int b -> Int {
+    let Int diff = a - b {
+        diff
+    }
+}
+
+define main: -> Int {
+  diff(8, 5)
+}

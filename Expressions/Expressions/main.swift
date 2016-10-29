@@ -8,7 +8,7 @@
 
 import Foundation
 
-if let p = Bundle.main.path(forResource: "example", ofType: "expr") {
+if let p = Bundle.main.path(forResource: "example2", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
     
     let ps = Parser(input: cont)
@@ -18,4 +18,7 @@ if let p = Bundle.main.path(forResource: "example", ofType: "expr") {
         let generator = CodeGenerator(program: program)
         generator.generate()
     }
+}
+else {
+    print("Ingen fil fundet..")
 }
