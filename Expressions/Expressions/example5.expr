@@ -7,6 +7,8 @@ define main: -> Int {
 
 define stringTest: String str -> Char {
     let String str = "start asdf æøå */+- slut" {
-        1
+        1 # Should be ignored.
     }
 }
+
+# Comment here

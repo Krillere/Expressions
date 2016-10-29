@@ -202,6 +202,13 @@ class Scanner {
     }
     
     
+    func removeComment() {
+        while char != "\n" {
+            char = get()
+        }
+    }
+    
+    
     // Finder token ud fra string
     private func parseString() -> Token? {
         
@@ -257,7 +264,6 @@ class Scanner {
         return token
     }
 
-    
     // Lader brugeren kigge 'num' tokens frem (0 som default)
     func peekToken(num: Int = 0) -> Token {
         if tokenIndex+num > allTokens.count-1 {
@@ -367,10 +373,6 @@ class Scanner {
                 token = Token(cont: "*", type: .op, charIndex: inputIndex)
                 break
                 
-            case "#":
-                print("Kommentar!")
-            break
-                
             case "/":
                 token = Token(cont: "/", type: .op, charIndex: inputIndex)
                 break
@@ -443,6 +445,11 @@ class Scanner {
             case "\"":
                 let stringLit = getStringLiteralContent()
                 token = Token(cont: stringLit, type: .stringLiteral, charIndex: inputIndex)
+            break
+                
+            case "#":
+                removeComment()
+                token = intGetToken()
             break
                 
             default:
