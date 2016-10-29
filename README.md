@@ -1,6 +1,9 @@
 # Expressions
 
 A simple compiler for a simple functional programming language. Everything is an expression, hence the name.
+The compiler is written in Swift 3.0.
+
+# The language
 
 ## Functions
 Functions are declared by using the following general syntax:
