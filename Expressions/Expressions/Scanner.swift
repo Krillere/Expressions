@@ -18,7 +18,7 @@ enum TokenType {
     
     case boolLiteral   // true|false
     
-    case op // AND | OR | * | + | / | - | < | > | <= | >= | ==
+    case op // AND | OR | * | + | / | - | < | > | <= | >= | == | !=
     
     case number         // (0-9)
     case string         // (a-Z)+
@@ -29,6 +29,7 @@ enum TokenType {
     case questionMark   // ?
     case returns        // ->
     case comma          // ,
+    case negate         // !
     
     case keyword_if     // "if"
     case keyword_else   // "else"
@@ -363,22 +364,35 @@ class Scanner {
             break
                 
             case "<":
-                let test = peekToken()
-                if test.type == .equal {
+                let test = get()
+                if test == "=" {
                     token = Token(cont: "<=", type: .op, charIndex: inputIndex)
                 }
                 else {
+                    inputIndex -= 1
                     token = Token(cont: "<", type: .op, charIndex: inputIndex)
                 }
             break
                 
             case ">":
-                let test = peekToken()
-                if test.type == .equal {
+                let test = get()
+                if test == "=" {
                     token = Token(cont: ">=", type: .op, charIndex: inputIndex)
                 }
                 else {
+                    inputIndex -= 1
                     token = Token(cont: ">", type: .op, charIndex: inputIndex)
+                }
+            break
+                
+            case "!":
+                let test = get()
+                if test == "=" {
+                    token = Token(cont: "!=", type: .op, charIndex: inputIndex)
+                }
+                else {
+                    inputIndex -= 1
+                    token = Token(cont: "!", type: .op, charIndex: inputIndex)
                 }
             break
                 

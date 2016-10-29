@@ -1,0 +1,9 @@
+define t: Int a, Int b, Int c, Int d -> Int {
+  if a > b
+  { a }
+{ if (a > c) AND (a > d) { a } { d } }
+}
+
+define main: -> Int {
+  t(1, 2, 3, 4)
+}

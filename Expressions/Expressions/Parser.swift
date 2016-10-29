@@ -239,6 +239,19 @@ class Parser {
             
             opNode = node
         }
+        else if tmpToken.type == .lpar {
+            let _ = scanner.getToken() // lpar
+            let expr = parseExpression()
+            let _ = scanner.getToken() // rpar
+            
+            let parexp = ParenthesesExpression(expr: expr)
+            
+            if !isNextOp() {
+                return parexp
+            }
+            
+            opNode = parexp
+        }
         
         if let opNode = opNode {
             let opToken = scanner.getToken()

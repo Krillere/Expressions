@@ -12,14 +12,19 @@ class CodeGenerator {
     private var internalCode:String = ""
     private var program:ProgramNode?
 
-    private var funcDecls:[String] = []
+    // Prototyper
+    private var declaredFunctions:[String] = []
     
+    // Ting der skal ændres direkte
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string"]
+    private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
+    
     
     init(program: ProgramNode) {
         self.program = program
     }
     
+    // Laver og printer kode
     func generate() {
         guard let program = self.program else { return }
         let functions = program.functions
@@ -31,7 +36,7 @@ class CodeGenerator {
         
         // Imports og declarations og shitz
         var decls = "// Prototypes \n"
-        for dec in funcDecls {
+        for dec in declaredFunctions {
             decls += dec+";\n"
         }
         decls += "\n\n// Generated:\n"
@@ -54,15 +59,15 @@ class CodeGenerator {
         
         
         let pars = createFunctionParameters(pars: function.pars)
-        funcDecls.append(type+" "+identifier+"("+pars+")")
+        declaredFunctions.append(type+" "+identifier+"("+pars+")")
         
         emit("\n"+type+" ") // int
         emit(identifier) // main
         emit("("+pars+")")
-        emit(createFunctionBlock(block: block))
+        emit(createBlock(block: block))
     }
     
-    // Laver string med funktionsparametre (bruges senere)
+    // Laver string med funktionsparametre - (T1 n1, T2 n2 ... )
     private func createFunctionParameters(pars: [ParameterNode]) -> String {
         var str = ""
         
@@ -79,19 +84,8 @@ class CodeGenerator {
         return str
     }
 
-    // Laver en blok
+    // Laver en blok - { expr }
     private func createBlock(block: BlockNode) -> String {
-        var str = "{"
-        
-        if let expr = block.expression {
-            str += createExpression(expr: expr)
-        }
-        
-        str += "}"
-        return str
-    }
-    
-    private func createFunctionBlock(block: BlockNode) -> String {
         
         var str = "{\n"
         str += createExpression(expr: block.expression!)
@@ -100,6 +94,7 @@ class CodeGenerator {
         return str
     }
     
+    // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
     private func shouldReturn(node: Node) -> Bool {
         
         var tmpNode:Node = node
@@ -124,6 +119,9 @@ class CodeGenerator {
             else if par is FunctionCallNode {
                 return false
             }
+            else if par is ParenthesesExpression {
+                return false
+            }
             else {
                 tmpNode = par
             }
@@ -132,6 +130,7 @@ class CodeGenerator {
         return false
     }
     
+    // Laver expression (Alle typer)
     private func createExpression(expr: Node) -> String {
         if expr is IfElseNode {
             return createIfElseNode(ifElse: (expr as! IfElseNode))
@@ -175,6 +174,10 @@ class CodeGenerator {
             retString += createFunctionCall(call: (expr as! FunctionCallNode))
         break
             
+        case is ParenthesesExpression:
+            retString += createParenthesisExpression(expr: (expr as! ParenthesesExpression))
+        break
+            
         default:
             retString += ""
             break
@@ -187,19 +190,37 @@ class CodeGenerator {
         return retString
     }
     
+    // Laver par expression - "(" expr ")"
+    private func createParenthesisExpression(expr: ParenthesesExpression) -> String {
+        var str = "("
+        str += createExpression(expr: expr.expression!)
+        str += ")"
+        return str
+    }
+    
+    // Laver expression node  -  expr OP expr
     private func createExpressionNode(expr: ExpressionNode) -> String {
          guard let op = expr.op, let ops = op.op, let lop = expr.loperand, let rop = expr.roperand else { return "" }
         
         var str = ""
         str += createExpression(expr: lop)
         str += " "
-        str += ops
+        
+        // Erstat operators hvis nødvendigt
+        if let replace = opConversions[ops] {
+            str += replace
+        }
+        else {
+            str += ops
+        }
+
         str += " "
         str += createExpression(expr: rop)
         
         return str
     }
     
+    // Laver funktionskald - name "(" [expr] ")"
     private func createFunctionCall(call: FunctionCallNode) -> String {
         guard let identifer = call.identifier else { return "" }
         var str = ""
@@ -221,6 +242,7 @@ class CodeGenerator {
         return str
     }
     
+    // Laver if-else - "if" expr block block
     private func createIfElseNode(ifElse: IfElseNode) -> String {
         guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition else { return "" }
         var str = ""
@@ -229,12 +251,13 @@ class CodeGenerator {
         str += createExpression(expr: cond)
         str += ")\n"
         str += createBlock(block: iblock)
-        str += "\n else "
+        str += "else "
         str += createBlock(block: eblock)
         
         return str
     }
     
+    // Laver let - "let" [Type name "=" expr] block
     private func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block, let bexpr = block.expression else { return "" }
         

@@ -8,7 +8,7 @@
 
 import Foundation
 
-if let p = Bundle.main.path(forResource: "example2", ofType: "expr") {
+if let p = Bundle.main.path(forResource: "example4", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
     
     let ps = Parser(input: cont)

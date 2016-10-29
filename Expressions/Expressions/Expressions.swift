@@ -123,6 +123,21 @@ class BooleanLiteralNode : Node, CustomStringConvertible {
 }
 
 // MARK: Expressions
+class ParenthesesExpression: Node, CustomStringConvertible {
+    var expression:Node?
+    
+    init(expr: Node) {
+        super.init()
+        
+        self.expression = expr
+        self.expression?.parent = self
+    }
+    
+    var description: String {
+        return "(\(self.expression))"
+    }
+}
+
 class OperatorNode : Node, CustomStringConvertible {
     var op: String?
     
