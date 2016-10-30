@@ -34,7 +34,9 @@ define main: -> Int {
 ```
 
 ## Types
-Something here soon.
+The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types.
+
+Currently there is no support of creating types, but there probably will be in the future.
 
 ## Conditionals
 Expressions supports two types of conditionals; If-statements and switch-statements.
