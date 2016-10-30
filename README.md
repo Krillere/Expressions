@@ -10,8 +10,8 @@ ToDo list:
 - Built-in functions (Mostly done for now)
 - Types (Done)
 - Lists (Done)
-- Generics
 - Objects
+- Generics
 - Side conditions (Print, IO and such)
 - Type conversions
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
@@ -29,6 +29,7 @@ Overview:
 
 1.  [Functions](#functions)
 2.  [Types](#types)
+3.  [Objects](#objects)
 3.  [Conditionals](#conditionals)
 4.  [Switch](#switch)
 5.  [Variables](#variables)
@@ -56,7 +57,7 @@ define main: -> Int {
 ```
 
 ## Types
-The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types.
+The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using quotes, just as strings: ```Char c = "c"```
 
 Currently there is no support of creating types, but there probably will be in the future.
 
@@ -65,9 +66,28 @@ Lists are created using square brackets. For example, a list of integers from 0-
 let [Int] myIntegers = [1, 2, 3, 4, 4+1] {
 }
 ```
-Nested lists are also possible, simply by adding another layer of square brackets. List literals can be used in all functioncalls that accepts these. For example:
+Nested lists are also possible, simply by adding another layer of square brackets. List literals can be used in all function calls that accepts these. For example:
 ```
 take([1, 2, 3, 4], 2) # Returns [1, 2]
+take("1234", 2) # Returns "12"
+```
+
+## Objects
+Objects can be defined to contain a number of different values using the *type* keyword. For example:
+```
+type MyType {
+  Int myInteger,
+  String myString,
+  Char myCharacter,
+}
+```
+The last comma does not have to be there.
+
+To create an object of this type, use:
+```
+let MyType t = MyType(4, "string", "c") {
+  # myInteger = 4, myString = "string", myCharacter = "c"
+}
 ```
 
 
