@@ -70,11 +70,13 @@ class CodeGenerator {
 
     // Generer funktioner
     private func emitFunction(function: FunctionNode) {
+        print("Laver function: \(function)")
         guard let retType = function.retType,
             let identifier = function.identifier,
-            let type = typeConversions[retType],
             let block = function.block else { return }
         
+        
+        let type = createTypeString(type: retType)
         
         let pars = createFunctionParameters(pars: function.pars)
         declaredFunctions.append(type+" "+identifier+"("+pars+")")

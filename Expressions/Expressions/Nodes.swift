@@ -29,13 +29,13 @@ class ProgramNode : Node {
 }
 
 
-class FunctionNode : Node {
+class FunctionNode : Node, CustomStringConvertible {
     var identifier:String?
     var block:BlockNode?
     var pars:[ParameterNode] = []
-    var retType:String?
+    var retType:TypeNode?
     
-    init(identifier: String, pars: [ParameterNode], ret: String, block: BlockNode) {
+    init(identifier: String, pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
         super.init()
         
         self.identifier = identifier
@@ -50,6 +50,10 @@ class FunctionNode : Node {
     }
     
     override init() { }
+    
+    var description: String {
+        return "\(retType) \(identifier)"
+    }
 }
 
 class ParameterNode : Node, CustomStringConvertible  {

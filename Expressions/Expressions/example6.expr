@@ -21,8 +21,13 @@ define boolTest: -> Bool {
   (true AND false) OR true
 }
 
-define palindrome: String pal -> Bool {
+define isPalindrome: String pal -> Bool {
   let String rpal = reverse(pal) {
     rpal == pal
   }
+}
+
+
+define takeTest: -> [Int] {
+  take([1, 2, 3, 4], 2)
 }

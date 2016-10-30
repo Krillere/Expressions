@@ -106,7 +106,7 @@ class Parser {
         
         let retType = parseType()
         
-        let fc = FunctionNode(identifier: funcName, pars: pars, ret: retType.fullString!, block: parseBlock())
+        let fc = FunctionNode(identifier: funcName, pars: pars, ret: retType, block: parseBlock())
         return fc
     }
     
