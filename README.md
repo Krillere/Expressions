@@ -27,12 +27,12 @@ The code generator traverses the tree created by the parser and produces the C++
 Overview:
 
 1.  [Functions](#functions)
-2.  Types
-3.  Conditionals
-4.  Switch
-5.  Variables
-6.  Comments
-7.  Standard functions
+2.  [Types](#types)
+3.  [Conditionals](#conditionals)
+4.  [Switch](#switch)
+5.  [Variables](#variables)
+6.  [Comments](#comments)
+7.  [Standard functions](#standard-functions--built-in-functions)
 
 ## Functions
 [functions]:asd
