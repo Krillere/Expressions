@@ -23,6 +23,15 @@ The code generator traverses the tree created by the parser and produces the C++
 
 # The language
 
+Overview:
+1. Functions
+2. Types
+3. Conditionals
+4. Switch
+5. Variables
+6. Comments
+7. Standard functions
+
 ## Functions
 Functions are declared by using the following general syntax:
 ```
