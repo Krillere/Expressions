@@ -7,12 +7,13 @@ ToDo list:
 - Function implementation (Done)
 - Switch implementation (Done)
 - Let implementation (Done)
-- Built-in functions (Some functions implemented)
-- Types (Simple types are working, Strings are WIP)
-- Type conversions (Will probably be created as functions)
-- Lists (Literals and variables works in builtin-functions)
+- Built-in functions (Mostly done for now)
+- Types (Done, testing.)
+- Lists (Testing)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 - Side conditions (Print, IO and such) (Not implemented at all)
+- Type conversions (Will probably be created as functions)
+- Generics (Not even started)
 
 ## Project structure
 The compiler consists of four major parts; scanner, parser, validator and code generation.
