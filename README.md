@@ -11,6 +11,7 @@ ToDo list:
 - Simple types (Done)
 - Lists (Done)
 - Objects (Done)
+- Functions as first-class-citizens
 - Generics
 - Side conditions (Print, IO and such)
 - Type conversions
