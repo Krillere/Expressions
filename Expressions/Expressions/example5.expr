@@ -1,3 +1,5 @@
+# General testing
+
 define main: -> Int {
   switch  1 == 2 { 1 }
           2 == 1 { 2 }

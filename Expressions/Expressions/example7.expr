@@ -1,38 +1,25 @@
+# Testing types
+
+type TestType {
+  Int iint,
+  String sstring,
+  Char cchar,
+}
+
+type AnotherType {
+  Int int1,
+  Int int2
+}
+
+type NestedType {
+  AnotherType test,
+  Int a
+}
+
 define main: -> Int {
   0
 }
 
-# Recursive last element
-#define myLast: [Generic] lst -> Generic {
-#    if length(lst) == 1 { first(lst) }
-#                         { myLast(tail(lst)) }
-#}
-
-# Second last element or -1
-#define myButLast: [Generic] lst -> Generic {
-#  switch length(lst) == 2 { first(lst) }
-#         length(lst) > 2 { myButLast(tail(lst)) }
-#         else { -1 }
-#}
-
-# Length of list
-define myLength: [Generic] lst -> Generic {
-  if length(lst) == 0 { 0 }
-                       { 1 + myLength(tail(lst)) }
+define test: -> AnotherType {
+  AnotherType(1, 1)
 }
-
-# Test
-define multGenTest: [Generic] lst, Int a -> Int {
-  0
-}
-
-define multGenTest2: [Generic] lst, Int a -> Generic {
-  0
-}
-
-# Reverse
-#define reverse: [Generic] lst -> [Generic] {
-#let t = first(lst) {
-
-#}
-#}

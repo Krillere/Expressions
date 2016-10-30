@@ -105,12 +105,18 @@ class Parser {
     
     // Type
     private func parseObjectType() -> ObjectTypeNode {
-        let _ = scanner.getToken() // 'type'
+        let t1 = scanner.getToken() // 'type'
+        if !t1.content.contains("type") {
+            error("Expected 'type', got \(t1.content)")
+        }
         
         let name = scanner.getToken()
         ParserTables.types.append(name.content)
         
-        let _ = scanner.getToken() // '{'
+        let t2 = scanner.getToken() // '{'
+        if !t2.content.contains("{") {
+            error("Expected '{', got \(t2.content)")
+        }
         
         var variables:[ObjectTypeVariableNode] = []
         
@@ -124,7 +130,10 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue } // Skip komma
         }
         
-        let _ = scanner.getToken() // '}'
+        let t3 = scanner.getToken() // '}'
+        if !t3.content.contains("}") {
+            error("Expected '}', got \(t3.content)")
+        }
         
         return ObjectTypeNode(variables: variables, name: name.content)
     }
@@ -143,11 +152,17 @@ class Parser {
         
         ParserTables.functions.append(funcName) // Gem funktionsnavn så vi kan tjekke i TypeChecker
         
-        let _ = scanner.getToken() // Kolon før parameters
+        let t1 = scanner.getToken() // ';'
+        if !t1.content.contains(":") {
+            error("Expected ':', got \(t1.content)")
+        }
         
         // Parametre og ->
         let pars = parseParameters()
-        let _ = scanner.getToken()
+        let t2 = scanner.getToken()
+        if !t2.content.contains(">") {
+            error("Expected '>', got \(t2.content)")
+        }
         
         let retType = parseType()
         
@@ -192,7 +207,10 @@ class Parser {
         
         let block = BlockNode(expr: parseExpression())
         
-        let _ = scanner.getToken() // } i block
+        let t1 = scanner.getToken() // } i block
+        if !t1.content.contains("}") {
+            error("Expected '}', got \(t1.content)")
+        }
         
         return block
     }
@@ -287,7 +305,11 @@ class Parser {
             return parseSwitch()
         }
         else if tmpToken.type == .keyword_else {
-            let _ = scanner.getToken() // Fjern 'else'
+            let t1 = scanner.getToken() // Fjern 'else'
+            if !t1.content.contains("else") {
+                error("Expected 'else', got \(t1.content)")
+            }
+            
             return ElseNode()
         }
         
@@ -350,9 +372,17 @@ class Parser {
             opNode = node
         }
         else if tmpToken.type == .lpar {
-            let _ = scanner.getToken() // lpar
+            let t1 = scanner.getToken() // lpar
+            if !t1.content.contains("(") {
+                error("Expected '(', got \(t1.content)")
+            }
+            
             let expr = parseExpression()
-            let _ = scanner.getToken() // rpar
+            
+            let t2 = scanner.getToken() // rpar
+            if !t2.content.contains("(") {
+                error("Expected ')', got \(t2.content)")
+            }
             
             let parexp = ParenthesesExpression(expr: expr)
             
@@ -363,7 +393,11 @@ class Parser {
             opNode = parexp
         }
         else if tmpToken.type == .stringLiteral {
-            let _ = scanner.getToken()
+            let t1 = scanner.getToken() // "
+            if !t1.content.contains("\"") {
+                error("Expected '\"', got \(t1.content)")
+            }
+            
             let expr = StringLiteralNode(content: tmpToken.content)
             
             if !isNextOp() {
@@ -389,7 +423,10 @@ class Parser {
 
     // MARK: Specielle expressions
     func parseArrayLiteral() -> ArrayLiteralNode {
-        let _ = scanner.getToken() // [
+        let t1 = scanner.getToken() // [
+        if !t1.content.contains("[") {
+            error("Expected '[', got \(t1.content)")
+        }
         
         var literalNodes:[Node] = []
         
@@ -405,7 +442,7 @@ class Parser {
             literalNodes.append(expr)
         }
         
-        let _ = scanner.getToken()
+        let _ = scanner.getToken() // I forgot what this is.. Fuck it.
         
         let lit = ArrayLiteralNode(nodes: literalNodes)
         return lit
@@ -414,7 +451,10 @@ class Parser {
     
     // Parser if-else node
     private func parseIf() -> IfElseNode {
-        let _ = scanner.getToken() // keyword "if"
+        let t1 = scanner.getToken() // keyword "if"
+        if !t1.content.contains("if") {
+            error("Expected 'if', got \(t1.content)")
+        }
         
         let ifExpr = parseExpression()
         let ifBlock = parseBlock()
@@ -426,7 +466,10 @@ class Parser {
     
     // let Int a = 2, String c = "fuck this"
     private func parseLet() -> LetNode {
-        let _ = scanner.getToken() // keyword let
+        let t1 = scanner.getToken() // keyword let
+        if !t1.content.contains("let") {
+            error("Expected 'let', got \(t1.content)")
+        }
 
         let vars = parseLetVariables()
         let block = parseBlock()
@@ -449,7 +492,10 @@ class Parser {
             let type = parseType()
             let name = scanner.getToken().content
 
-            let _ = scanner.getToken() // =
+            let t1 = scanner.getToken() // =
+            if !t1.content.contains("=") {
+                error("Expected '=', got \(t1.content)")
+            }
             let value = parseExpression()
 
             let vNode = LetVariableNode(type: type, name: name, value: value)
@@ -462,7 +508,10 @@ class Parser {
     
     // Parser en switch, lidt ligesom en række if's
     private func parseSwitch() -> SwitchNode {
-        let _ = scanner.getToken() // keyword switch
+        let t1 = scanner.getToken() // keyword switch
+        if !t1.content.contains("switch") {
+            error("Expected 'switch', got \(t1.content)")
+        }
         
         var cases:[SwitchCaseNode] = []
         
@@ -484,11 +533,17 @@ class Parser {
     
     // MARK: Kald
     func parseFunctionCall(_ identifier: String) -> FunctionCallNode {
-        let _ = scanner.getToken() // lpar
+        let t1 = scanner.getToken() // lpar
+        if !t1.content.contains("(") {
+            error("Expected '(', got \(t1.content)")
+        }
         
         let pars:[Node] = parseFunctionCallParameters()
         
-        let _ = scanner.getToken() // rpar
+        let t2 = scanner.getToken() // rpar
+        if !t2.content.contains(")") {
+            error("Expected ')', got \(t2.content)")
+        }
         
         return FunctionCallNode(identifier: identifier, parameters: pars)
     }

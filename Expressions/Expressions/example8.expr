@@ -1,18 +1,13 @@
-type TestType {
-  Int iint,
-  String sstring,
-  Char cchar,
-}
-
-type AnotherType {
-  Int int1,
-  Int int2
-}
+# Testing functions as first-class-citizens
 
 define main: -> Int {
-  0
+  ftest(add)
 }
 
-define test: -> AnotherType {
-  AnotherType(1, 1)
+define ftest: ((Int, Int) -> Int) func -> Int {
+  func(1, 2)
+}
+
+define add: Int a, Int b -> Int {
+  a + b
 }

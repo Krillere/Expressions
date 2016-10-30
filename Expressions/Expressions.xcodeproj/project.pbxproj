@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA09F7541DC681DB009A9900 /* example8.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7531DC681D7009A9900 /* example8.expr */; };
+		AA09F7541DC681DB009A9900 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7531DC681D7009A9900 /* example7.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
@@ -24,7 +24,7 @@
 		AAEAC03F1DC4EE6F00989910 /* example3.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC03E1DC4EDF300989910 /* example3.expr */; };
 		AAEAC0411DC4F17800989910 /* example4.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0401DC4F16C00989910 /* example4.expr */; };
 		AAEAC0431DC4FE3700989910 /* example5.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0421DC4FE2D00989910 /* example5.expr */; };
-		AAF443511DC65516004F0917 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAF443501DC65505004F0917 /* example7.expr */; };
+		AAF443511DC65516004F0917 /* example8.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAF443501DC65505004F0917 /* example8.expr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,8 +36,8 @@
 			files = (
 				AAEAC03D1DC4ED0800989910 /* example2.expr in CopyFiles */,
 				AAB4EE9A1DC53E430035F875 /* example6.expr in CopyFiles */,
-				AA09F7541DC681DB009A9900 /* example8.expr in CopyFiles */,
-				AAF443511DC65516004F0917 /* example7.expr in CopyFiles */,
+				AA09F7541DC681DB009A9900 /* example7.expr in CopyFiles */,
+				AAF443511DC65516004F0917 /* example8.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
 				AAEAC0411DC4F17800989910 /* example4.expr in CopyFiles */,
 				AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */,
@@ -49,7 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AA09F7531DC681D7009A9900 /* example8.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example8.expr; sourceTree = "<group>"; };
+		AA09F7531DC681D7009A9900 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
 		AAB4EE961DC52DE80035F875 /* std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std.cpp; sourceTree = "<group>"; };
 		AAB4EE991DC53E3D0035F875 /* example6.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example6.expr; sourceTree = "<group>"; };
@@ -67,7 +67,7 @@
 		AAEAC03E1DC4EDF300989910 /* example3.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example3.expr; sourceTree = "<group>"; };
 		AAEAC0401DC4F16C00989910 /* example4.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example4.expr; sourceTree = "<group>"; };
 		AAEAC0421DC4FE2D00989910 /* example5.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example5.expr; sourceTree = "<group>"; };
-		AAF443501DC65505004F0917 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
+		AAF443501DC65505004F0917 /* example8.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example8.expr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,8 +119,8 @@
 				AAEAC0401DC4F16C00989910 /* example4.expr */,
 				AAEAC0421DC4FE2D00989910 /* example5.expr */,
 				AAB4EE991DC53E3D0035F875 /* example6.expr */,
-				AAF443501DC65505004F0917 /* example7.expr */,
-				AA09F7531DC681D7009A9900 /* example8.expr */,
+				AA09F7531DC681D7009A9900 /* example7.expr */,
+				AAF443501DC65505004F0917 /* example8.expr */,
 			);
 			name = "Code examples (Tests)";
 			sourceTree = "<group>";
