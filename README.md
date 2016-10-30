@@ -26,7 +26,7 @@ The code generator traverses the tree created by the parser and produces the C++
 
 Overview:
 
-1.  Functions
+1.  [Functions](#functions)
 2.  Types
 3.  Conditionals
 4.  Switch
