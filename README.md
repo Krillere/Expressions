@@ -10,9 +10,10 @@ ToDo list:
 - Built-in functions (Mostly done for now)
 - Types (Done)
 - Lists (Done)
-- Generics (Not even started)
-- Side conditions (Print, IO and such) (Not implemented at all)
-- Type conversions (Will probably be created as functions)
+- Generics
+- Objects
+- Side conditions (Print, IO and such)
+- Type conversions
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
