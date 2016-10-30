@@ -58,9 +58,15 @@ class CodeGenerator {
         print(internalCode)
     }
     
+    func getIntermediate() -> String {
+        return self.internalCode
+    }
+    
     private func emit(_ str: String) {
         internalCode += str
     }
+    
+    
 
     // Generer funktioner
     private func emitFunction(function: FunctionNode) {
@@ -102,6 +108,29 @@ class CodeGenerator {
         var str = "{\n"
         str += createExpression(expr: block.expression!)
         str += "\n}\n"
+        
+        return str
+    }
+    
+    // Laver string ud fra type
+    private func createTypeString(type: TypeNode) -> String {
+        if type.numNested == 0 {
+            return typeConversions[type.clearType!]!
+        }
+        
+        var str = ""
+        
+        for i in 0 ..< type.numNested! {
+            str += "std::vector<"
+            
+            if i == type.numNested!-1 {
+                str += typeConversions[type.clearType!]!
+            }
+        }
+        
+        for _ in 0 ..< type.numNested! {
+            str += ">"
+        }
         
         return str
     }
@@ -224,10 +253,12 @@ class CodeGenerator {
         return retString
     }
     
+    // Laver array literal indhold (expr, expr ...)
     func createArrayLiteral(lit: ArrayLiteralNode) -> String {
+        
         var str = ""
         
-        str += "["
+        str += "{"
         
         for n in 0 ..< lit.contents.count {
             let expr = lit.contents[n]
@@ -238,7 +269,7 @@ class CodeGenerator {
             }
         }
         
-        str += "]"
+        str += "}"
         
         return str
     }
@@ -344,8 +375,12 @@ class CodeGenerator {
 
         // Lav funktionens indhold
         var str = "{"
+        
         for v in letN.vars {
-            guard let ttype = v.type, let type = typeConversions[ttype.clearType!], let name = v.name, let expr = v.value else { continue }
+            guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
+            
+            let type = createTypeString(type: ttype)
+            
             str += type+" "+name+" = "
             str += createExpression(expr: expr)
             str += ";\n"

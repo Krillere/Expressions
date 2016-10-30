@@ -21,6 +21,14 @@ func compile(code: String) {
     if let program = ps.getProgram() {
         let generator = CodeGenerator(program: program)
         generator.generate()
+        
+        let intermediate = generator.getIntermediate()
+        do {
+            try intermediate.write(toFile: NSHomeDirectory()+"/Desktop/intermediate.cpp", atomically: true, encoding: String.Encoding.utf8)
+        }
+        catch {
+            print("Error ved gem intermediate: \(error)")
+        }
     }
 }
 

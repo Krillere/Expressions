@@ -161,6 +161,8 @@ class Parser {
             return TypeNode(full: token.content, type: token.content, nestedLevel: 0)
         }
         
+        
+        
         // Et array af en art, fix!
         let ret = TypeNode()
         
@@ -169,12 +171,17 @@ class Parser {
         var lParCount = 0
         var rParCount = 0
         
+        if token.type == .lsquare {
+            lParCount += 1
+        }
         
         var fullTypeName:String = token.content
         var clearTypeName:String = ""
         
+        // Iterer [[ string ]] indtil der kommer string igen, da vi så er færdige!
         while true {
             let tmp = scanner.peekToken()
+            
             if tmp.type == .string {
                 if !metName {
                     clearTypeName = tmp.content
@@ -185,15 +192,14 @@ class Parser {
                 }
             }
             
-            if tmp.type == .lpar {
+            if tmp.type == .lsquare {
                 lParCount += 1
             }
-            if tmp.type == .rpar {
+            if tmp.type == .rsquare {
                 rParCount += 1
             }
             
             if tmp.type != .lsquare && tmp.type != .string && tmp.type != .rsquare {
-
                 break
             }
             

@@ -9,5 +9,5 @@
 import Foundation
 
 class ParserTables {
-    static var functions:[String] = ["first", "last", "length", "reverse", "get"]
+    static var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail"]
 }
