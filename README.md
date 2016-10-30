@@ -8,7 +8,7 @@ ToDo list:
 - Switch implementation (Done)
 - Let implementation (Done)
 - Built-in functions (Some functions implemented)
-- Types (Simple types are working, Strings are not completely)
+- Types (Simple types are working, Strings are WIP)
 - Lists (WIP)
 - Validators (Scope check, type check and so on. Currently performed only be the C++ compiler)
 
