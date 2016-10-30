@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Types of tokens
 enum TokenType {
     case lpar // "("
     case rpar // ")"
@@ -39,20 +40,22 @@ enum TokenType {
     case keyword_let    // "let"
     case keyword_switch // "switch"
     
-    case none           // EOF som regel
+    case none           // EOF usually, possibly error
 }
 
 class Token : CustomStringConvertible {
     var content:String = ""
     var type:TokenType = .none
-    var intValue:Int?
-    var floatValue:Float?
+    
+    var intValue:Int? // Used for Int
+    var floatValue:Float? // Used for Float
     
     init(cont: String, type: TokenType, charIndex: Int) {
         self.content = cont
         self.type = type
     }
     
+    // First token, or error token (.none is often error)
     static func emptyToken(_ index: Int) -> Token {
         return Token(cont: "", type: .none, charIndex: index)
     }
@@ -63,20 +66,25 @@ class Token : CustomStringConvertible {
 }
 
 class Scanner {
+    // Char classes
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
     private let otherNameChars = CharacterSet(charactersIn: "-")
 
+    // Input and index in input (integer of character)
     private var input:[UInt16] = []
     private var inputIndex = 0
+    
     private var token:Token = Token.emptyToken(0)
     
+    // Variables used in generating tokens
     private var char:UnicodeScalar = " "
     private var ident:UnicodeScalar = " "
     private var string:String = ""
     private var intValue:Int = 0
     private var floatValue:Float = 0
     
+    // Array of tokens and current token index
     private var allTokens:[Token] = []
     private var tokenIndex:Int = 0
     
@@ -85,6 +93,7 @@ class Scanner {
         self.fetchAllTokens()
     }
     
+    // Creates all tokens in input
     private func fetchAllTokens() {
         var tmpToken = Token.emptyToken(0)
         
@@ -95,19 +104,19 @@ class Scanner {
         while tmpToken.type != .none
     }
     
-    // Finder næste char
+    // Gets next character in input
     private func get() -> UnicodeScalar {
-        
         if inputIndex > input.count-1 {
             return UnicodeScalar(1)
         }
+        
         let tmp = UnicodeScalar(input[inputIndex])!
         inputIndex += 1
         return tmp
     }
     
     
-    // Henter tal fra index
+    // Gets number as string from index to first non-number character (Continues if '.' is met)
     private func getNumberString() -> String {
         var tmp:String = ""
         
@@ -141,11 +150,12 @@ class Scanner {
         return tmp//Int(tmp)!
     }
     
+    // Does string contain '.'
     private func isFloating(test: String) -> Bool {
         return test.contains(".")
     }
     
-    // Henter streng fra index
+    // Fetches string from current char, allows characters allowed in variable and function names
     private func getString() -> String {
         var tmp:String = ""
         
@@ -163,33 +173,7 @@ class Scanner {
         return tmp
     }
     
-    
-    // Henter navn fra index (char efterfulgt af chars eller tal)
-    private func getName() -> String {
-        var tmp:String = ""
-        
-        if letters.contains(char) {
-            tmp.append(Character(char))
-            char = get()
-        }
-        else {
-            return ""
-        }
-        
-        repeat {
-            tmp.append(Character(char))
-            char = get()
-        }
-        while letters.contains(char) || digits.contains(char)
-        
-        if inputIndex >= input.count-1 { }
-        else {
-            inputIndex -= 1
-        }
-        
-        return tmp
-    }
-    
+    // Fetches string literal content. Continues until '"'(quote) is met
     private func getStringLiteralContent() -> String {
         var stringContent = ""
         
@@ -202,7 +186,7 @@ class Scanner {
         return stringContent
     }
     
-    
+    // Continues until newline. Used to ignore from # newline.
     func removeComment() {
         while char != "\n" {
             char = get()
@@ -210,7 +194,7 @@ class Scanner {
     }
     
     
-    // Finder token ud fra string
+    // Returns token from string. Determines type, ex. 'type' becomes .keyword_type and so on (See TokenType)
     private func parseString() -> Token? {
         
         var type:TokenType = .string
@@ -257,7 +241,7 @@ class Scanner {
     }
     
 
-    // Returnerer token og tilføjer til index
+    // Returns a token and increments tokenIndex
     func getToken() -> Token {
         if tokenIndex > allTokens.count-1 {
             return Token.emptyToken(-1)
@@ -269,7 +253,7 @@ class Scanner {
         return token
     }
 
-    // Lader brugeren kigge 'num' tokens frem (0 som default)
+    // Peeks 'num' from tokenIndex in tokens (Default is 0, which is the current token)
     func peekToken(num: Int = 0) -> Token {
         if tokenIndex+num > allTokens.count-1 {
             return Token.emptyToken(-1)
@@ -279,7 +263,7 @@ class Scanner {
         return token
     }
     
-    // Finder næste token, bruges kun internt
+    // Determines next token. Used internally, thus 'int'.
     private func intGetToken() -> Token {
         // Fjern whitespace
         while(inputIndex < input.count) {
