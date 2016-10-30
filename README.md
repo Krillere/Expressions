@@ -24,15 +24,17 @@ The code generator traverses the tree created by the parser and produces the C++
 # The language
 
 Overview:
-1. Functions
-2. Types
-3. Conditionals
-4. Switch
-5. Variables
-6. Comments
-7. Standard functions
+
+1.  [Functions][functions]
+2.  Types
+3.  Conditionals
+4.  Switch
+5.  Variables
+6.  Comments
+7.  Standard functions
 
 ## Functions
+[functions]:asd
 Functions are declared by using the following general syntax:
 ```
 define functionName: Type1 name1, Type2 name2 .. TypeN nameN -> ReturnType {
