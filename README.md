@@ -7,7 +7,7 @@ ToDo list:
 - Function implementation (Done)
 - Switch implementation (Done)
 - Let implementation (Done)
-- Built-in functions (Mostly done for now)
+- Built-in functions (Mostly done for now. Missing some important ones, though.)
 - Types (Done)
 - Lists (Done)
 - Objects
@@ -81,7 +81,7 @@ type MyType {
   Char myCharacter,
 }
 ```
-The last comma does not have to be there.
+The last comma is optional. Could just be ```Char myCharacter }```
 
 To create an object of this type, use:
 ```
