@@ -8,26 +8,58 @@
 
 import Foundation
 
-enum CompilerError : Error {
-    case ScannerError
-    case ParserError
-    case TypeError
-}
-
+// Base Node class
 class Node {
     var parent:Node?
     
     init() { }
 }
 
-class ErrorNode : Node {
-    
-}
 
+
+// General program. Contains types and functions
 class ProgramNode : Node {
     var functions:[FunctionNode] = []
     var types:[ObjectTypeNode] = []
 }
+
+// MARK: Object types
+class ObjectTypeNode : Node, CustomStringConvertible {
+    var variables:[ObjectTypeVariableNode] = []
+    var name:String?
+    
+    init(variables: [ObjectTypeVariableNode], name: String) {
+        super.init()
+        
+        self.variables = variables
+        self.name = name
+        
+        for v in self.variables {
+            v.parent = self
+        }
+    }
+    
+    var description: String {
+        return "ObjectType"
+    }
+}
+
+// Variables in object type
+class ObjectTypeVariableNode : Node, CustomStringConvertible {
+    var identifier:String?
+    var type:TypeNode?
+    
+    init(identifier: String, type: TypeNode) {
+        self.identifier = identifier
+        self.type = type
+    }
+    
+    var description: String {
+        return "VariableNode"
+    }
+}
+
+// MARK: Function
 
 // Function declaration
 class FunctionNode : Node, CustomStringConvertible {
@@ -57,41 +89,7 @@ class FunctionNode : Node, CustomStringConvertible {
     }
 }
 
-// MARK: Object types
-class ObjectTypeNode : Node, CustomStringConvertible {
-    var variables:[ObjectTypeVariableNode] = []
-    var name:String?
-    
-    init(variables: [ObjectTypeVariableNode], name: String) {
-        super.init()
-        
-        self.variables = variables
-        self.name = name
-        
-        for v in self.variables {
-            v.parent = self
-        }
-    }
-    
-    var description: String {
-        return "ObjectType"
-    }
-}
-
-class ObjectTypeVariableNode : Node, CustomStringConvertible {
-    var identifier:String?
-    var type:TypeNode?
-    
-    init(identifier: String, type: TypeNode) {
-        self.identifier = identifier
-        self.type = type
-    }
-    
-    var description: String {
-        return "VariableNode"
-    }
-}
-
+// Parameter in function declaration
 class ParameterNode : Node, CustomStringConvertible  {
     var type: TypeNode?
     var name: String?
@@ -106,6 +104,7 @@ class ParameterNode : Node, CustomStringConvertible  {
     }
 }
 
+// Block (Wrapper for 'expression', basically)
 class BlockNode : Node {
     var expression:Node?
     
@@ -119,6 +118,7 @@ class BlockNode : Node {
     }
 }
 
+// Function call node: name and parameters
 class FunctionCallNode : Node, CustomStringConvertible {
     var identifier:String?
     var parameters:[Node] = []
@@ -140,7 +140,7 @@ class FunctionCallNode : Node, CustomStringConvertible {
     }
 }
 
-// Type erklæring
+// Type declaration (Int, String, CustomType, [Int] and such)
 class TypeNode : Node, CustomStringConvertible {
     var fullString:String?
     
@@ -175,7 +175,7 @@ class TypeNode : Node, CustomStringConvertible {
 }
 
 
-// MARK: Literals og variabler
+// MARK: Literals and variable names
 class VariableNode : Node, CustomStringConvertible {
     var identifier:String?
     
@@ -188,6 +188,7 @@ class VariableNode : Node, CustomStringConvertible {
     }
 }
 
+// Int or Float value
 class NumberLiteralNode : Node, CustomStringConvertible {
     var intValue:Int?
     var floatValue:Float?
@@ -205,6 +206,7 @@ class NumberLiteralNode : Node, CustomStringConvertible {
     }
 }
 
+// true || false
 class BooleanLiteralNode : Node, CustomStringConvertible {
     var value:String = "false"
     
@@ -218,6 +220,51 @@ class BooleanLiteralNode : Node, CustomStringConvertible {
         return String(describing: self.value)
     }
 }
+
+// String literal: "abcdef .. "
+class StringLiteralNode : Node, CustomStringConvertible {
+    var content:String?
+    
+    init(content: String) {
+        self.content = content
+    }
+    
+    var description: String {
+        return "\""+self.content!+"\""
+    }
+}
+
+// A list of expressions: [expr, expr, expr ... ]
+class ArrayLiteralNode : Node, CustomStringConvertible {
+    var contents:[Node] = []
+    
+    init(nodes: [Node]) {
+        super.init()
+        
+        self.contents = nodes
+        
+        for c in self.contents {
+            c.parent = self
+        }
+    }
+    
+    var description: String {
+        var str = "["
+        
+        for n in 0 ..< self.contents.count {
+            let node = self.contents[n]
+            str += String(describing: node)
+            
+            if n != self.contents.count-1 {
+                str += ", "
+            }
+        }
+        
+        str += "]"
+        return str
+    }
+}
+
 
 // MARK: Expressions
 class ParenthesesExpression: Node, CustomStringConvertible {
@@ -235,6 +282,7 @@ class ParenthesesExpression: Node, CustomStringConvertible {
     }
 }
 
+// Node wrapper for operators
 class OperatorNode : Node, CustomStringConvertible {
     var op: String?
     
@@ -247,6 +295,7 @@ class OperatorNode : Node, CustomStringConvertible {
     }
 }
 
+// Node for: expr OP expr
 class ExpressionNode : Node, CustomStringConvertible {
     var op: OperatorNode?
     var loperand: Node?
@@ -289,7 +338,7 @@ class IfElseNode : Node {
 }
 
 
-// MARK: let
+// MARK: Let
 class LetNode : Node, CustomStringConvertible {
     var vars:[LetVariableNode] = []
     var block:BlockNode?
@@ -311,6 +360,7 @@ class LetNode : Node, CustomStringConvertible {
     }
 }
 
+// Variable in 'let', for example "Int a = 1"
 class LetVariableNode : Node, CustomStringConvertible {
     var type:TypeNode?
     var value:Node?
@@ -331,47 +381,6 @@ class LetVariableNode : Node, CustomStringConvertible {
     }
 }
 
-class StringLiteralNode : Node, CustomStringConvertible {
-    var content:String?
-    
-    init(content: String) {
-        self.content = content
-    }
-    
-    var description: String {
-        return "\""+self.content!+"\""
-    }
-}
-
-class ArrayLiteralNode : Node, CustomStringConvertible {
-    var contents:[Node] = []
-    
-    init(nodes: [Node]) {
-        super.init()
-        
-        self.contents = nodes
-        
-        for c in self.contents {
-            c.parent = self
-        }
-    }
-    
-    var description: String {
-        var str = "["
-        
-        for n in 0 ..< self.contents.count {
-            let node = self.contents[n]
-            str += String(describing: node)
-            
-            if n != self.contents.count-1 {
-                str += ", "
-            }
-        }
-        
-        str += "]"
-        return str
-    }
-}
 
 // MARK: switch
 class SwitchNode : Node {
@@ -407,7 +416,7 @@ class SwitchCaseNode : Node, CustomStringConvertible {
     }
 }
 
-// Node der stopper switch
+// Used to stop 'switch'
 class ElseNode : Node { }
 
 
