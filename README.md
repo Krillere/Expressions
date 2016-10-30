@@ -47,6 +47,17 @@ The language contains a few simple types: Int, Float, Char, String and Boolean. 
 
 Currently there is no support of creating types, but there probably will be in the future.
 
+Lists are created using square brackets. For example, a list of integers from 0-5 can be defined like this in a *let* block:
+```
+let [Int] myIntegers = [1, 2, 3, 4, 4+1] {
+}
+```
+Nested lists are also possible, simply by adding another layer of square brackets. List literals can be used in all functioncalls that accepts these. For example:
+```
+take([1, 2, 3, 4], 2) # Returns [1, 2]
+```
+
+
 ## Conditionals
 Expressions supports two types of conditionals; If-statements and switch-statements.
 Boolean literals are either *true* or *false*, and they can be combined with the *AND* and *OR* operators.
