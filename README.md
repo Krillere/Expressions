@@ -66,6 +66,14 @@ switch Bool1 { Block1 }
        else { ElseBlock }
 ```
 The statement always have to end on 'else'.
+For example:
+```
+switch  1 == 2 { 1 }
+        2 == 1 { 2 }
+        3 == 1 { 3 }
+        else { 4 }
+```
+Which, of course, returns 4.
 
 ## Variables
 In order to define variables in a scope, the *let* keyword is used. The general syntax is as follows:
@@ -77,3 +85,15 @@ The variables are only accessible inside the scope.
 
 ## Comments
 Comments are created using a \# in the code. Currently there only exists one-line comments and they can't be stopped by using another \#.
+
+## Standard functions / built-in functions
+Some functions to handle lists and strings are already implemented (More are to come, of course!).
+```
+length(list) # Returns the length of a list
+first(list) # Returns the first object in the list
+last(list) # Returns the last object in the list
+reverse(list) # Reverses a list
+get(list, nth) # Fetches the nth object in a list
+tail(list) # Returns everything but the first object
+init(list) # Returns everything but the last object
+```
