@@ -8,9 +8,9 @@ ToDo list:
 - Switch implementation (Done)
 - Let implementation (Done)
 - Built-in functions (Mostly done for now. Missing some important ones, though.)
-- Types (Done)
+- Simple types (Done)
 - Lists (Done)
-- Objects
+- Objects (Done)
 - Generics
 - Side conditions (Print, IO and such)
 - Type conversions
