@@ -10,8 +10,8 @@ ToDo list:
 - Built-in functions (Some functions implemented)
 - Types (Simple types are working, Strings are WIP)
 - Type conversions (Will probably be created as functions)
-- Lists (WIP)
-- Validating (Scope check, type check and so on. Currently performed only be the C++ compiler)
+- Lists (Literals and variables works in builtin-functions)
+- Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 - Side conditions (Print, IO and such) (Not implemented at all)
 
 ## Project structure
@@ -105,4 +105,5 @@ reverse(list) # Reverses a list
 get(list, nth) # Fetches the nth object in a list
 tail(list) # Returns everything but the first object
 init(list) # Returns everything but the last object
+take(list, num) # Returns 'num' items from list
 ```
