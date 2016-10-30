@@ -9,8 +9,17 @@ ToDo list:
 - Let implementation (Done)
 - Built-in functions (Some functions implemented)
 - Types (Simple types are working, Strings are WIP)
+- Type conversions (Will probably be created as functions)
 - Lists (WIP)
-- Validators (Scope check, type check and so on. Currently performed only be the C++ compiler)
+- Validating (Scope check, type check and so on. Currently performed only be the C++ compiler)
+- Side conditions (Print, IO and such) (Not implemented at all)
+
+## Project structure
+The compiler consists of four major parts; scanner, parser, validator and code generation.
+
+The scanner creates tokens from the input source code. The parser determines the code structure and syntactical correctness and creates the program tree. The root node being a 'program', with multiple functions.
+The validator will, at some point, validate the scope of variables, types and such. Currently, this is only handled by the C++ compiler.
+The code generator traverses the tree created by the parser and produces the C++ intermediate code. This intermediate code is saved on the users desktop in the file intermediate.cpp.
 
 # The language
 
