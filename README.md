@@ -3,6 +3,15 @@
 A simple compiler for a simple functional programming language. Everything is an expression, hence the name.
 The compiler is written in Swift 3.0. The compiler compiles the Expression code to the intermediate language C++.
 
+ToDo list:
+- Function implementation (Done)
+- Switch implementation (Done)
+- Let implementation (Done)
+- Built-in functions (Some functions implemented)
+- Types (Simple types are working, Strings are not completely)
+- Lists (WIP)
+- Validators (Scope check, type check and so on. Currently performed only be the C++ compiler)
+
 # The language
 
 ## Functions
