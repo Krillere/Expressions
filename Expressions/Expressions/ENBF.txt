@@ -8,9 +8,13 @@ Examples in folder 'Code examples (Tests)'
 
 EBNF:
 
-program := [func] // Liste af func's
+program := func | func program | type | type program
 
 func := "define" name ": " pars " -> " type block
+
+type := "type" name "{" typeDecls "}"
+typeDecls := typeDecl | typeDecl ", " typeDecls
+typeDecl  := type name
 
 pars := type name | type name ", " pars
 block := "{" expr "}"
@@ -26,22 +30,22 @@ expr := if
 | call
 | let
 
-number := (0-9)+ | (0-9)+.(0-9)+ | -number
+number  := (0-9)+ | (0-9)+.(0-9)+ | -number
 boolLit := "true" | "false"
-string := """ (.*) """
-name := (a-Z) (a-Z0-9'_-)*
+string  := """ (.*) """
+name    := (a-Z) (a-Z0-9'_-)*
 
 op := AND | OR | * | / | + | - | < | > | <= | >= | == | !=
 
 if := "if" expr block block
 
 switch := "switch" cases "else" expr
-cases := case | case cases
-case := expr block
+cases  := case | case cases
+case   := expr block
 
-call := name "(" passPars ")"
+call     := name "(" passPars ")"
 passPars := expr | expr "," passPars
 
-let := "let" vardecls block
+let      := "let" vardecls block
 vardecls := type name "=" expr" | type name "=" expr ", " vardecls
-type := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]"
+type     := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]"

@@ -10,4 +10,5 @@ import Foundation
 
 class ParserTables {
     static var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail"]
+    static var types:[String] = []
 }

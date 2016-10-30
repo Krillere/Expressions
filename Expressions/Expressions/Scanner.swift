@@ -35,6 +35,7 @@ enum TokenType {
     case keyword_if     // "if"
     case keyword_else   // "else"
     case keyword_define // "define"
+    case keyword_type   // "type"
     case keyword_let    // "let"
     case keyword_switch // "switch"
     
@@ -64,7 +65,7 @@ class Token : CustomStringConvertible {
 class Scanner {
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
-    private let otherNameChars = CharacterSet(charactersIn: "'-_")
+    private let otherNameChars = CharacterSet(charactersIn: "-")
 
     private var input:[UInt16] = []
     private var inputIndex = 0
@@ -225,6 +226,10 @@ class Scanner {
             
             case "define":
                 type = .keyword_define
+            break
+            
+            case "type":
+                type = .keyword_type
             break
             
             case "if":

@@ -16,7 +16,7 @@ class CodeGenerator {
     private var declaredFunctions:[String] = []
     
     // Ting der skal ændres direkte
-    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool"]
+    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool", "Generic":"Generic"]
     private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
     
     
@@ -27,35 +27,57 @@ class CodeGenerator {
     // Laver og printer kode
     func generate() {
         guard let program = self.program else { return }
-        let functions = program.functions
-        
-        for function in functions {
-            emitFunction(function: function)
-        }
         
         
-        // Imports og declarations og shitz
-        var decls = "// Prototypes \n"
-        for dec in declaredFunctions {
-            decls += dec+";\n"
-        }
-        internalCode = decls+internalCode
-        
+        // Create standard lib, prototypes, types and functions
         
         // Stdlib
+        var stds = ""
         do {
             if let path = Bundle.main.path(forResource: "std", ofType: "cpp") {
                 let stdFuncs = try String(contentsOfFile: path)
-                internalCode = stdFuncs+internalCode
+                stds += stdFuncs
             }
         }
         catch { }
         
-        decls += "\n\n// Generated:\n"
+        
+        let functions = program.functions
+        let objTypes = program.types
+        
+        var typeString = ""
+        var funcsString = ""
+        
+        // Generate types
+        for objType in objTypes {
+            typeString += createObjectType(objType: objType)
+        }
         
         
-        print("Code:")
-        print(internalCode)
+        // Generate functions
+        for function in functions {
+            funcsString += createFunction(function: function)
+        }
+        
+        // Prototypes
+        var decls = ""
+        for dec in declaredFunctions {
+            decls += dec+";\n"
+        }
+        
+        emit(stds)
+        
+        emit("\n// Prototypes \n")
+        emit(decls)
+        
+        emit("\n// Types: \n")
+        emit(typeString)
+        
+        emit("\n// Functions: \n")
+        emit(funcsString)
+        
+        //print("Code:")
+        //print(internalCode)
     }
     
     func getIntermediate() -> String {
@@ -66,25 +88,132 @@ class CodeGenerator {
         internalCode += str
     }
     
-    
+    // Generer typer
+    private func createObjectType(objType: ObjectTypeNode) -> String {
+        guard let name = objType.name else { return "" }
+        
+        var ret = ""
+        
+        // Type declaration
+        var typeDecl = "struct t_"+name+" {\n"
+        
+        for v in objType.variables {
+            guard let type = v.type, let vname = v.identifier else { continue }
+            typeDecl += " "+createTypeString(type: type)+" "+vname+";\n"
+        }
+        
+        typeDecl += "};"
+        ret += typeDecl
+        
+        declaredFunctions.append("struct t_"+name)
+        
+        // Initialization function
+        
+        // Function definition
+        var typeInit = "t_"+name+" "+name+"("
+        for n in 0 ..< objType.variables.count {
+            let v = objType.variables[n]
+            guard let type = v.type, let vname = v.identifier else { continue }
+            
+            typeInit += createTypeString(type: type)+" "+vname
+            
+            if n != objType.variables.count-1 {
+                typeInit += ", "
+            }
+        }
+        typeInit += ")"
+        
+        declaredFunctions.append(typeInit)
+        
+        // Function block
+        typeInit += " {\n"
+        
+        typeInit += "t_"+name+" t_tmp;"
+        for n in 0 ..< objType.variables.count {
+            let v = objType.variables[n]
+            guard let vname = v.identifier else { continue }
+            
+            typeInit += "t_tmp."+vname+" = "+vname+";\n"
+        }
+        
+        typeInit += "return t_tmp;"
+        
+        typeInit += "}\n"
+        
+         ret += "\n"+typeInit
+        
+        return ret
+    }
 
     // Generer funktioner
-    private func emitFunction(function: FunctionNode) {
-        print("Laver function: \(function)")
+    private func createFunction(function: FunctionNode) -> String {
+        guard let retType = function.retType,
+            let identifier = function.identifier,
+            let block = function.block else { return "" }
+        
+        // Non-generic function
+        if !isGenericTypeArgument(pars: function.pars) {
+            var ret = ""
+            
+            let type = createTypeString(type: retType)
+            
+            let pars = createFunctionParameters(pars: function.pars)
+            declaredFunctions.append(type+" "+identifier+"("+pars+")")
+            
+            // type navn ( pars ) block
+            let funcDecl:String = "\n"+type+" "+identifier+"("+pars+")"+createBlock(block: block)
+            ret += funcDecl
+            
+            return ret
+        }
+        else { // Generic function
+            return ""
+            //self.emitGenericFunction(function: function)
+        }
+    }
+    
+    // Laver generisk funktionserklæring
+    private func emitGenericFunction(function: FunctionNode) {
         guard let retType = function.retType,
             let identifier = function.identifier,
             let block = function.block else { return }
         
+        // String
+        let stringType = createGenericTypeString(type: retType, genType: "std::string", isRet: true)
+        let stringPars = createGenericFunctionParameters(pars: function.pars, genType: "std::string")
         
-        let type = createTypeString(type: retType)
+        let stringFuncDecl:String = "\n"+stringType+" "+identifier+"("+stringPars+")"+createBlock(block: block)
+        emit(stringFuncDecl)
         
-        let pars = createFunctionParameters(pars: function.pars)
-        declaredFunctions.append(type+" "+identifier+"("+pars+")")
+        // Vector
+        let vecType = createGenericTypeString(type: retType, genType: "std::vector<T>", isRet: true)
+        let vecPars = createGenericFunctionParameters(pars: function.pars, genType: "std::vector<T>")
         
-        emit("\n"+type+" ") // int
-        emit(identifier) // main
-        emit("("+pars+")")
-        emit(createBlock(block: block))
+        let vecFuncDecl:String = "\n"+vecType+" "+identifier+"("+vecPars+")"+createBlock(block: block)
+        emit(vecFuncDecl)
+        
+        // initializer_list
+        let initType = createGenericTypeString(type: retType, genType: "std::initializer_list<T>", isRet: true)
+        let initPars = createGenericFunctionParameters(pars: function.pars, genType: "std::initializer_list<T>")
+        
+        let initFuncDecl:String = "\n"+initType+" "+identifier+"("+initPars+")"+createBlock(block: block)
+        emit(initFuncDecl)
+    }
+    
+    // Does the function have any generic arguments?
+    private func isGenericTypeArgument(pars: [ParameterNode]) -> Bool {
+        var isGeneric = false
+        
+        for p in pars {
+            guard let t = p.type else { continue }
+            
+            if t.generic {
+                isGeneric = true
+                break
+            }
+        }
+        
+        return isGeneric
     }
     
     // Laver string med funktionsparametre - (T1 n1, T2 n2 ... )
@@ -93,8 +222,34 @@ class CodeGenerator {
         
         for n in 0 ..< pars.count {
             let par = pars[n]
-            guard let tmpType = par.type, let type = typeConversions[tmpType], let name = par.name else { continue }
+            guard let tmpType = par.type, let name = par.name else { continue }
+            let type = createTypeString(type: tmpType)
             str += type+" "+name
+            
+            if n != pars.count-1 {
+                str += ", "
+            }
+        }
+        
+        return str
+    }
+    
+    // Laver funktionsparametre, men laver generics til bestemt type
+    private func createGenericFunctionParameters(pars: [ParameterNode], genType: String) -> String {
+        var str = ""
+        
+        for n in 0 ..< pars.count {
+            let par = pars[n]
+            guard let tmpType = par.type, let name = par.name else { continue }
+            
+            if tmpType.generic { // Generisk type
+                let type = createGenericTypeString(type: tmpType, genType: genType, isRet: false)
+                str += type+" "+name
+            }
+            else { // Almindelig type
+                let type = createTypeString(type: tmpType)
+                str += type+" "+name
+            }
             
             if n != pars.count-1 {
                 str += ", "
@@ -116,8 +271,18 @@ class CodeGenerator {
     
     // Laver string ud fra type
     private func createTypeString(type: TypeNode) -> String {
+        guard let clearType = type.clearType else { return "" }
+        
         if type.numNested == 0 {
-            return typeConversions[type.clearType!]!
+            if let converted = typeConversions[clearType] {
+                return converted
+            }
+            
+            if ParserTables.types.contains(clearType) {
+                return "t_"+clearType
+            }
+            
+            return clearType // Må være objekt
         }
         
         var str = ""
@@ -126,13 +291,49 @@ class CodeGenerator {
             str += "std::vector<"
             
             if i == type.numNested!-1 {
-                str += typeConversions[type.clearType!]!
+                if let converted = typeConversions[clearType] {
+                    str += converted
+                }
+                else if ParserTables.types.contains(clearType) {
+                    str += "t_"+clearType
+                }
+                else {
+                    str += clearType
+                }
             }
         }
         
         for _ in 0 ..< type.numNested! {
             str += ">"
         }
+        
+        return str
+    }
+    
+    // Laver type, med afsæt i 'genType' hvis generisk type
+    private func createGenericTypeString(type: TypeNode, genType: String, isRet: Bool) -> String {
+        if genType == "std::string" && type.numNested! != 0 {
+            type.numNested! -= 1
+        }
+        
+        if type.numNested == 0 {
+            return genType
+        }
+        
+        var str = ""
+        
+        for i in 0 ..< type.numNested! {
+            str += "std::vector<"
+            
+            if i == type.numNested!-1 {
+                str += genType
+            }
+        }
+        
+        for _ in 0 ..< type.numNested! {
+            str += ">"
+        }
+
         
         return str
     }

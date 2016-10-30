@@ -26,9 +26,10 @@ class ErrorNode : Node {
 
 class ProgramNode : Node {
     var functions:[FunctionNode] = []
+    var types:[ObjectTypeNode] = []
 }
 
-
+// Function declaration
 class FunctionNode : Node, CustomStringConvertible {
     var identifier:String?
     var block:BlockNode?
@@ -56,17 +57,52 @@ class FunctionNode : Node, CustomStringConvertible {
     }
 }
 
+// MARK: Object types
+class ObjectTypeNode : Node, CustomStringConvertible {
+    var variables:[ObjectTypeVariableNode] = []
+    var name:String?
+    
+    init(variables: [ObjectTypeVariableNode], name: String) {
+        super.init()
+        
+        self.variables = variables
+        self.name = name
+        
+        for v in self.variables {
+            v.parent = self
+        }
+    }
+    
+    var description: String {
+        return "ObjectType"
+    }
+}
+
+class ObjectTypeVariableNode : Node, CustomStringConvertible {
+    var identifier:String?
+    var type:TypeNode?
+    
+    init(identifier: String, type: TypeNode) {
+        self.identifier = identifier
+        self.type = type
+    }
+    
+    var description: String {
+        return "VariableNode"
+    }
+}
+
 class ParameterNode : Node, CustomStringConvertible  {
-    var type: String?
+    var type: TypeNode?
     var name: String?
     
-    init(type: String, name: String) {
+    init(type: TypeNode, name: String) {
         self.type = type
         self.name = name
     }
     
     var description: String {
-        return "'"+type!+" "+name!+"'"
+        return "'\(type) "+name!+"'"
     }
 }
 
@@ -107,16 +143,31 @@ class FunctionCallNode : Node, CustomStringConvertible {
 // Type erklæring
 class TypeNode : Node, CustomStringConvertible {
     var fullString:String?
-    var clearType:String?
+    
+    var intClearType:String?
+    var clearType:String? {
+        set(nval) {
+            self.intClearType = nval
+            self.generic = (nval == "Generic")
+        }
+        get {
+            return intClearType
+        }
+    }
     var numNested:Int?
+    var generic:Bool = false
     
     override init() { }
     
     init(full: String, type: String, nestedLevel: Int) {
         self.fullString = full
-        self.clearType = type
+        self.intClearType = type
         self.numNested = nestedLevel
+        
+        self.generic = (type == "Generic")
     }
+    
+    
     
     var description: String {
         return String(describing: self.fullString)

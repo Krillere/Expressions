@@ -14,7 +14,7 @@ func compile(code: String) {
     
     let errs = ps.getErrors()
     if errs.count != 0 {
-        print("Stopper grundet errors.")
+        print("Skipping validation and generation due to parsing errors.")
         return
     }
     
@@ -32,7 +32,7 @@ func compile(code: String) {
     }
 }
 
-if let p = Bundle.main.path(forResource: "example6", ofType: "expr") {
+if let p = Bundle.main.path(forResource: "example8", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
     compile(code: cont)
 }

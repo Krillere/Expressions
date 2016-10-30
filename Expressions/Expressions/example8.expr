@@ -1,0 +1,18 @@
+type TestType {
+  Int iint,
+  String sstring,
+  Char cchar,
+}
+
+type AnotherType {
+  Int int1,
+  Int int2
+}
+
+define main: -> Int {
+  0
+}
+
+define test: -> AnotherType {
+  AnotherType(1, 1)
+}

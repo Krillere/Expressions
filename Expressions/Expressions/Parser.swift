@@ -8,13 +8,17 @@
 
 import Foundation
 
-class ParserError {
+class ParserError : CustomStringConvertible {
     var reason:String?
     var token:Token?
     
     init(reason: String, token: Token) {
         self.reason = reason
         self.token = token
+    }
+    
+    var description: String {
+        return self.reason!
     }
 }
 
@@ -42,10 +46,12 @@ class Parser {
         }
         
         if !hasEntry {
-            errors.append(ParserError(reason: "No entry point found!", token: Token(cont: "", type: .none, charIndex: -1)))
+            errors.append(ParserError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
         
-        print("Fundet: \(program.functions.count) funktioner!")
+        print("Found: \(program.functions.count) functions!")
+        print("Found: \(program.types.count) types!")
+        
         print("Errors: \(errors)")
     }
     
@@ -71,17 +77,56 @@ class Parser {
     // Program
     private func parseProgram() -> ProgramNode {
         var functions:[FunctionNode] = []
+        var objectTypes:[ObjectTypeNode] = []
         let program = ProgramNode()
         
         while scanner.peekToken().type != .none {
-            let node = parseFunction()
-            node.parent = program
-            functions.append(node)
+            let test = scanner.peekToken()
+            
+            if test.type == .keyword_type { // Type
+                let node = parseObjectType()
+                node.parent = program
+                
+                objectTypes.append(node)
+            }
+            else if test.type == .keyword_define { // Funktion
+                let node = parseFunction()
+                node.parent = program
+                
+                functions.append(node)
+            }
         }
         
         program.functions = functions
+        program.types = objectTypes
         
         return program
+    }
+    
+    // Type
+    private func parseObjectType() -> ObjectTypeNode {
+        let _ = scanner.getToken() // 'type'
+        
+        let name = scanner.getToken()
+        ParserTables.types.append(name.content)
+        
+        let _ = scanner.getToken() // '{'
+        
+        var variables:[ObjectTypeVariableNode] = []
+        
+        while scanner.peekToken().type != .rcurly {
+            let type = parseType()
+            let name = scanner.getToken()
+            
+            let varNode = ObjectTypeVariableNode(identifier: name.content, type: type)
+            variables.append(varNode)
+            
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue } // Skip komma
+        }
+        
+        let _ = scanner.getToken() // '}'
+        
+        return ObjectTypeNode(variables: variables, name: name.content)
     }
     
     // MARK: Funktioner
@@ -125,7 +170,7 @@ class Parser {
             let type = parseType()
             let name = scanner.getToken()
             
-            res.append(ParameterNode(type: type.fullString!, name: name.content))
+            res.append(ParameterNode(type: type, name: name.content))
         }
         
         return res
