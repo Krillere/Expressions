@@ -7,7 +7,7 @@ ToDo list:
 - ~~Function implementation~~ (Done)
 - ~~Switch implementation~~ (Done)
 - ~~Let implementation~~ (Done)
-- Built-in functions (Mostly done for now. Missing some important ones, though.)
+- ~~Built-in functions~~ (Mostly done for now. Missing some important ones.)
 - ~~Simple types~~ (Done)
 - ~~Lists~~ (Done)
 - ~~Objects~~ (Done)
