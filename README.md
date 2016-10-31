@@ -11,8 +11,8 @@ ToDo list:
 - Simple types (Done)
 - Lists (Done)
 - Objects (Done)
-- Functions as first-class-citizens
-- Generics
+- Functions as first-class-citizens (Somewhat done)
+- Generics (Currently, only built-in functions are generic)
 - Side conditions (Print, IO and such)
 - Type conversions (Will be implemented as functions, like Scheme (number->String sort of))
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
