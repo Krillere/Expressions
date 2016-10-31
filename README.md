@@ -203,7 +203,7 @@ readFileContents(path) # Reads the contents from 'path'. Returns a string.
 The first three (With no return values) can be used in every codeblock along with normal expressions. For example:
 ```
 define main: -> Int {
-  print("This will be printed.") printLn("This will be printed, along with a newline.")
+  print("This will be printed. ") printLn("This will be printed, along with a newline.")
   print("This will be on a new line!")
   
   0 # Returns 0
