@@ -17,12 +17,33 @@ std::vector<T> list(std::initializer_list<T> obj) {
     
     return ret;
 }
-
 std::string list(char c) {
     std::string ret;
     ret.push_back(c);
     
     return ret;
+}
+
+// Append
+std::string append(std::string str, char c) {
+    std::string tmp(str);
+    tmp.push_back(c);
+    
+    return tmp;
+}
+template<typename T>
+std::vector<T> append(std::vector<T> lst, T obj) {
+    std::vector<T>tmp(lst);
+    tmp.push_back(obj);
+    
+    return tmp;
+}
+template<typename T>
+std::vector<T> append(std::initializer_list<T> lst, T obj) {
+    std::vector<T>tmp(lst);
+    tmp.push_back(obj);
+    
+    return tmp;
 }
 
 // First
