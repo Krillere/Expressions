@@ -32,7 +32,7 @@ func compile(code: String) {
     }
 }
 
-if let p = Bundle.main.path(forResource: "example7", ofType: "expr") {
+if let p = Bundle.main.path(forResource: "example6", ofType: "expr") {
     let cont = try String(contentsOfFile: p)
     compile(code: cont)
 }

@@ -19,7 +19,7 @@ enum TokenType {
     
     case boolLiteral   // true|false
     
-    case op // AND | OR | * | + | / | - | < | > | <= | >= | == | !=
+    case op // AND | OR | * | + | / | - | < | > | <= | >= | == | != | %
     
     case number         // (0-9)
     case string         // (a-Z)+
@@ -368,6 +368,10 @@ class Scanner {
             case "*":
                 token = Token(cont: "*", type: .op, charIndex: inputIndex)
                 break
+                
+            case "%":
+                token = Token(cont: "%", type: .op, charIndex: inputIndex)
+            break
                 
             case "/":
                 token = Token(cont: "/", type: .op, charIndex: inputIndex)

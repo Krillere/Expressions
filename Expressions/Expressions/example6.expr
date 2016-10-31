@@ -1,0 +1,13 @@
+define test: Int a -> [Int] {
+  list(a)
+}
+
+define strTest: Char a, Char b -> String {
+  append(list(a), b)
+}
+
+define main: -> Int {
+ let [Int] nlist = list(1) {
+   get(append(nlist, 2), 1)
+ }
+}
