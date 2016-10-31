@@ -182,4 +182,5 @@ get(list, nth) # Fetches the nth object in a list
 tail(list) # Returns everything but the first object
 init(list) # Returns everything but the last object
 take(list, num) # Returns 'num' items from list
+list(obj) # Returns a list containing 'obj'
 ```
