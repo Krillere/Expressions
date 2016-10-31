@@ -99,11 +99,23 @@ class CodeGenerator {
         
         for v in objType.variables {
             guard let ttype = v.type, let vname = v.identifier else { continue }
-            var type = ""
+            
+            // Normal type
             if ttype is NormalTypeNode {
-                type = createTypeString(type: ttype as! NormalTypeNode)
+                guard let ttype = ttype as? NormalTypeNode else { return "" }
+                
+                let type = createTypeString(type: ttype)
+                typeDecl += " "+type+" "+vname+";\n"
             }
-            typeDecl += " "+type+" "+vname+";\n"
+            else if ttype is FunctionTypeNode { // Function type
+                guard let ttype = ttype as? FunctionTypeNode else { return "" }
+                
+                let retType = createFunctionTypeString(type: ttype, context: .preName)
+                let inp = createFunctionTypeString(type: ttype, context: .postName)
+                typeDecl += retType+" (*"+vname+")"+inp+";\n"
+            }
+            
+            
         }
         
         typeDecl += "};"
@@ -119,11 +131,17 @@ class CodeGenerator {
             let v = objType.variables[n]
             guard let ttype = v.type, let vname = v.identifier else { continue }
             
-            var type = ""
             if ttype is NormalTypeNode {
-                type = createTypeString(type: ttype as! NormalTypeNode)
+                guard let ttype = ttype as? NormalTypeNode else { return "" }
+                let type = createTypeString(type: ttype)
+                typeInit += type+" "+vname
             }
-            typeInit += type+" "+vname
+            else if ttype is FunctionTypeNode {
+                guard let ttype = ttype as? FunctionTypeNode else { return "" }
+                let retType = createFunctionTypeString(type: ttype, context: .preName)
+                let inp = createFunctionTypeString(type: ttype, context: .postName)
+                typeInit += retType+" "+vname+inp
+            }
             
             if n != objType.variables.count-1 {
                 typeInit += ", "
@@ -266,6 +284,7 @@ class CodeGenerator {
         case preName
         case postName
     }
+    
     private func createFunctionTypeString(type: FunctionTypeNode, context: FunctionTypeContext) -> String {
         
         if context == .preName {
@@ -535,13 +554,22 @@ class CodeGenerator {
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
             
-            var type = ""
+            // Normal type
             if ttype is NormalTypeNode {
-                type = createTypeString(type: ttype as! NormalTypeNode)
+                guard let ttype = ttype as? NormalTypeNode else { return "" }
+                
+                let type = createTypeString(type: ttype)
+                str += type+" "+name+" = "
+                str += createExpression(expr: expr)
+            }
+            else if ttype is FunctionTypeNode { // Function type
+                guard let ttype = ttype as? FunctionTypeNode else { return "" }
+                
+                let retType = createFunctionTypeString(type: ttype, context: .preName)
+                let inp = createFunctionTypeString(type: ttype, context: .postName)
+                str += retType+" (*"+name+")"+inp+" = "+createExpression(expr: expr)
             }
             
-            str += type+" "+name+" = "
-            str += createExpression(expr: expr)
             str += ";\n"
         }
         

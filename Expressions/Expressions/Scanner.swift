@@ -32,6 +32,7 @@ enum TokenType {
     case returns        // ->
     case comma          // ,
     case negate         // !
+    case dot            // .
     
     case keyword_if     // "if"
     case keyword_else   // "else"
@@ -434,6 +435,10 @@ class Scanner {
             case "\"":
                 let stringLit = getStringLiteralContent()
                 token = Token(cont: stringLit, type: .stringLiteral, charIndex: inputIndex)
+            break
+                
+            case ".":
+                token = Token(cont: ".", type: .dot, charIndex: inputIndex)
             break
                 
             case "#":
