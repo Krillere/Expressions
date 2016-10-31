@@ -98,8 +98,12 @@ class CodeGenerator {
         var typeDecl = "struct t_"+name+" {\n"
         
         for v in objType.variables {
-            guard let type = v.type, let vname = v.identifier else { continue }
-            typeDecl += " "+createTypeString(type: type)+" "+vname+";\n"
+            guard let ttype = v.type, let vname = v.identifier else { continue }
+            var type = ""
+            if ttype is NormalTypeNode {
+                type = createTypeString(type: ttype as! NormalTypeNode)
+            }
+            typeDecl += " "+type+" "+vname+";\n"
         }
         
         typeDecl += "};"
@@ -113,9 +117,13 @@ class CodeGenerator {
         var typeInit = "t_"+name+" "+name+"("
         for n in 0 ..< objType.variables.count {
             let v = objType.variables[n]
-            guard let type = v.type, let vname = v.identifier else { continue }
+            guard let ttype = v.type, let vname = v.identifier else { continue }
             
-            typeInit += createTypeString(type: type)+" "+vname
+            var type = ""
+            if ttype is NormalTypeNode {
+                type = createTypeString(type: ttype as! NormalTypeNode)
+            }
+            typeInit += type+" "+vname
             
             if n != objType.variables.count-1 {
                 typeInit += ", "
@@ -151,70 +159,26 @@ class CodeGenerator {
             let identifier = function.identifier,
             let block = function.block else { return "" }
         
-        // Non-generic function
-        if !isGenericTypeArgument(pars: function.pars) {
-            var ret = ""
-            
-            let type = createTypeString(type: retType)
-            
-            let pars = createFunctionParameters(pars: function.pars)
-            declaredFunctions.append(type+" "+identifier+"("+pars+")")
-            
-            // type navn ( pars ) block
-            let funcDecl:String = "\n"+type+" "+identifier+"("+pars+")"+createBlock(block: block)
-            ret += funcDecl
-            
-            return ret
+        var ret = ""
+        
+        var type = ""
+        if retType is NormalTypeNode {
+            type = createTypeString(type: retType as! NormalTypeNode)
         }
-        else { // Generic function
-            return ""
-            //self.emitGenericFunction(function: function)
-        }
+        
+        let pars:String = createFunctionParameters(pars: function.pars)
+        
+        var declaredFunction:String = type+" "+identifier
+        declaredFunction.append("("+pars+")")
+        declaredFunctions.append(declaredFunction)
+        
+        // type navn ( pars ) block
+        let funcDecl:String = "\n"+type+" "+identifier+"("+pars+")"+createBlock(block: block)
+        ret += funcDecl
+        
+        return ret
     }
     
-    // Laver generisk funktionserklæring
-    private func emitGenericFunction(function: FunctionNode) {
-        guard let retType = function.retType,
-            let identifier = function.identifier,
-            let block = function.block else { return }
-        
-        // String
-        let stringType = createGenericTypeString(type: retType, genType: "std::string", isRet: true)
-        let stringPars = createGenericFunctionParameters(pars: function.pars, genType: "std::string")
-        
-        let stringFuncDecl:String = "\n"+stringType+" "+identifier+"("+stringPars+")"+createBlock(block: block)
-        emit(stringFuncDecl)
-        
-        // Vector
-        let vecType = createGenericTypeString(type: retType, genType: "std::vector<T>", isRet: true)
-        let vecPars = createGenericFunctionParameters(pars: function.pars, genType: "std::vector<T>")
-        
-        let vecFuncDecl:String = "\n"+vecType+" "+identifier+"("+vecPars+")"+createBlock(block: block)
-        emit(vecFuncDecl)
-        
-        // initializer_list
-        let initType = createGenericTypeString(type: retType, genType: "std::initializer_list<T>", isRet: true)
-        let initPars = createGenericFunctionParameters(pars: function.pars, genType: "std::initializer_list<T>")
-        
-        let initFuncDecl:String = "\n"+initType+" "+identifier+"("+initPars+")"+createBlock(block: block)
-        emit(initFuncDecl)
-    }
-    
-    // Does the function have any generic arguments?
-    private func isGenericTypeArgument(pars: [ParameterNode]) -> Bool {
-        var isGeneric = false
-        
-        for p in pars {
-            guard let t = p.type else { continue }
-            
-            if t.generic {
-                isGeneric = true
-                break
-            }
-        }
-        
-        return isGeneric
-    }
     
     // Laver string med funktionsparametre - (T1 n1, T2 n2 ... )
     private func createFunctionParameters(pars: [ParameterNode]) -> String {
@@ -222,9 +186,19 @@ class CodeGenerator {
         
         for n in 0 ..< pars.count {
             let par = pars[n]
+                
             guard let tmpType = par.type, let name = par.name else { continue }
-            let type = createTypeString(type: tmpType)
-            str += type+" "+name
+            
+            if tmpType is NormalTypeNode { // Normal type, just 'Type Name'
+                let type = createTypeString(type: tmpType as! NormalTypeNode)
+                str += type+" "+name
+
+            }
+            else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
+                let retType = createFunctionTypeString(type: tmpType as! FunctionTypeNode, context: .preName)
+                let inp = createFunctionTypeString(type: tmpType as! FunctionTypeNode, context: .postName)
+                str += retType+" "+name+inp
+            }
             
             if n != pars.count-1 {
                 str += ", "
@@ -234,32 +208,8 @@ class CodeGenerator {
         return str
     }
     
-    // Laver funktionsparametre, men laver generics til bestemt type
-    private func createGenericFunctionParameters(pars: [ParameterNode], genType: String) -> String {
-        var str = ""
-        
-        for n in 0 ..< pars.count {
-            let par = pars[n]
-            guard let tmpType = par.type, let name = par.name else { continue }
-            
-            if tmpType.generic { // Generisk type
-                let type = createGenericTypeString(type: tmpType, genType: genType, isRet: false)
-                str += type+" "+name
-            }
-            else { // Almindelig type
-                let type = createTypeString(type: tmpType)
-                str += type+" "+name
-            }
-            
-            if n != pars.count-1 {
-                str += ", "
-            }
-        }
-        
-        return str
-    }
-
-    // Laver en blok - { expr }
+    
+    // Creates block - { expr }
     private func createBlock(block: BlockNode) -> String {
         
         var str = "{\n"
@@ -269,8 +219,8 @@ class CodeGenerator {
         return str
     }
     
-    // Laver string ud fra type
-    private func createTypeString(type: TypeNode) -> String {
+    // Creates a string from a normal type. Int becomes int, String becomse std::string and so on.
+    private func createTypeString(type: NormalTypeNode) -> String {
         guard let clearType = type.clearType else { return "" }
         
         if type.numNested == 0 {
@@ -310,32 +260,35 @@ class CodeGenerator {
         return str
     }
     
-    // Laver type, med afsæt i 'genType' hvis generisk type
-    private func createGenericTypeString(type: TypeNode, genType: String, isRet: Bool) -> String {
-        if genType == "std::string" && type.numNested! != 0 {
-            type.numNested! -= 1
+    
+    // Are we before the name or after? (Important for function types)
+    private enum FunctionTypeContext {
+        case preName
+        case postName
+    }
+    private func createFunctionTypeString(type: FunctionTypeNode, context: FunctionTypeContext) -> String {
+        
+        if context == .preName {
+            return createTypeString(type: type.ret as! NormalTypeNode)
         }
-        
-        if type.numNested == 0 {
-            return genType
-        }
-        
-        var str = ""
-        
-        for i in 0 ..< type.numNested! {
-            str += "std::vector<"
+        else if context == .postName {
+            var str = "("
             
-            if i == type.numNested!-1 {
-                str += genType
+            for n in 0 ..< type.inputs.count {
+                let t = type.inputs[n]
+                str += createTypeString(type: t as! NormalTypeNode)
+                
+                if n != type.inputs.count-1 {
+                    str += ", "
+                }
             }
-        }
-        
-        for _ in 0 ..< type.numNested! {
-            str += ">"
+            
+            str += ")"
+            
+            return str
         }
 
-        
-        return str
+        return ""
     }
     
     // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
@@ -582,7 +535,10 @@ class CodeGenerator {
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
             
-            let type = createTypeString(type: ttype)
+            var type = ""
+            if ttype is NormalTypeNode {
+                type = createTypeString(type: ttype as! NormalTypeNode)
+            }
             
             str += type+" "+name+" = "
             str += createExpression(expr: expr)

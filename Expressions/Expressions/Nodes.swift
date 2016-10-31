@@ -91,10 +91,12 @@ class FunctionNode : Node, CustomStringConvertible {
 
 // Parameter in function declaration
 class ParameterNode : Node, CustomStringConvertible  {
+    var name:String?
     var type: TypeNode?
-    var name: String?
     
     init(type: TypeNode, name: String) {
+        super.init()
+        
         self.type = type
         self.name = name
     }
@@ -140,8 +142,10 @@ class FunctionCallNode : Node, CustomStringConvertible {
     }
 }
 
+class TypeNode : Node { }
+
 // Type declaration (Int, String, CustomType, [Int] and such)
-class TypeNode : Node, CustomStringConvertible {
+class NormalTypeNode : TypeNode, CustomStringConvertible {
     var fullString:String?
     
     var intClearType:String?
@@ -171,6 +175,15 @@ class TypeNode : Node, CustomStringConvertible {
     
     var description: String {
         return String(describing: self.fullString)
+    }
+}
+
+class FunctionTypeNode : TypeNode, CustomStringConvertible {
+    var ret:TypeNode?
+    var inputs:[TypeNode] = []
+    
+    var description: String {
+        return "Ret: \(ret), inputs: \(inputs)"
     }
 }
 

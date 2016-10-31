@@ -1,7 +1,7 @@
 # Testing functions as first-class-citizens
 
 define main: -> Int {
-  ftest(add)
+  ftest(add) # Can be called with 'add' or 'subtract'
 }
 
 define ftest: ((Int, Int) -> Int) func -> Int {
@@ -10,4 +10,8 @@ define ftest: ((Int, Int) -> Int) func -> Int {
 
 define add: Int a, Int b -> Int {
   a + b
+}
+
+define subtract: Int a, Int b -> Int {
+  a - b
 }

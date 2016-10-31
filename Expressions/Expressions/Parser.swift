@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Parser error class
 class ParserError : CustomStringConvertible {
     var reason:String?
     var token:Token?
@@ -32,7 +33,7 @@ class Parser {
         self.scanner = Scanner(input: input)
     }
     
-    // Parser alle funktioner
+    // Runs the parser on the input.
     func run() {
         let program = parseProgram()
         self.program = program
@@ -45,6 +46,7 @@ class Parser {
             }
         }
         
+        // No 'main' found
         if !hasEntry {
             errors.append(ParserError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
@@ -64,7 +66,9 @@ class Parser {
         return self.program
     }
     
+    // MARK: Parser functionality
     
+    // Creates an error
     private func error(_ reason: String) {
         self.errorOccurred = true
         
@@ -74,12 +78,13 @@ class Parser {
         print("ERROR: "+reason)
     }
     
-    // Program
+    // Parse program
     private func parseProgram() -> ProgramNode {
         var functions:[FunctionNode] = []
         var objectTypes:[ObjectTypeNode] = []
         let program = ProgramNode()
         
+        // Continue as long as input exists
         while scanner.peekToken().type != .none {
             let test = scanner.peekToken()
             
@@ -89,7 +94,7 @@ class Parser {
                 
                 objectTypes.append(node)
             }
-            else if test.type == .keyword_define { // Funktion
+            else if test.type == .keyword_define { // Function
                 let node = parseFunction()
                 node.parent = program
                 
@@ -103,13 +108,14 @@ class Parser {
         return program
     }
     
-    // Type
+    // Parses an objec type
     private func parseObjectType() -> ObjectTypeNode {
         let t1 = scanner.getToken() // 'type'
         if !t1.content.contains("type") {
             error("Expected 'type', got \(t1.content)")
         }
         
+        // Type name
         let name = scanner.getToken()
         ParserTables.types.append(name.content)
         
@@ -120,6 +126,7 @@ class Parser {
         
         var variables:[ObjectTypeVariableNode] = []
         
+        // Finds type variables
         while scanner.peekToken().type != .rcurly {
             let type = parseType()
             let name = scanner.getToken()
@@ -138,7 +145,7 @@ class Parser {
         return ObjectTypeNode(variables: variables, name: name.content)
     }
     
-    // MARK: Funktioner
+    // MARK: Function
     private func parseFunction() -> FunctionNode {
         let token = scanner.getToken()
         if token.type != .keyword_define {
@@ -146,7 +153,7 @@ class Parser {
             return FunctionNode()
         }
         
-        // Navn og :
+        // Name and ':'
         let nt = scanner.getToken()
         let funcName = nt.content
         
@@ -170,7 +177,7 @@ class Parser {
         return fc
     }
     
-    // Parametre til funktion:   type name, type name ...
+    // PParameters for function:   type name, type name ...
     private func parseParameters() -> [ParameterNode] {
         var res:[ParameterNode] = []
         
@@ -180,8 +187,7 @@ class Parser {
                 break
             }
             
-            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
-            
+            // Regular parameter (type name)
             let type = parseType()
             let name = scanner.getToken()
             
@@ -215,19 +221,23 @@ class Parser {
         return block
     }
     
-    // Type [String], [[[[[String]]]]], Int, osv.
+    // Type [String], [[[[[String]]]]], Int, and so on.
     private func parseType() -> TypeNode {
         let token = scanner.getToken()
         
         // Direkte navngiven type
         if token.type == .string {
-            return TypeNode(full: token.content, type: token.content, nestedLevel: 0)
+            return NormalTypeNode(full: token.content, type: token.content, nestedLevel: 0)
+        }
+        
+        // Function type?
+        if token.type == .lpar {
+            return parseFunctionType()
         }
         
         
-        
-        // Et array af en art, fix!
-        let ret = TypeNode()
+        // List of some sort, [Int] [[Int]] or something
+        let ret = NormalTypeNode()
         
         var metName = false
         
@@ -280,6 +290,51 @@ class Parser {
     
         
         return ret
+    }
+    
+    // Create function type
+    private func parseFunctionType() -> TypeNode {
+        var inpTypes:[TypeNode] = []
+        
+        // Parse input types
+        let t = scanner.getToken()
+        if t.type != .lpar {
+            error("Expected ')', got \(t.content)")
+        }
+        
+        while scanner.peekToken().type != .rpar {
+            if scanner.peekToken().type == .none {
+                error("Error in function declaration. Syntax all fucked up.")
+                break
+            }
+            
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
+            
+            let inpType = parseType()
+            inpTypes.append(inpType)
+        }
+        
+        let _ = scanner.getToken() // ')'
+        
+        let t2 = scanner.getToken()
+        if t2.type != .returns {
+            error("Expected '->', got \(t2.content)")
+        }
+        
+        // Parse output type
+        let retType = parseType()
+        
+        let _ = scanner.getToken() // ')'
+        
+        
+        print("Fundet funktion med input: \(inpTypes) og output: \(retType)")
+        
+        // Create type node
+        let functionType = FunctionTypeNode()
+        functionType.ret = retType
+        functionType.inputs = inpTypes
+        
+        return functionType
     }
 
     // Er det næste udtryk en operator?

@@ -23,3 +23,8 @@ define main: -> Int {
 define test: -> AnotherType {
   AnotherType(1, 1)
 }
+
+
+define aTest: Int a, Int b, Int c, Char ch, String str -> Int {
+  a + b + c
+}
