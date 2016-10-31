@@ -81,6 +81,7 @@ type MyType {
   Int myInteger,
   String myString,
   Char myCharacter,
+  ((Int, Int) -> Int) myFunction,
 }
 ```
 The last comma is optional. Could just be ```Char myCharacter }```
@@ -90,6 +91,12 @@ To create an object of this type, use:
 let MyType t = MyType(4, "string", "c") {
   # myInteger = 4, myString = "string", myCharacter = "c"
 }
+```
+
+To access functions or variables inside the object, use a dot. For exampe:
+```
+let Int tmp = myType.myInteger
+let Int tmp = myType.myFunction(1, 2)
 ```
 
 ## Functions as a type
