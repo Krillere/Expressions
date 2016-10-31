@@ -215,11 +215,12 @@ Using any one of these but ```readFileContents``` in an expression context (```1
 These can be used together, for example:
 ```
 define main: -> Int {
-  writeFileContents("/Folder/file.txt", "This is text.")
+  let String path = "/Folder/file.txt" {
+    writeFileContents(path, "This is text.")
   
-  print("From file: ")
-  print(readFileContents("/Folder/file.txt")) # Prints 'This is text.'
-  
+    print("From file: ")
+    print(readFileContents(path)) # Prints 'This is text.'
+  }
   0
 }
 ```
