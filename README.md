@@ -188,6 +188,7 @@ take(list, num) # Returns 'num' items from list
 list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 append(lst, obj) # Adds 'obj' to the end of 'lst'
+null(lst) # true of list is empty
 ```
 
 ## Side conditions
