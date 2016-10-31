@@ -104,6 +104,8 @@ class Scanner {
             allTokens.append(tmpToken)
         }
         while tmpToken.type != .none
+        
+        print("Scanning completed")
     }
     
     // Gets next character in input

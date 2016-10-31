@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7531DC681D7009A9900 /* example4.expr */; };
 		AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7551DC7BF6B009A9900 /* example6.expr */; };
+		AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7571DC7C27B009A9900 /* std.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
@@ -38,6 +39,7 @@
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
 				AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */,
 				AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */,
+				AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */,
 				AAEAC0431DC4FE3700989910 /* example2.expr in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

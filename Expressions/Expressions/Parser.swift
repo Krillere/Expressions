@@ -30,7 +30,20 @@ class Parser {
     private var errorOccurred = false
     
     init(input: String) {
-        self.scanner = Scanner(input: input)
+        var code = ""
+        if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
+            do {
+                let stdCont = try String(contentsOfFile: p)
+                code += stdCont
+            }
+            catch {
+                
+            }
+        }
+        
+        code += input
+        
+        self.scanner = Scanner(input: code)
     }
     
     // Runs the parser on the input.
@@ -55,6 +68,8 @@ class Parser {
         print("Found: \(program.types.count) types!")
         
         print("Errors: \(errors)")
+        
+        print("Parsing completed")
     }
     
     // Getters
@@ -202,7 +217,14 @@ class Parser {
             return BlockNode()
         }
         
-        let block = BlockNode(expr: parseExpression())
+        var exprs:[Node] = []
+        
+        while scanner.peekToken().type != .rcurly {
+            let expr = parseExpression()
+            exprs.append(expr)
+        }
+        
+        let block = BlockNode(exprs: exprs)
         
         let t1 = scanner.getToken() // } i block
         if !t1.content.contains("}") {

@@ -7,7 +7,34 @@ define strTest: Char a, Char b -> String {
 }
 
 define main: -> Int {
- let [Int] nlist = list(1) {
-   get(append(nlist, 2), 1)
- }
+  print("This will be printed. ") printLn("This will be printed, along with a newline.")
+  print("This will be on a new line!")
+
+  0 # Returns 0
+}
+
+define listTest: -> Int {
+  let [Int] nlist = list(1) {
+    get(append(nlist, 2), 1)
+  }
+}
+
+
+# Should print 'derp' and then return a + b
+define scTest: Int a, Int b -> Int {
+  print("derp")
+  a + b
+}
+
+# Should read the file contents from ~/Desktop/intermediate.cpp into the variable str
+define scTest2: -> String {
+  let String str = readFileContents("~/Desktop/intermediate.cpp") {
+     str
+  }
+}
+
+# Should write the second parameter to the file in the first
+define scTest3: -> Int {
+  writeFileContents("~/Desktop/temp.txt", "This is the contents.")
+  0
 }

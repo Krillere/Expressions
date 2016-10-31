@@ -9,12 +9,30 @@
 import Foundation
 
 class ParserTables {
-    static var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail"]
-    static var types:[String] = []
+    static var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
+    static var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial"]
+    static var types:[String] = [] // User defined types
+    static var nameTranslation:[String : String] = [:]
+    
+    // Creates a renamed variable for identifier
+    static func createRename(forIdentifier: String) -> String {
+        
+        if let known = nameTranslation[forIdentifier] {
+            return known
+        }
+        
+        let newName = generateNewVariableName()
+        nameTranslation[forIdentifier] = newName
+        
+        return newName
+    }
     
     // Generates a 10 digit long random variable name, as to now allow 'collisions' with user functions
     static func generateNewVariableName() -> String {
-        let tmp = randomString(length: 10)
+        var tmp = randomString(length: 10)
+        while nameTranslation.values.contains(tmp) {
+            tmp = randomString(length: 10)
+        }
         
         return tmp
     }

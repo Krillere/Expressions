@@ -231,7 +231,11 @@ class CodeGenerator {
     private func createBlock(block: BlockNode) -> String {
         
         var str = "{\n"
-        str += createExpression(expr: block.expression!)
+        
+        for expr in block.expressions {
+            str += createExpression(expr: expr)
+        }
+        
         str += "\n}\n"
         
         return str
@@ -329,10 +333,7 @@ class CodeGenerator {
         if shouldRet {
             retString = "return "
         }
-        else {
-            //print("Returnerer IKKE: \(expr)")
-        }
-        
+
         switch expr {
         case is ExpressionNode:
             retString += createExpressionNode(expr: (expr as! ExpressionNode))
@@ -396,8 +397,16 @@ class CodeGenerator {
             break
         }
         
-        if shouldRet {
+        if shouldRet { // End of expression
             retString += ";"
+        }
+        
+        if expr is FunctionCallNode { // Side conditions should be ended too.
+            let fc = expr as! FunctionCallNode
+            guard let name = fc.identifier else { return retString }
+            if ParserTables.sideConditionFunctions.contains(name) {
+                retString += ";"
+            }
         }
         
         return retString
@@ -520,7 +529,7 @@ class CodeGenerator {
     
     // Laver let - "let" [Type name "=" expr] block
     private func createLetNode(letN: LetNode) -> String {
-        guard let block = letN.block, let bexpr = block.expression else { return "" }
+        guard let block = letN.block else { return "" }
         
 
         // Lav funktionens indhold
@@ -548,7 +557,9 @@ class CodeGenerator {
             str += ";\n"
         }
         
-        str += createExpression(expr: bexpr)
+        for bexpr in block.expressions {
+            str += createExpression(expr: bexpr)
+        }
         str += "}"
         
         return str
@@ -564,6 +575,15 @@ class CodeGenerator {
             let par = tmpNode.parent!
             
             if par is BlockNode {
+                if node is FunctionCallNode { // Side condition?
+                    let tmpNode = node as! FunctionCallNode
+                    guard let name = tmpNode.identifier else { return true }
+                    
+                    if ParserTables.sideConditionFunctions.contains(name) {
+                        return false
+                    }
+                }
+                
                 return true
             }
             else if par is IfElseNode {

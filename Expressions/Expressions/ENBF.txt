@@ -29,6 +29,9 @@ expr := if
 | number
 | call
 | let
+| name . name
+| name . call
+
 
 number  := (0-9)+ | (0-9)+.(0-9)+ | -number
 boolLit := "true" | "false"
@@ -48,4 +51,7 @@ passPars := expr | expr "," passPars
 
 let      := "let" vardecls block
 vardecls := type name "=" expr" | type name "=" expr ", " vardecls
-type     := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]"
+type     := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]" | funcType
+
+funcType := "(" "(" inpTypes ")" "->" type ")" // For example: ((Int, Int) -> Int) takes two integers as parameter and returns integer
+inpTypes := type | type ", " inpTypes

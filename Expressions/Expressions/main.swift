@@ -32,10 +32,24 @@ func compile(code: String) {
     }
 }
 
-if let p = Bundle.main.path(forResource: "example6", ofType: "expr") {
-    let cont = try String(contentsOfFile: p)
-    compile(code: cont)
+// Did the user specify a file?
+let args = CommandLine.arguments
+if args.count == 2 {
+    do {
+        let path = args[1]
+        let cont = try String(contentsOfFile: path)
+        compile(code: cont)
+    }
+    catch {
+        print("Error: \(error)")
+    }
 }
-else {
-    print("Ingen fil fundet..")
+else { // Default. Use an example.
+    if let p = Bundle.main.path(forResource: "example6", ofType: "expr") {
+        let cont = try String(contentsOfFile: p)
+        compile(code: cont)
+    }
+    else {
+        print("Ingen fil fundet..")
+    }
 }

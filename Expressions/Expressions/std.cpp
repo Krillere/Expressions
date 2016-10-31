@@ -1,6 +1,33 @@
 // Standard library
 #include <iostream>
+#include <fstream>
 #include <vector>
+
+// Print
+template<typename T>
+void print(T obj) {
+    std::cout << obj;
+}
+template<typename T>
+void printLn(T obj) {
+    std::cout << obj << std::endl;
+}
+
+// readFileContents
+std::string readFileContents(std::string path) {
+    std::ifstream ifs(path);
+    std::string content( (std::istreambuf_iterator<char>(ifs) ),
+                        (std::istreambuf_iterator<char>()    ) );
+    ifs.close();
+    return content;
+}
+
+// writeFileContents
+void writeFileContents(std::string path, std::string content) {
+    std::ofstream ofs (path, std::ofstream::binary);
+    ofs << content;
+    ofs.close();
+}
 
 // List
 template<typename T>

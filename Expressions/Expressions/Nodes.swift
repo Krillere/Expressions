@@ -23,7 +23,7 @@ class ProgramNode : Node {
     var types:[ObjectTypeNode] = []
 }
 
-// MARK: Object types
+// MARK: Object types ('type' keyword)
 class ObjectTypeNode : Node, CustomStringConvertible {
     var variables:[ObjectTypeVariableNode] = []
     var name:String?
@@ -32,7 +32,7 @@ class ObjectTypeNode : Node, CustomStringConvertible {
         super.init()
         
         self.variables = variables
-        self.name = name
+        self.name = name //ParserTables.createRename(forIdentifier: name)
         
         for v in self.variables {
             v.parent = self
@@ -59,8 +59,7 @@ class ObjectTypeVariableNode : Node, CustomStringConvertible {
     }
 }
 
-// MARK: Function
-
+// MARK: Functions
 // Function declaration
 class FunctionNode : Node, CustomStringConvertible {
     var identifier:String?
@@ -108,15 +107,17 @@ class ParameterNode : Node, CustomStringConvertible  {
 
 // Block (Wrapper for 'expression', basically)
 class BlockNode : Node {
-    var expression:Node?
+    var expressions:[Node] = []
     
     override init() { }
     
-    init(expr: Node) {
+    init(exprs: [Node]) {
         super.init()
         
-        self.expression = expr
-        self.expression?.parent = self
+        self.expressions = exprs
+        for expr in self.expressions {
+            expr.parent = self
+        }
     }
 }
 
