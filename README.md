@@ -31,7 +31,7 @@ Overview:
 1.  [Functions](#functions)
 2.  [Types](#types)
 3.  [Objects](#objects)
-3.  [Functions as objects](#functions-as-objects)
+3.  [Functions as objects](#functions-as-a-type)
 3.  [Conditionals](#conditionals)
 4.  [Switch](#switch)
 5.  [Variables](#variables)
@@ -92,7 +92,7 @@ let MyType t = MyType(4, "string", "c") {
 }
 ```
 
-## Functions as objects
+## Functions as a type
 Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following ((InpType1, InpType2, ... InpTypeN) -> RetType). An example:
 ```
 define add: Int a, Int b -> Int {
@@ -107,6 +107,13 @@ define test: ((Int, Int) -> Int) funcToCall -> Int {
 }
 
 # 'test' can now be called with the parameter 'add', which will then return 20 or 'subtract' which will return 0
+```
+
+Functions can be declared in objects as well, and used in *let* expressions.
+```
+let ((Int, Int) -> Int) addFunc = add {
+  1 + addFunc(1, 1) # 3
+}
 ```
 
 ## Conditionals
