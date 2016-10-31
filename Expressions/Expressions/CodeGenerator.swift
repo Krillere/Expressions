@@ -15,7 +15,7 @@ class CodeGenerator {
     // Prototyper
     private var declaredFunctions:[String] = []
     
-    // Ting der skal ændres direkte
+    // Direct conversions (Types and operators)
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool", "Generic":"Generic"]
     private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
     
@@ -24,7 +24,7 @@ class CodeGenerator {
         self.program = program
     }
     
-    // Laver og printer kode
+    // Creates and saves code at ~/Desktop/intermediate.cpp
     func generate() {
         guard let program = self.program else { return }
         
@@ -279,7 +279,7 @@ class CodeGenerator {
     }
     
     
-    // Are we before the name or after? (Important for function types)
+    // Are we before the name or after? (Important for function types due to C++ syntax)
     private enum FunctionTypeContext {
         case preName
         case postName
@@ -310,49 +310,8 @@ class CodeGenerator {
         return ""
     }
     
-    // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
-    private func shouldReturn(node: Node) -> Bool {
-        
-        var tmpNode:Node = node
-        while tmpNode.parent != nil {
-            let par = tmpNode.parent!
-            
-            if par is BlockNode {
-                return true
-            }
-            else if par is IfElseNode {
-                return false
-            }
-            else if par is LetNode {
-                return false
-            }
-            else if par is ParameterNode {
-                return false
-            }
-            else if par is ExpressionNode {
-                return false
-            }
-            else if par is FunctionCallNode {
-                return false
-            }
-            else if par is ParenthesesExpression {
-                return false
-            }
-            else if par is SwitchNode {
-                return false
-            }
-            else if par is ArrayLiteralNode {
-                return false
-            }
-            else {
-                tmpNode = par
-            }
-        }
-        
-        return false
-    }
     
-    // Laver expression (Alle typer)
+    // Creates an expression (Covers all expression types)
     private func createExpression(expr: Node) -> String {
         if expr is IfElseNode {
             return createIfElseNode(ifElse: (expr as! IfElseNode))
@@ -414,6 +373,11 @@ class CodeGenerator {
             
         case is ArrayLiteralNode:
             retString += createArrayLiteral(lit: (expr as! ArrayLiteralNode))
+        break
+            
+        case is PropertyValueNode:
+            guard let node = expr as? PropertyValueNode, let name = node.name, let property = node.property else { break }
+            retString += name+"."+property
         break
             
         default:
@@ -578,4 +542,49 @@ class CodeGenerator {
         
         return str
     }
+    
+    
+    // MARK: Helpers
+    // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
+    private func shouldReturn(node: Node) -> Bool {
+        
+        var tmpNode:Node = node
+        while tmpNode.parent != nil {
+            let par = tmpNode.parent!
+            
+            if par is BlockNode {
+                return true
+            }
+            else if par is IfElseNode {
+                return false
+            }
+            else if par is LetNode {
+                return false
+            }
+            else if par is ParameterNode {
+                return false
+            }
+            else if par is ExpressionNode {
+                return false
+            }
+            else if par is FunctionCallNode {
+                return false
+            }
+            else if par is ParenthesesExpression {
+                return false
+            }
+            else if par is SwitchNode {
+                return false
+            }
+            else if par is ArrayLiteralNode {
+                return false
+            }
+            else {
+                tmpNode = par
+            }
+        }
+        
+        return false
+    }
+    
 }

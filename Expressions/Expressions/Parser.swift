@@ -68,15 +68,6 @@ class Parser {
     
     // MARK: Parser functionality
     
-    // Creates an error
-    private func error(_ reason: String) {
-        self.errorOccurred = true
-        
-        let error = ParserError(reason: reason, token: scanner.peekToken())
-        errors.append(error)
-        
-        print("ERROR: "+reason)
-    }
     
     // Parse program
     private func parseProgram() -> ProgramNode {
@@ -337,12 +328,6 @@ class Parser {
         return functionType
     }
 
-    // Er det næste udtryk en operator?
-    private func isNextOp() -> Bool {
-        let tmp = scanner.peekToken()
-        return tmp.type == .op
-    }
-    
     
     // Parser en expression (Største type af alle)
     private func parseExpression() -> Node {
@@ -374,7 +359,7 @@ class Parser {
             let stringToken = scanner.getToken()
             
             let funcCheck = scanner.peekToken()
-            if funcCheck.type == .lpar {
+            if funcCheck.type == .lpar { // Function call
                 let funcNode = parseFunctionCall(stringToken.content)
                 
                 if !isNextOp() {
@@ -383,10 +368,20 @@ class Parser {
                 
                 opNode = funcNode
             }
-            else {
+            else if funcCheck.type == .dot { // Type.property
+                let prop = parseTypeProperty(name: stringToken.content)
+                
+                // Operator?
+                if !isNextOp() {
+                    return prop
+                }
+                
+                opNode = prop
+            }
+            else { // variable
                 let variableNode = VariableNode(identifier: stringToken.content)
             
-                // Skal der ske mere?
+                // Operator?
                 if !isNextOp() {
                     return variableNode
                 }
@@ -448,12 +443,14 @@ class Parser {
             opNode = parexp
         }
         else if tmpToken.type == .stringLiteral {
-            let t1 = scanner.getToken() // "
+            /*let t1 = scanner.getToken() // "
             if !t1.content.contains("\"") {
                 error("Expected '\"', got \(t1.content)")
             }
+            */
+            let stringContent = scanner.getToken()
+            let expr = StringLiteralNode(content: stringContent.content)
             
-            let expr = StringLiteralNode(content: tmpToken.content)
             
             if !isNextOp() {
                 return expr
@@ -476,6 +473,12 @@ class Parser {
         return Node()
     }
 
+    private func parseTypeProperty(name: String) -> PropertyValueNode {
+        let _ = scanner.getToken() // '.'
+        let property = scanner.getToken()
+        return PropertyValueNode(name: name, property: property.content)
+    }
+    
     // MARK: Specielle expressions
     func parseArrayLiteral() -> ArrayLiteralNode {
         let t1 = scanner.getToken() // [
@@ -503,7 +506,6 @@ class Parser {
         return lit
     }
 
-    
     // Parser if-else node
     private func parseIf() -> IfElseNode {
         let t1 = scanner.getToken() // keyword "if"
@@ -586,7 +588,7 @@ class Parser {
     }
     
     
-    // MARK: Kald
+    // MARK: Function calls
     func parseFunctionCall(_ identifier: String) -> FunctionCallNode {
         let t1 = scanner.getToken() // lpar
         if !t1.content.contains("(") {
@@ -622,5 +624,24 @@ class Parser {
         }
         
         return res
+    }
+    
+    
+    
+    // MARK: Helpers
+    // Er det næste udtryk en operator?
+    private func isNextOp() -> Bool {
+        let tmp = scanner.peekToken()
+        return tmp.type == .op
+    }
+    
+    // Creates an error
+    private func error(_ reason: String) {
+        self.errorOccurred = true
+        
+        let error = ParserError(reason: reason, token: scanner.peekToken())
+        errors.append(error)
+        
+        print("ERROR: "+reason)
     }
 }

@@ -23,7 +23,9 @@ define main: -> Int {
 }
 
 define test: -> AnotherType {
-  AnotherType(1, 1)
+  let String derp = "asdf" {
+    AnotherType(1, 1)
+  }
 }
 
 
