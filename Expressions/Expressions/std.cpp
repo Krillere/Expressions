@@ -2,6 +2,29 @@
 #include <iostream>
 #include <vector>
 
+// List
+template<typename T>
+std::vector<T> list(T obj) {
+    std::vector<T> ret;
+    ret.push_back(obj);
+    
+    return ret;
+}
+template<typename T>
+std::vector<T> list(std::initializer_list<T> obj) {
+    std::vector<T> ret;
+    ret.push_back(obj);
+    
+    return ret;
+}
+
+std::string list(char c) {
+    std::string ret;
+    ret.push_back(c);
+    
+    return ret;
+}
+
 // First
 template<typename T>
 T first(std::initializer_list<T> ini) {
