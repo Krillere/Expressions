@@ -60,7 +60,7 @@ define main: -> Int {
 ```
 
 ## Types
-The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using quotes, just as strings: ```Char c = "c"```
+The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using single-quotes: ```Char c = 'c'```
 
 Currently there is no support of creating types, but there probably will be in the future.
 
