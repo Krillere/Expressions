@@ -11,10 +11,10 @@ ToDo list:
 - ~~Simple types~~ (Done)
 - ~~Lists~~ (Done)
 - ~~Objects~~ (Done)
+- ~~Side conditions~~ (Print, IO and such)
 - Functions as first-class-citizens (Somewhat done)
 - Generics (Currently, only built-in functions are generic)
 - Variadic functions
-- Side conditions (Print, IO and such)
 - Type conversions (Will be implemented as functions, like Scheme (number->String sort of))
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
@@ -38,6 +38,7 @@ Overview:
 5.  [Variables](#variables)
 6.  [Comments](#comments)
 7.  [Standard functions](#standard-functions--built-in-functions)
+8.  [Side conditions](#side-conditions)
 
 ## Functions
 [functions]:asd
@@ -188,3 +189,24 @@ list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 append(lst, obj) # Adds 'obj' to the end of 'lst'
 ```
+
+## Side conditions
+Certain functions, even though they have side effects, can be utilized.
+```
+print(msg) # Prints 'msg' to console. Does not return a value.
+printLn(msg) # Prings 'msg' and a newline to console. Does not return a value.
+writeFileContents(path, content) # Writes 'content' to the file at 'path'. Does not return a value.
+
+readFileContents(path) # Reads the contents from 'path'. Returns a string.
+```
+
+The first three (With no return values) can be used in every codeblock along with normal expressions. For example:
+```
+define main: -> Int {
+  print("This will be printed.") println("This will be printed, along with a newline.")
+  print("This will be on a new line!")
+  
+  0 # Returns 0
+}
+```
+Using any one of these but ```readFileContents``` in an expression context (```1 + print("Error") + 2```) will not compile.
