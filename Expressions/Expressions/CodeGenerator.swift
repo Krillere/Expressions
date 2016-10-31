@@ -376,8 +376,15 @@ class CodeGenerator {
         break
             
         case is PropertyValueNode:
-            guard let node = expr as? PropertyValueNode, let name = node.name, let property = node.property else { break }
-            retString += name+"."+property
+            guard let node = expr as? PropertyValueNode, let name = node.name else { break }
+            
+            if node.call == nil {
+                guard let property = node.property else { break }
+                retString += name+"."+property
+            }
+            else {
+                retString += name+"."+createFunctionCall(call: node.call!)
+            }
         break
             
         default:

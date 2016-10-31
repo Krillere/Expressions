@@ -99,7 +99,7 @@ class Parser {
         return program
     }
     
-    // Parses an objec type
+    // Parses an object type
     private func parseObjectType() -> ObjectTypeNode {
         let t1 = scanner.getToken() // 'type'
         if !t1.content.contains("type") {
@@ -318,8 +318,6 @@ class Parser {
         let _ = scanner.getToken() // ')'
         
         
-        print("Fundet funktion med input: \(inpTypes) og output: \(retType)")
-        
         // Create type node
         let functionType = FunctionTypeNode()
         functionType.ret = retType
@@ -345,7 +343,7 @@ class Parser {
             return parseSwitch()
         }
         else if tmpToken.type == .keyword_else {
-            let t1 = scanner.getToken() // Fjern 'else'
+            let t1 = scanner.getToken() // Drop 'else'
             if !t1.content.contains("else") {
                 error("Expected 'else', got \(t1.content)")
             }
@@ -476,6 +474,19 @@ class Parser {
     private func parseTypeProperty(name: String) -> PropertyValueNode {
         let _ = scanner.getToken() // '.'
         let property = scanner.getToken()
+        
+        let test = scanner.peekToken()
+        if test.type == .lpar { // Function call
+            let propNode = PropertyValueNode()
+            propNode.name = name
+            
+            let functionCall = parseFunctionCall(property.content)
+            propNode.call = functionCall
+            
+            return propNode
+        }
+        
+        // Regular property
         return PropertyValueNode(name: name, property: property.content)
     }
     

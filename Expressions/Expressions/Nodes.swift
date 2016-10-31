@@ -251,6 +251,9 @@ class StringLiteralNode : Node, CustomStringConvertible {
 class PropertyValueNode : Node, CustomStringConvertible {
     var name:String?
     var property:String?
+    var call:FunctionCallNode?
+    
+    override init() { }
     
     init(name: String, property: String) {
         self.name = name

@@ -9,6 +9,12 @@ define main: -> Int {
   ftest(add) # Can be called with 'add' or 'subtract'
 }
 
+define test2: -> Int {
+  let TestType derp = TestType(1, add) {
+    derp.func(1, 1)
+  }
+}
+
 define ftest: ((Int, Int) -> Int) func -> Int {
   func(1, 2)
 }
