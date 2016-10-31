@@ -98,11 +98,15 @@ Functions are first-class-citizens in Expression, hence they can be used as vari
 define add: Int a, Int b -> Int {
   a + b
 }
+define subtract: Int a, Int b -> Int {
+  a - b
+}
+
 define test: ((Int, Int) -> Int) funcToCall -> Int {
   funcToCall(10, 10)
 }
 
-# Test can now be called with the parameter 'add', which will then return 20.
+# 'test' can now be called with the parameter 'add', which will then return 20 or 'subtract' which will return 0
 ```
 
 ## Conditionals
