@@ -375,6 +375,10 @@ class CodeGenerator {
             retString += createArrayLiteral(lit: (expr as! ArrayLiteralNode))
         break
             
+        case is CharLiteralNode:
+            retString += "'"+(expr as! CharLiteralNode).content!+"'"
+        break
+            
         case is PropertyValueNode:
             guard let node = expr as? PropertyValueNode, let name = node.name else { break }
             

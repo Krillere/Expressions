@@ -247,6 +247,18 @@ class StringLiteralNode : Node, CustomStringConvertible {
     }
 }
 
+class CharLiteralNode : Node, CustomStringConvertible {
+    var content:String?
+    
+    init(content: String) {
+        self.content = content
+    }
+    
+    var description: String {
+        return "Char(\(self.content))"
+    }
+}
+
 // Accessing a property from a type
 class PropertyValueNode : Node, CustomStringConvertible {
     var name:String?

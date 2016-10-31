@@ -456,6 +456,16 @@ class Parser {
             
             opNode = expr
         }
+        else if tmpToken.type == .char {
+            let token = scanner.getToken()
+            let node = CharLiteralNode(content: token.content)
+            
+            if !isNextOp() {
+                return node
+            }
+            
+            opNode = node
+        }
         else if tmpToken.type  == .lsquare {
             return parseArrayLiteral()
         }

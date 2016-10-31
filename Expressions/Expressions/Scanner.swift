@@ -24,6 +24,7 @@ enum TokenType {
     case number         // (0-9)
     case string         // (a-Z)+
     case stringLiteral  // "(.*)"
+    case char           // '(A-z osv.)'
     
     case equal          // =
     case semicolon      // ;
@@ -172,6 +173,11 @@ class Scanner {
         }
         
         return tmp
+    }
+    
+    private func getCharLiteralContent() -> String {
+        char = get()
+        return String(char)
     }
     
     // Fetches string literal content. Continues until '"'(quote) is met
@@ -435,6 +441,12 @@ class Scanner {
             case "\"":
                 let stringLit = getStringLiteralContent()
                 token = Token(cont: stringLit, type: .stringLiteral, charIndex: inputIndex)
+            break
+                
+            case "'":
+                let charLit = getCharLiteralContent()
+                char = get() // '
+                token = Token(cont: charLit, type: .char, charIndex: inputIndex)
             break
                 
             case ".":

@@ -17,7 +17,7 @@ type NestedType {
 }
 
 define main: -> Int {
-  let TestType test = TestType(0, "asd", "a") {
+  let TestType test = TestType(0, "asd", 'a') {
     test.iint # 0
   }
 }
