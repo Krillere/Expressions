@@ -1,11 +1,34 @@
-# General testing
+# Testing types
 
-define t: Int a, Int b, Int c, Int d -> Int {
-  if a > b
-  { a }
-{ if (a > c) AND (a > d) { a } { d } }
+type TestType {
+  Int iint,
+  String sstring,
+  Char cchar,
+}
+
+type AnotherType {
+  Int int1,
+  Int int2
+}
+
+type NestedType {
+  AnotherType test,
+  Int a
 }
 
 define main: -> Int {
-  t(1, 2, 3, 4)
+  let TestType test = TestType(0, "asd", 'a') {
+    test.iint # 0
+  }
+}
+
+define test: -> AnotherType {
+  let String derp = "asdf" {
+    AnotherType(1, 1)
+  }
+}
+
+
+define aTest: Int a, Int b, Int c, Char ch, String str -> Int {
+  a + b + c
 }

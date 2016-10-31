@@ -1,20 +1,35 @@
-# General testing
+# Testing functions as first-class-citizens
+
+type TestType {
+  Int integer,
+  ((Int, Int) -> Int) func
+}
 
 define main: -> Int {
-  switch  1 == 2 { 1 }
-          2 == 1 { 2 }
-          3 == 1 { 3 }
-          else { 4 }
+  ftest(add) # Can be called with 'add' or 'subtract'
 }
 
-define stringTest: String str -> Char {
-    let String str = "start asdf æøå */+- slut" {
-        first(str) # Should be ignored.
-    }
+define test2: -> Int {
+  let TestType derp = TestType(1, add) {
+    derp.func(1, 1)
+  }
 }
 
-# Comment here
+define ftest: ((Int, Int) -> Int) func -> Int {
+  func(1, 2)
+}
 
-define ifTest: -> Int {
-    if (1 > 2) OR true { 1 } { 2 }
+# Methods that adhere to ((Int, Int) -> Int)
+define add: Int a, Int b -> Int {
+  a + b
+}
+
+define subtract: Int a, Int b -> Int {
+  a - b
+}
+
+define testing: Int a -> Int {
+  let ((Int, Int) -> Int) addFunc = add {
+    a + addFunc(1, 1) # 3
+  }
 }

@@ -1,11 +1,20 @@
 # General testing
 
-define diff: Int a, Int b -> Int {
-    let Int diff = a - b {
-        diff
+define main: -> Int {
+  switch  1 == 2 { 1 }
+          2 == 1 { 2 }
+          3 == 1 { 3 }
+          else { 4 }
+}
+
+define stringTest: String str -> Char {
+    let String str = "start asdf æøå */+- slut" {
+        first(str) # Should be ignored.
     }
 }
 
-define main: -> Int {
-  diff(8, 5)
+# Comment here
+
+define ifTest: -> Int {
+    if (1 > 2) OR true { 1 } { 2 }
 }

@@ -33,6 +33,18 @@ define moreLet: -> Int {
   }
 }
 
+define diff: Int a, Int b -> Int {
+  let Int d = a - b {
+    d
+  }
+}
+
+define t: Int a, Int b, Int c, Int d -> Int {
+  if a > b
+  { a }
+  { if (a > c) AND (a > d) { a } { d } }
+}
+
 define main: -> Int {
   if 1 == 2 { 1 } { 0 }
 }
