@@ -9,8 +9,25 @@ void print(T obj) {
     std::cout << obj;
 }
 template<typename T>
+void print(const std::vector<T> obj) {
+    for(int n = 0; n < obj.size(); n++) {
+        std::cout << obj[n] << ", ";
+    }
+}
+template<typename T>
+void print(std::initializer_list<T> obj) {
+    std::vector<T>tmp(obj);
+    for(int n = 0; n < tmp.size(); n++) {
+        std::cout << tmp[n] << ", ";
+    }
+}
+void print(std::string obj) {
+    std::cout << obj;
+}
+template<typename T>
 void printLn(T obj) {
-    std::cout << obj << std::endl;
+    print(obj);
+    print("\n");
 }
 
 // readFileContents

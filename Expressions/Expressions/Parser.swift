@@ -224,6 +224,13 @@ class Parser {
         var exprs:[Node] = []
         
         while scanner.peekToken().type != .rcurly {
+            
+            let t = scanner.peekToken().type
+            if t == .none {
+                error("Unexpected input in block")
+                break
+            }
+            
             let expr = parseExpression()
             exprs.append(expr)
         }

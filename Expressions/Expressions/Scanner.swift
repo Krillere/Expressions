@@ -27,7 +27,6 @@ enum TokenType {
     case char           // '(A-z osv.)'
     
     case equal          // =
-    case semicolon      // ;
     case colon          // :
     case questionMark   // ?
     case returns        // ->
@@ -378,11 +377,7 @@ class Scanner {
             case "/":
                 token = Token(cont: "/", type: .op, charIndex: inputIndex)
                 break
-                
-            case ";":
-                token = Token(cont: ";", type: .semicolon, charIndex: inputIndex)
-                break
-                
+
             case "?":
                 token = Token(cont: "?", type: .questionMark, charIndex: inputIndex)
             break
