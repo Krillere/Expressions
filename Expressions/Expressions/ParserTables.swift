@@ -9,13 +9,26 @@
 import Foundation
 
 class ParserTables {
-    static var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
-    static var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial"]
-    static var types:[String] = [] // User defined types
-    static var nameTranslation:[String : String] = [:]
+    static let shared = ParserTables()
+    
+    var randomizeNames:Bool = true
+    var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
+    var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial"]
+    var types:[String] = [] // User defined types
+    var nameTranslation:[String : String] = [:]
+    
+    init() {
+        let builtin = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main"]
+        for n in builtin {
+            nameTranslation[n] = n
+        }
+    }
     
     // Creates a renamed variable for identifier
-    static func createRename(forIdentifier: String) -> String {
+    func createRename(forIdentifier: String) -> String {
+        if !randomizeNames {
+            return forIdentifier
+        }
         
         if let known = nameTranslation[forIdentifier] {
             return known
@@ -28,7 +41,7 @@ class ParserTables {
     }
     
     // Generates a 10 digit long random variable name, as to now allow 'collisions' with user functions
-    static func generateNewVariableName() -> String {
+    private func generateNewVariableName() -> String {
         var tmp = randomString(length: 10)
         while nameTranslation.values.contains(tmp) {
             tmp = randomString(length: 10)
@@ -37,7 +50,7 @@ class ParserTables {
         return tmp
     }
     
-    static func randomString(length: Int) -> String {
+    private func randomString(length: Int) -> String {
         
         let fLetters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -46,13 +59,13 @@ class ParserTables {
         var randomString = ""
         
         for i in 0 ..< length {
-            let rand = arc4random_uniform(len)
-            
             if i == 0 {
+                let rand = arc4random_uniform(UInt32(fLetters.length))
                 var nextChar = fLetters.character(at: Int(rand))
                 randomString += NSString(characters: &nextChar, length: 1) as String
             }
             else {
+                let rand = arc4random_uniform(len)
                 var nextChar = letters.character(at: Int(rand))
                 randomString += NSString(characters: &nextChar, length: 1) as String
             }

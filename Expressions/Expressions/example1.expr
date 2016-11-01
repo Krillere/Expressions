@@ -19,7 +19,8 @@ define letTest: Int a -> Int {
 }
 
 define recursion: Int a, Char b -> Char {
-  recursion(a+1, b)
+    switch a >= b { 0 }
+           else { recursion(a+1, b) }
 }
 
 define recursionSwitch: Int start, Int stop -> Int {
@@ -44,6 +45,7 @@ define t: Int a, Int b, Int c, Int d -> Int {
   { a }
   { if (a > c) AND (a > d) { a } { d } }
 }
+
 
 define main: -> Int {
   if 1 == 2 { 1 } { 0 }

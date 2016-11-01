@@ -167,6 +167,16 @@ std::vector<T> take(const std::vector<T> obj, int num) {
     
     return ret;
 }
+template<typename T>
+std::vector<T> take(const std::initializer_list<T> tmp, int num) {
+    std::vector<T>obj(tmp);
+    std::vector<T> ret;
+    for(int i = 0; i < num; i++) {
+        ret.push_back(obj[i]);
+    }
+    
+    return ret;
+}
 std::string take(std::string str, int num) {
     std::string ret;
     

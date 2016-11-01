@@ -70,7 +70,7 @@ class Scanner {
     // Char classes
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
-    private let otherNameChars = CharacterSet(charactersIn: "-")
+    private let otherNameChars = CharacterSet(charactersIn: "")
 
     // Input and index in input (integer of character)
     private var input:[UInt16] = []
@@ -118,6 +118,15 @@ class Scanner {
         return tmp
     }
     
+    // Fetches character in input and does not
+    private func peek() -> UnicodeScalar {
+        if inputIndex > input.count-1 {
+            return UnicodeScalar(1)
+        }
+        
+        let tmp = UnicodeScalar(input[inputIndex])!
+        return tmp
+    }
     
     // Gets number as string from index to first non-number character (Continues if '.' is met)
     private func getNumberString() -> String {
@@ -166,7 +175,7 @@ class Scanner {
             tmp.append(Character(char))
             char = get()
         }
-        while letters.contains(char) || digits.contains(char) || otherNameChars.contains(char)
+        while letters.contains(char) || digits.contains(char)
         
         if inputIndex >= input.count-1 { }
         else {
@@ -304,13 +313,13 @@ class Scanner {
             if isFloating(test: intS) {
                 floatValue = Float(intS)!
                 
-                token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
+                token = Token(cont: intS, type: .number, charIndex: inputIndex)
                 token.floatValue = floatValue
             }
             else {
                 intValue = Int(intS)!
                 
-                token = Token(cont: String(intValue), type: .number, charIndex: inputIndex)
+                token = Token(cont: intS, type: .number, charIndex: inputIndex)
                 token.intValue = intValue
             }
         }
@@ -326,26 +335,12 @@ class Scanner {
             
             case "-": // Undersøg kontekst. Den kan stå i midten af en expression, eller foran et nummer eller evt. returns
                 char = get()
-
-                if digits.contains(char) {
-                    let intS = "-"+getNumberString()
-                    if isFloating(test: intS) {
-                        floatValue = Float(intS)!
-                        
-                        token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
-                        token.floatValue = floatValue
-                    }
-                    else {
-                        intValue = Int(intS)!
-                        
-                        token = Token(cont: "-"+intS, type: .number, charIndex: inputIndex)
-                        token.intValue = intValue
-                    }
-                }
-                else if char == ">" { // returns
+                
+                if char == ">" { // returns
                     token = Token(cont: ">", type: .returns, charIndex: inputIndex)
                 }
                 else { // I en expression
+                    inputIndex -= 1
                     token = Token(cont: "-", type: .op, charIndex: inputIndex)
                 }
                 break

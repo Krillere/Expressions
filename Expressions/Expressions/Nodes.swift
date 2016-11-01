@@ -32,7 +32,7 @@ class ObjectTypeNode : Node, CustomStringConvertible {
         super.init()
         
         self.variables = variables
-        self.name = name //ParserTables.createRename(forIdentifier: name)
+        self.name = ParserTables.shared.createRename(forIdentifier: name)
         
         for v in self.variables {
             v.parent = self
@@ -50,7 +50,7 @@ class ObjectTypeVariableNode : Node, CustomStringConvertible {
     var type:TypeNode?
     
     init(identifier: String, type: TypeNode) {
-        self.identifier = identifier
+        self.identifier = ParserTables.shared.createRename(forIdentifier: identifier)
         self.type = type
     }
     
@@ -70,7 +70,7 @@ class FunctionNode : Node, CustomStringConvertible {
     init(identifier: String, pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
         super.init()
         
-        self.identifier = identifier
+        self.identifier = ParserTables.shared.createRename(forIdentifier: identifier)
         self.pars = pars
         self.retType = ret
         self.block = block
@@ -97,7 +97,7 @@ class ParameterNode : Node, CustomStringConvertible  {
         super.init()
         
         self.type = type
-        self.name = name
+        self.name = ParserTables.shared.createRename(forIdentifier: name)
     }
     
     var description: String {
@@ -130,7 +130,7 @@ class FunctionCallNode : Node, CustomStringConvertible {
         super.init()
         
         
-        self.identifier = identifier
+        self.identifier = ParserTables.shared.createRename(forIdentifier: identifier)
         self.parameters = parameters
         
         for p in self.parameters {
@@ -202,7 +202,7 @@ class VariableNode : Node, CustomStringConvertible {
     var identifier:String?
     
     init(identifier: String) {
-        self.identifier = identifier
+        self.identifier = ParserTables.shared.createRename(forIdentifier: identifier)
     }
     
     var description: String {
@@ -256,6 +256,7 @@ class StringLiteralNode : Node, CustomStringConvertible {
     }
 }
 
+// Char literal, 'a', '\t', '\n', 'b'
 class CharLiteralNode : Node, CustomStringConvertible {
     var content:String?
     
@@ -277,8 +278,8 @@ class PropertyValueNode : Node, CustomStringConvertible {
     override init() { }
     
     init(name: String, property: String) {
-        self.name = name
-        self.property = property
+        self.name = ParserTables.shared.createRename(forIdentifier: name)
+        self.property = ParserTables.shared.createRename(forIdentifier: property)
     }
     
     var description: String {
@@ -423,7 +424,7 @@ class LetVariableNode : Node, CustomStringConvertible {
         
         self.type = type
         self.value = value
-        self.name = name
+        self.name = ParserTables.shared.createRename(forIdentifier: name)
         
         self.value?.parent = self
     }

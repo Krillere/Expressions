@@ -52,7 +52,7 @@ class Parser {
         self.program = program
         
         var hasEntry = false
-        for f in ParserTables.functions {
+        for f in ParserTables.shared.functions {
             if f == "main" {
                 hasEntry = true
                 break
@@ -107,7 +107,7 @@ class Parser {
                 functions.append(node)
             }
             else {
-                error("Unexpected something in program.")
+                error("Unexpected something in program: \(test)")
                 break
             }
         }
@@ -127,7 +127,7 @@ class Parser {
         
         // Type name
         let name = scanner.getToken()
-        ParserTables.types.append(name.content)
+        ParserTables.shared.types.append(name.content)
         
         let t2 = scanner.getToken() // '{'
         if !t2.content.contains("{") {
@@ -167,7 +167,7 @@ class Parser {
         let nt = scanner.getToken()
         let funcName = nt.content
         
-        ParserTables.functions.append(funcName) // Gem funktionsnavn så vi kan tjekke i TypeChecker
+        ParserTables.shared.functions.append(funcName) // Gem funktionsnavn så vi kan tjekke i TypeChecker
         
         let t1 = scanner.getToken() // ';'
         if !t1.content.contains(":") {
@@ -227,7 +227,7 @@ class Parser {
             
             let t = scanner.peekToken().type
             if t == .none {
-                error("Unexpected input in block")
+                error("Unexpected input in block: \(t)")
                 break
             }
             
@@ -460,8 +460,8 @@ class Parser {
             let expr = parseExpression()
             
             let t2 = scanner.getToken() // rpar
-            if !t2.content.contains("(") {
-                error("Expected ')', got \(t2.content)")
+            if !t2.content.contains(")") {
+                error("a Expected ')', got \(t2.content)")
             }
             
             let parexp = ParenthesesExpression(expr: expr)
@@ -672,7 +672,6 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let val = parseExpression()
-            
             res.append(val)
         }
         

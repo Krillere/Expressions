@@ -91,7 +91,6 @@ class CodeGenerator {
     // Generer typer
     private func createObjectType(objType: ObjectTypeNode) -> String {
         guard let name = objType.name else { return "" }
-        
         var ret = ""
         
         // Type declaration
@@ -382,8 +381,8 @@ class CodeGenerator {
                 return converted
             }
             
-            if ParserTables.types.contains(clearType) {
-                return "t_"+clearType
+            if ParserTables.shared.types.contains(clearType) {
+                return "t_"+ParserTables.shared.createRename(forIdentifier: clearType)
             }
             
             return clearType // Må være objekt
@@ -398,8 +397,8 @@ class CodeGenerator {
                 if let converted = typeConversions[clearType] {
                     str += converted
                 }
-                else if ParserTables.types.contains(clearType) {
-                    str += "t_"+clearType
+                else if ParserTables.shared.types.contains(clearType) {
+                    str += "t_"+ParserTables.shared.createRename(forIdentifier: clearType)
                 }
                 else {
                     str += clearType
@@ -518,10 +517,10 @@ class CodeGenerator {
             
             if node.call == nil {
                 guard let property = node.property else { break }
-                retString += name+"."+property
+                retString += ParserTables.shared.createRename(forIdentifier: name)+"."+property
             }
             else {
-                retString += name+"."+createFunctionCall(call: node.call!)
+                retString += ParserTables.shared.createRename(forIdentifier: name)+"."+createFunctionCall(call: node.call!)
             }
         break
             
@@ -537,7 +536,7 @@ class CodeGenerator {
         if expr is FunctionCallNode { // Side conditions should be ended too.
             let fc = expr as! FunctionCallNode
             guard let name = fc.identifier else { return retString }
-            if ParserTables.sideConditionFunctions.contains(name) {
+            if ParserTables.shared.sideConditionFunctions.contains(name) {
                 retString += ";"
             }
         }
@@ -625,10 +624,11 @@ class CodeGenerator {
     
     // Laver funktionskald - name "(" [expr] ")"
     private func createFunctionCall(call: FunctionCallNode) -> String {
-        guard let identifer = call.identifier else { return "" }
+        guard let identifier = call.identifier else { return "" }
+        
         var str = ""
         
-        str += identifer
+        str += identifier
         str += "("
         
         for n in 0 ..< call.parameters.count {
@@ -712,7 +712,7 @@ class CodeGenerator {
                     let tmpNode = node as! FunctionCallNode
                     guard let name = tmpNode.identifier else { return true }
                     
-                    if ParserTables.sideConditionFunctions.contains(name) {
+                    if ParserTables.shared.sideConditionFunctions.contains(name) {
                         return false
                     }
                 }
