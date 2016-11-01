@@ -89,8 +89,8 @@ The last comma is optional. Could just be ```Char myCharacter }```
 
 To create an object of this type, use:
 ```
-let MyType t = MyType(4, "string", "c") {
-  # myInteger = 4, myString = "string", myCharacter = "c"
+let MyType t = MyType(4, "string", 'c') {
+  # myInteger = 4, myString = "string", myCharacter = 'c'
 }
 ```
 
@@ -101,7 +101,7 @@ let Int tmp = myType.myFunction(1, 2) # Assume MyType contains a function called
 ```
 
 ## Functions as a type
-Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following ((InpType1, InpType2, ... InpTypeN) -> RetType). An example:
+Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following (InpType1, InpType2, ... InpTypeN -> RetType). An example:
 ```
 define add: Int a, Int b -> Int {
   a + b
@@ -110,7 +110,7 @@ define subtract: Int a, Int b -> Int {
   a - b
 }
 
-define test: ((Int, Int) -> Int) funcToCall -> Int {
+define test: (Int, Int -> Int) funcToCall -> Int {
   funcToCall(10, 10)
 }
 
@@ -119,7 +119,7 @@ define test: ((Int, Int) -> Int) funcToCall -> Int {
 
 Functions can be declared in objects as well, and used in *let* expressions.
 ```
-let ((Int, Int) -> Int) addFunc = add {
+let (Int, Int -> Int) addFunc = add {
   1 + addFunc(1, 1) # 3
 }
 ```
