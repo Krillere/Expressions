@@ -16,7 +16,7 @@ class CodeGenerator {
     private var declaredFunctions:[String] = []
     
     // Direct conversions (Types and operators)
-    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool", "Generic":"Generic"]
+    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::string", "Bool":"bool", "Generic":"T"]
     private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
     
     
@@ -177,26 +177,153 @@ class CodeGenerator {
             let identifier = function.identifier,
             let block = function.block else { return "" }
         
-        var ret = ""
         
-        var type = ""
-        if retType is NormalTypeNode {
-            type = createTypeString(type: retType as! NormalTypeNode)
+        let genCheck = isGenericFunction(node: function)
+        if genCheck {
+            return createGenericFunction(function: function)
         }
-        
-        let pars:String = createFunctionParameters(pars: function.pars)
-        
-        var declaredFunction:String = type+" "+identifier
-        declaredFunction.append("("+pars+")")
-        declaredFunctions.append(declaredFunction)
-        
-        // type navn ( pars ) block
-        let funcDecl:String = "\n"+type+" "+identifier+"("+pars+")"+createBlock(block: block)
-        ret += funcDecl
-        
-        return ret
+        else {
+            var ret = ""
+            
+            var type = ""
+            if retType is NormalTypeNode {
+                type = createTypeString(type: retType as! NormalTypeNode)
+            }
+            
+            let pars:String = createFunctionParameters(pars: function.pars)
+            
+            var declaredFunction:String = type+" "+identifier
+            declaredFunction.append("("+pars+")")
+            declaredFunctions.append(declaredFunction)
+            
+            // type navn ( pars ) block
+            let funcDecl:String = "\n"+type+" "+identifier+"("+pars+")"+createBlock(block: block)
+            ret += funcDecl
+            
+            return ret
+        }
     }
     
+    // Laver generisk funktion
+    private func createGenericFunction(function: FunctionNode) -> String {
+        guard let retType = function.retType else { return "" }
+        
+        var retGen = false
+        if retType is NormalTypeNode {
+            guard let retType = retType as? NormalTypeNode else { return "" }
+            retGen = retType.generic
+        }
+        
+        var str = ""
+        
+        // String function
+        str += createGenericStringFunction(function: function, retGen: retGen)
+        
+        // Vector function
+        str += createGenericVectorFunction(function: function, retGen: retGen)
+        
+        return str
+    }
+    
+    private func createGenericStringFunction(function: FunctionNode, retGen: Bool) -> String {
+        guard let retType = function.retType,
+            let identifier = function.identifier,
+            let block = function.block else { return "" }
+        
+        var strFunc = ""
+        
+        // Return type
+        if retGen {
+            let tmpType = (retType as! NormalTypeNode).copy() as! NormalTypeNode
+            tmpType.clearType = "char"
+            
+            strFunc += createTypeString(type: tmpType)
+        }
+        else {
+            strFunc += createTypeString(type: retType as! NormalTypeNode)
+        }
+        
+        strFunc += " "+identifier
+        
+        // Parameters
+        var strPars = "("
+        for n in 0 ..< function.pars.count {
+            let par = function.pars[n]
+            
+            guard let pname = par.name, let ptype = par.type as? NormalTypeNode else { continue }
+            if ptype.generic {
+                let tmpType = (ptype ).copy() as! NormalTypeNode
+                tmpType.clearType = "std::string"
+                
+                strPars += createTypeString(type: tmpType)
+            }
+            else {
+                strPars += createTypeString(type: ptype)
+            }
+            
+            strPars += " "+pname
+            if n != function.pars.count-1 {
+                strPars += ", "
+            }
+        }
+        strPars += ")"
+        strFunc += strPars
+        declaredFunctions.append(strFunc)
+        
+        strFunc += createBlock(block: block)
+        
+        return strFunc
+    }
+    
+    private func createGenericVectorFunction(function: FunctionNode, retGen: Bool) -> String {
+        guard let retType = function.retType,
+            let identifier = function.identifier,
+            let block = function.block else { return "" }
+        
+        var vecFunc = "template<typename T>\n"
+        
+        // Return type
+        if retGen {
+            let tmpType = (retType as! NormalTypeNode).copy() as! NormalTypeNode
+            tmpType.clearType = "T"
+            
+            vecFunc += createTypeString(type: tmpType)
+        }
+        else {
+            vecFunc += createTypeString(type: retType as! NormalTypeNode)
+        }
+        
+        vecFunc += " "+identifier
+        
+        // Parameters
+        var vecPars = "("
+        for n in 0 ..< function.pars.count {
+            let par = function.pars[n]
+            
+            guard let pname = par.name, let ptype = par.type as? NormalTypeNode else { continue }
+            if ptype.generic {
+                let tmpType = ptype.copy() as! NormalTypeNode
+                tmpType.clearType = "T"
+                
+                vecPars += createTypeString(type: tmpType)
+            }
+            else {
+                vecPars += createTypeString(type: ptype)
+            }
+            
+            vecPars += " "+pname
+            if n != function.pars.count-1 {
+                vecPars += ", "
+            }
+        }
+        vecPars += ")"
+        vecFunc += vecPars
+        declaredFunctions.append(vecFunc)
+        
+        vecFunc += createBlock(block: block)
+        
+        return vecFunc
+    }
     
     // Laver string med funktionsparametre - (T1 n1, T2 n2 ... )
     private func createFunctionParameters(pars: [ParameterNode]) -> String {
@@ -243,9 +370,14 @@ class CodeGenerator {
     
     // Creates a string from a normal type. Int becomes int, String becomse std::string and so on.
     private func createTypeString(type: NormalTypeNode) -> String {
-        guard let clearType = type.clearType else { return "" }
+        guard let clearType = type.clearType, var nested = type.numNested else { return "" }
         
-        if type.numNested == 0 {
+        
+        if type.clearType == "std::string" && nested >= 1 {
+            nested -= 1
+        }
+        
+        if nested == 0 {
             if let converted = typeConversions[clearType] {
                 return converted
             }
@@ -259,10 +391,10 @@ class CodeGenerator {
         
         var str = ""
         
-        for i in 0 ..< type.numNested! {
+        for i in 0 ..< nested {
             str += "std::vector<"
             
-            if i == type.numNested!-1 {
+            if i == nested-1 {
                 if let converted = typeConversions[clearType] {
                     str += converted
                 }
@@ -275,7 +407,7 @@ class CodeGenerator {
             }
         }
         
-        for _ in 0 ..< type.numNested! {
+        for _ in 0 ..< nested {
             str += ">"
         }
         
@@ -289,6 +421,7 @@ class CodeGenerator {
         case postName
     }
     
+    // Creates a function type string (Other syntax than nnormal types)
     private func createFunctionTypeString(type: FunctionTypeNode, context: FunctionTypeContext) -> String {
         
         if context == .preName {
@@ -618,4 +751,29 @@ class CodeGenerator {
         return false
     }
     
+    // Does the function have generics as parameter or return type?
+    private func isGenericFunction(node: FunctionNode) -> Bool {
+        var isGeneric = false
+        
+        // Return type
+        let ret = node.retType
+        if ret is NormalTypeNode {
+            if (ret as! NormalTypeNode).generic {
+                isGeneric = true
+            }
+        }
+        
+        if !isGeneric {
+            for p in node.pars {
+                if p.type is NormalTypeNode {
+                    if (p.type as! NormalTypeNode).generic {
+                        isGeneric = true
+                        break
+                    }
+                }
+            }
+        }
+        
+        return isGeneric
+    }
 }

@@ -49,7 +49,7 @@ if args.count == 2 {
     }
 }
 else { // Default. Use an example.
-    if let p = Bundle.main.path(forResource: "example5", ofType: "expr") {
+    if let p = Bundle.main.path(forResource: "example7", ofType: "expr") {
         let cont = try String(contentsOfFile: p)
         compile(code: cont)
     }

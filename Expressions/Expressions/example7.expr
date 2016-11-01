@@ -8,6 +8,8 @@ define main: -> Int {
   print("Largest: ")
   printLn(largest([1, 99, 20, 101, 3]))
 
+  print("llength: ")
+  printLn(llength([1, 2, 3, 4, 5, 6]))
   0
 }
 
@@ -17,7 +19,8 @@ define addAll: [Int] ints -> Int {
 }
 
 define largest: [Int] ints -> Int {
-  largestHelper(ints, 0)
+  if null(ints) { 0 }
+                { largestHelper(ints, first(ints)) }
 }
 define largestHelper: [Int] ints, Int cur -> Int {
   switch length(ints) == 0 { cur }
@@ -28,3 +31,11 @@ define largestHelper: [Int] ints, Int cur -> Int {
 define nullTest: [Int] ints -> Bool {
   null(ints)
 }
+define gen: [Generic] lst -> Generic {
+  first(lst)
+}
+
+define llength: [Generic] lst -> Int {
+  if null(lst) { 0 } { 1 + length(tail(lst)) }
+}
+

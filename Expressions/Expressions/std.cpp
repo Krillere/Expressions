@@ -51,6 +51,12 @@ std::string append(std::string str, char c) {
     
     return tmp;
 }
+std::string append(std::string str1, std::string str2) {
+    std::string tmp(str1);
+    tmp.append(str2);
+    
+    return tmp;
+}
 template<typename T>
 std::vector<T> append(const std::vector<T> lst, T obj) {
     std::vector<T>tmp(lst);

@@ -6,7 +6,13 @@ type TestType {
 }
 
 define main: -> Int {
-  ftest(add) # Can be called with 'add' or 'subtract'
+  print("ftest med add: ")
+  printLn(ftest(add))
+
+  print("ftest med subtract: ")
+  printLn(ftest(subtract))
+
+  0 # Can be called with 'add' or 'subtract'
 }
 
 define test2: -> Int {
@@ -16,7 +22,7 @@ define test2: -> Int {
 }
 
 define ftest: (Int, Int -> Int) func -> Int {
-  func(1, 2)
+  func(10, 10)
 }
 
 # Methods that adhere to (Int, Int -> Int)

@@ -1,0 +1,19 @@
+type DateTime {
+  Int day,
+  Int month,
+  Int year,
+  Int hours,
+  Int minutes,
+}
+
+type Appointment {
+  DateTime startTime,
+  DateTime endTime,
+  String description,
+}
+
+type Calendar {
+  [Calendar] calendars,
+  [Appointment] appointments,
+}
+

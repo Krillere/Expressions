@@ -146,14 +146,14 @@ class FunctionCallNode : Node, CustomStringConvertible {
 class TypeNode : Node { }
 
 // Type declaration (Int, String, CustomType, [Int] and such)
-class NormalTypeNode : TypeNode, CustomStringConvertible {
+class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
     var fullString:String?
     
     var intClearType:String?
     var clearType:String? {
         set(nval) {
             self.intClearType = nval
-            self.generic = (nval == "Generic")
+            self.generic = nval!.contains("Generic")
         }
         get {
             return intClearType
@@ -169,7 +169,7 @@ class NormalTypeNode : TypeNode, CustomStringConvertible {
         self.intClearType = type
         self.numNested = nestedLevel
         
-        self.generic = (type == "Generic")
+        self.generic = type.contains("Generic")
     }
     
     
@@ -177,6 +177,14 @@ class NormalTypeNode : TypeNode, CustomStringConvertible {
     var description: String {
         return String(describing: self.fullString)
     }
+    
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let ret = NormalTypeNode(full: self.fullString!, type: self.intClearType!, nestedLevel: self.numNested!)
+        return ret
+    }
+    
+    
 }
 
 class FunctionTypeNode : TypeNode, CustomStringConvertible {

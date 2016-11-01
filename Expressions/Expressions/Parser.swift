@@ -106,6 +106,10 @@ class Parser {
                 
                 functions.append(node)
             }
+            else {
+                error("Unexpected something in program.")
+                break
+            }
         }
         
         program.functions = functions

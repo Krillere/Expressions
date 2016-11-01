@@ -11,6 +11,7 @@
 		AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7551DC7BF6B009A9900 /* example6.expr */; };
 		AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7571DC7C27B009A9900 /* std.expr */; };
 		AA09F75B1DC7E986009A9900 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F75A1DC7E980009A9900 /* example7.expr */; };
+		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
@@ -40,6 +41,7 @@
 				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
 				AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */,
+				AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */,
 				AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */,
 				AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */,
 				AAEAC0431DC4FE3700989910 /* example2.expr in CopyFiles */,
@@ -55,6 +57,7 @@
 		AA09F7591DC7E8B7009A9900 /* index.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.txt; sourceTree = "<group>"; };
 		AA09F75A1DC7E980009A9900 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
 		AA09F75C1DC7F2D7009A9900 /* stdold */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stdold; sourceTree = "<group>"; };
+		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
 		AAB4EE961DC52DE80035F875 /* std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std.cpp; sourceTree = "<group>"; };
 		AAB4EE991DC53E3D0035F875 /* example3.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example3.expr; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 				AAF443501DC65505004F0917 /* example5.expr */,
 				AA09F7551DC7BF6B009A9900 /* example6.expr */,
 				AA09F75A1DC7E980009A9900 /* example7.expr */,
+				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 			);
 			name = "Code examples (Tests)";
 			sourceTree = "<group>";
