@@ -1,0 +1,30 @@
+define main: -> Int {
+  print("AddAll: ")
+  printLn(addAll([1, 1, 1, 2]))
+
+  print("Null: ")
+  printLn(nullTest([])) # True
+
+  print("Largest: ")
+  printLn(largest([1, 99, 20, 101, 3]))
+
+  0
+}
+
+define addAll: [Int] ints -> Int {
+  if length(ints) == 1 { first(ints) }
+                       { first(ints) + addAll(tail(ints)) }
+}
+
+define largest: [Int] ints -> Int {
+  largestHelper(ints, 0)
+}
+define largestHelper: [Int] ints, Int cur -> Int {
+  switch length(ints) == 0 { cur }
+         first(ints) > cur { largestHelper(tail(ints), first(ints)) }
+         else { largestHelper(tail(ints), cur) }
+}
+
+define nullTest: [Int] ints -> Bool {
+  null(ints)
+}

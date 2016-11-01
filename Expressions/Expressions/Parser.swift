@@ -310,12 +310,12 @@ class Parser {
         var inpTypes:[TypeNode] = []
         
         // Parse input types
-        let t = scanner.getToken()
+        /*let t = scanner.getToken()
         if t.type != .lpar {
             error("Expected ')', got \(t.content)")
         }
-        
-        while scanner.peekToken().type != .rpar {
+        */
+        while scanner.peekToken().type != .returns {
             if scanner.peekToken().type == .none {
                 error("Error in function declaration. Syntax all fucked up.")
                 break
@@ -327,7 +327,6 @@ class Parser {
             inpTypes.append(inpType)
         }
         
-        let _ = scanner.getToken() // ')'
         
         let t2 = scanner.getToken()
         if t2.type != .returns {

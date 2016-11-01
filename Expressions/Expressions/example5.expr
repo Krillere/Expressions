@@ -2,7 +2,7 @@
 
 type TestType {
   Int integer,
-  ((Int, Int) -> Int) func
+  (Int, Int -> Int) func
 }
 
 define main: -> Int {
@@ -15,11 +15,11 @@ define test2: -> Int {
   }
 }
 
-define ftest: ((Int, Int) -> Int) func -> Int {
+define ftest: (Int, Int -> Int) func -> Int {
   func(1, 2)
 }
 
-# Methods that adhere to ((Int, Int) -> Int)
+# Methods that adhere to (Int, Int -> Int)
 define add: Int a, Int b -> Int {
   a + b
 }
@@ -29,7 +29,7 @@ define subtract: Int a, Int b -> Int {
 }
 
 define testing: Int a -> Int {
-  let ((Int, Int) -> Int) addFunc = add {
+  let (Int, Int -> Int) addFunc = add {
     a + addFunc(1, 1) # 3
   }
 }

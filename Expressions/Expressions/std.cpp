@@ -37,13 +37,6 @@ std::vector<T> list(T obj) {
     
     return ret;
 }
-template<typename T>
-std::vector<T> list(std::initializer_list<T> obj) {
-    std::vector<T> ret;
-    ret.push_back(obj);
-    
-    return ret;
-}
 std::string list(char c) {
     std::string ret;
     ret.push_back(c);
@@ -59,14 +52,7 @@ std::string append(std::string str, char c) {
     return tmp;
 }
 template<typename T>
-std::vector<T> append(std::vector<T> lst, T obj) {
-    std::vector<T>tmp(lst);
-    tmp.push_back(obj);
-    
-    return tmp;
-}
-template<typename T>
-std::vector<T> append(std::initializer_list<T> lst, T obj) {
+std::vector<T> append(const std::vector<T> lst, T obj) {
     std::vector<T>tmp(lst);
     tmp.push_back(obj);
     
@@ -74,11 +60,6 @@ std::vector<T> append(std::initializer_list<T> lst, T obj) {
 }
 
 // First
-template<typename T>
-T first(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    return obj[0];
-}
 template<typename T>
 T first(const std::vector<T> obj) {
     return obj[0];
@@ -89,12 +70,7 @@ char first(std::string str) {
 
 // Last
 template<typename T>
-T last(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    return obj[obj.size()-1];
-}
-template<typename T>
-T last(std::vector<T> obj) {
+T last(const std::vector<T> obj) {
     return obj[obj.size()-1];
 }
 char last(std::string str) {
@@ -103,12 +79,7 @@ char last(std::string str) {
 
 // Length
 template<typename T>
-size_t length(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    return obj.size();
-}
-template<typename T>
-size_t length(std::vector<T> obj) {
+size_t length(const std::vector<T> obj) {
     return obj.size();
 }
 size_t length(std::string str) {
@@ -117,14 +88,7 @@ size_t length(std::string str) {
 
 // Reverse
 template<typename T>
-std::vector<T> reverse(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    std::vector<T> tmp(obj);
-    std::reverse(tmp.begin(), tmp.end());
-    return tmp;
-}
-template<typename T>
-std::vector<T> reverse(std::vector<T> obj) {
+std::vector<T> reverse(const std::vector<T> obj) {
     std::vector<T> tmp(obj);
     std::reverse(tmp.begin(), tmp.end());
     return tmp;
@@ -137,12 +101,7 @@ std::string reverse(std::string str) {
 
 // Get
 template<typename T>
-T get(std::initializer_list<T> ini, int index) {
-    std::vector<T> obj(ini);
-    return obj[index];
-}
-template<typename T>
-T get(std::vector<T> obj, int index) {
+T get(const std::vector<T> obj, int index) {
     return obj[index];
 }
 char get(std::string str, int index) {
@@ -151,14 +110,7 @@ char get(std::string str, int index) {
 
 // Tail
 template<typename T>
-std::vector<T> tail(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    std::vector<T> tmp(obj);
-    tmp.erase(tmp.begin());
-    return tmp;
-}
-template<typename T>
-std::vector<T> tail(std::vector<T> obj) {
+std::vector<T> tail(const std::vector<T> obj) {
     std::vector<T> tmp(obj);
     tmp.erase(tmp.begin());
     return tmp;
@@ -171,14 +123,7 @@ std::string tail(std::string str) {
 
 // Init
 template<typename T>
-std::vector<T> init(std::initializer_list<T> ini) {
-    std::vector<T> obj(ini);
-    std::vector<T> tmp(obj);
-    tmp.erase(tmp.end());
-    return tmp;
-}
-template<typename T>
-std::vector<T> init(std::vector<T> obj) {
+std::vector<T> init(const std::vector<T> obj) {
     std::vector<T> tmp(obj);
     tmp.erase(tmp.end());
     return tmp;
@@ -191,17 +136,7 @@ std::string init(std::string str) {
 
 // Take
 template<typename T>
-std::vector<T> take(std::initializer_list<T> ini, int num) {
-    std::vector<T> obj(ini);
-    std::vector<T> ret;
-    for(int i = 0; i < num; i++) {
-        ret.push_back(obj[i]);
-    }
-    
-    return ret;
-}
-template<typename T>
-std::vector<T> take(std::vector<T> obj, int num) {
+std::vector<T> take(const std::vector<T> obj, int num) {
     std::vector<T> ret;
     for(int i = 0; i < num; i++) {
         ret.push_back(obj[i]);
@@ -219,19 +154,11 @@ std::string take(std::string str, int num) {
     return ret;
 }
 
-/*
- Basics:
- length(lst)
- first(lst) = Første objekt
- last(lst) = Sidste objekt
- reverse(lst)
- get(lst, n)
- 
- init(lst) = ALT ANDET END SIDSTE
- tail(lst) = ALT ANDET END FØRSTE
- take(lst, n)
- 
- // Kan laves i expr
- null(lst) = { if length(lst) == 0 { true } { false } }
- 
- */
+// null
+template<typename T>
+bool null(const std::vector<T> obj) {
+    return obj.size() == 0;
+}
+bool null(std::string obj) {
+    return obj.size() == 0;
+}

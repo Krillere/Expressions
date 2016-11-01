@@ -13,6 +13,10 @@ define stringTest: String str -> Char {
     }
 }
 
+define charTest: Char c -> String {
+  list(c)
+}
+
 # Comment here
 
 define ifTest: -> Int {

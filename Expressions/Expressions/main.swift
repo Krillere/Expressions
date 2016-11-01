@@ -24,7 +24,11 @@ func compile(code: String) {
         
         let intermediate = generator.getIntermediate()
         do {
-            try intermediate.write(toFile: NSHomeDirectory()+"/Desktop/intermediate.cpp", atomically: true, encoding: String.Encoding.utf8)
+            let writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
+            try intermediate.write(toFile: writePath, atomically: true, encoding: String.Encoding.utf8)
+            
+            print("To compile and run: g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate")
+            // g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate
         }
         catch {
             print("Error ved gem intermediate: \(error)")
@@ -45,7 +49,7 @@ if args.count == 2 {
     }
 }
 else { // Default. Use an example.
-    if let p = Bundle.main.path(forResource: "example6", ofType: "expr") {
+    if let p = Bundle.main.path(forResource: "example5", ofType: "expr") {
         let cont = try String(contentsOfFile: p)
         compile(code: cont)
     }

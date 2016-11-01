@@ -7,10 +7,13 @@ define strTest: Char a, Char b -> String {
 }
 
 define main: -> Int {
-  print("This will be printed. ") printLn("This will be printed, along with a newline.")
-  print("This will be on a new line!")
+  let String path = "/Users/Christian/Desktop/file.txt" {
+    writeFileContents(path, "This is text.")
 
-  0 # Returns 0
+    print("From file: ")
+    print(readFileContents(path)) # Prints 'This is text.'
+  }
+  0
 }
 
 define listTest: -> Int {

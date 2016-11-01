@@ -1,0 +1,215 @@
+// Print
+template<typename T>
+void print(T obj) {
+std::cout << obj;
+}
+template<typename T>
+void printLn(T obj) {
+std::cout << obj << std::endl;
+}
+
+// readFileContents
+std::string readFileContents(std::string path) {
+std::ifstream ifs(path);
+std::string content( (std::istreambuf_iterator<char>(ifs) ),
+(std::istreambuf_iterator<char>()    ) );
+ifs.close();
+return content;
+}
+
+// writeFileContents
+void writeFileContents(std::string path, std::string content) {
+std::ofstream ofs (path, std::ofstream::binary);
+ofs << content;
+ofs.close();
+}
+
+// List
+template<typename T>
+std::vector<T> list(T obj) {
+std::vector<T> ret;
+ret.push_back(obj);
+
+return ret;
+}
+template<typename T>
+std::vector<T> list(std::initializer_list<T> obj) {
+std::vector<T> ret;
+ret.push_back(obj);
+
+return ret;
+}
+std::string list(char c) {
+std::string ret;
+ret.push_back(c);
+
+return ret;
+}
+
+// Append
+std::string append(std::string str, char c) {
+std::string tmp(str);
+tmp.push_back(c);
+
+return tmp;
+}
+template<typename T>
+std::vector<T> append(std::vector<T> lst, T obj) {
+std::vector<T>tmp(lst);
+tmp.push_back(obj);
+
+return tmp;
+}
+template<typename T>
+std::vector<T> append(std::initializer_list<T> lst, T obj) {
+std::vector<T>tmp(lst);
+tmp.push_back(obj);
+
+return tmp;
+}
+
+// First
+template<typename T>
+T first(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+return obj[0];
+}
+template<typename T>
+T first(const std::vector<T> obj) {
+return obj[0];
+}
+char first(std::string str) {
+return str[0];
+}
+
+// Last
+template<typename T>
+T last(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+return obj[obj.size()-1];
+}
+template<typename T>
+T last(std::vector<T> obj) {
+return obj[obj.size()-1];
+}
+char last(std::string str) {
+return str[str.size()-1];
+}
+
+// Length
+template<typename T>
+size_t length(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+return obj.size();
+}
+template<typename T>
+size_t length(std::vector<T> obj) {
+return obj.size();
+}
+size_t length(std::string str) {
+return str.size();
+}
+
+// Reverse
+template<typename T>
+std::vector<T> reverse(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+std::vector<T> tmp(obj);
+std::reverse(tmp.begin(), tmp.end());
+return tmp;
+}
+template<typename T>
+std::vector<T> reverse(std::vector<T> obj) {
+std::vector<T> tmp(obj);
+std::reverse(tmp.begin(), tmp.end());
+return tmp;
+}
+std::string reverse(std::string str) {
+std::string tmp = str;
+std::reverse(tmp.begin(), tmp.end());
+return tmp;
+}
+
+// Get
+template<typename T>
+T get(std::initializer_list<T> ini, int index) {
+std::vector<T> obj(ini);
+return obj[index];
+}
+template<typename T>
+T get(std::vector<T> obj, int index) {
+return obj[index];
+}
+char get(std::string str, int index) {
+return str[index];
+}
+
+// Tail
+template<typename T>
+std::vector<T> tail(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+std::vector<T> tmp(obj);
+tmp.erase(tmp.begin());
+return tmp;
+}
+template<typename T>
+std::vector<T> tail(std::vector<T> obj) {
+std::vector<T> tmp(obj);
+tmp.erase(tmp.begin());
+return tmp;
+}
+std::string tail(std::string str) {
+std::string tmp(str);
+tmp.erase(tmp.begin());
+return tmp;
+}
+
+// Init
+template<typename T>
+std::vector<T> init(std::initializer_list<T> ini) {
+std::vector<T> obj(ini);
+std::vector<T> tmp(obj);
+tmp.erase(tmp.end());
+return tmp;
+}
+template<typename T>
+std::vector<T> init(std::vector<T> obj) {
+std::vector<T> tmp(obj);
+tmp.erase(tmp.end());
+return tmp;
+}
+std::string init(std::string str) {
+std::string tmp(str);
+tmp.erase(tmp.end());
+return tmp;
+}
+
+// Take
+template<typename T>
+std::vector<T> take(std::initializer_list<T> ini, int num) {
+std::vector<T> obj(ini);
+std::vector<T> ret;
+for(int i = 0; i < num; i++) {
+ret.push_back(obj[i]);
+}
+
+return ret;
+}
+template<typename T>
+std::vector<T> take(std::vector<T> obj, int num) {
+std::vector<T> ret;
+for(int i = 0; i < num; i++) {
+ret.push_back(obj[i]);
+}
+
+return ret;
+}
+std::string take(std::string str, int num) {
+std::string ret;
+
+for(int i = 0; i < num; i++) {
+ret.push_back(str[i]);
+}
+
+return ret;
+}
