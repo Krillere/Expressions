@@ -13,7 +13,7 @@ ToDo list:
 - ~~Objects~~ (Done)
 - ~~Side conditions~~ (Print, IO and such)
 - Functions as first-class-citizens (Somewhat done)
-- Generics (Currently, only built-in functions are generic)
+- Generics (Somewhat done)
 - Variadic functions
 - Type conversions (Will be implemented as functions, like Scheme (number->String sort of))
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
@@ -31,6 +31,7 @@ Overview:
 
 1.  [Functions](#functions)
 2.  [Types](#types)
+3.  [Generics](#generics)
 3.  [Objects](#objects)
 3.  [Functions as objects](#functions-as-a-type)
 3.  [Conditionals](#conditionals)
@@ -60,6 +61,52 @@ define main: -> Int {
 }
 ```
 
+## Conditionals
+Expressions supports two types of conditionals; If-statements and switch-statements.
+Boolean literals are either *true* or *false*, and they can be combined with the *AND* and *OR* operators.
+Comparisons are performed using the following operators: *==*, *!=*, *<*, *>*, *<=*, *>=*
+
+### If
+The syntax for if-statements is; if CONDITIONAL { IfBlock } { ElseBlock }.
+For example:
+```
+if 1 > 2 { 1 } { 2 }
+```
+Which would return 2, as 1 is not larger than 2. 
+
+A slightly more complex example:
+```
+if (1 > 2) OR true { 1 } { 2 }
+```
+Which would return 1.
+
+### Switch
+The switch is useful when having multiple things that can happen. It's basically syntactic sugar for nested if-statements.
+The general structure is as follows: 
+```
+switch Bool1 { Block1 }
+       Bool2 { Block2 }
+       Bool3 { Block3 }
+       else { ElseBlock }
+```
+The statement always have to end on 'else'.
+For example:
+```
+switch  1 == 2 { 1 }
+        2 == 1 { 2 }
+        3 == 1 { 3 }
+        else { 4 }
+```
+Which, of course, returns 4.
+
+## Variables
+In order to define variables in a scope, the *let* keyword is used. The general syntax is as follows:
+```
+let Type1 name1 = expression1, Type2 name2 = expression2 ... TypeN nameN = expressionN {
+}
+```
+The variables are only accessible inside the scope.
+
 ## Types
 The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using single-quotes: ```Char c = 'c'```
 
@@ -75,6 +122,24 @@ Nested lists are also possible, simply by adding another layer of square bracket
 take([1, 2, 3, 4], 2) # Returns [1, 2]
 take("1234", 2) # Returns "12"
 ```
+
+## Generics
+Instead of defining a specific type for an object in a function, generics can be used. This means that it is not necessary to create a function for every type for a specific purpose. For example, a recursive *length* function using generics can be written as:
+```
+define length: [Generic] lst -> Int {
+  if null(list) { 0 }
+                { 1 + length(tail(lst)) }
+}
+```
+Generics can also be used in *let* and as return types. The following example returns a list containing the first and last element in a list:
+```
+define ends: [Generic] lst -> [Generic] {
+  let Generic f = first(lst), Generic l = last(lst) {
+    append(list(f), l) # Appens 'l' to a list containing 'f'
+  }
+}
+```
+Currently, only one type of generic can be used in a function. Meaning that if a function takes a Generic and returns a Generic, they will have to be the same type at runtime.
 
 ## Objects
 Objects can be defined to contain a number of different values using the *type* keyword. For example:
@@ -117,57 +182,12 @@ define test: (Int, Int -> Int) funcToCall -> Int {
 # 'test' can now be called with the parameter 'add', which will then return 20 or 'subtract' which will return 0
 ```
 
-Functions can be declared in objects as well, and used in *let* expressions.
+Functions can be declared in objects as well, and used in *let* expressions. Example of usage in *let*:
 ```
 let (Int, Int -> Int) addFunc = add {
   1 + addFunc(1, 1) # 3
 }
 ```
-
-## Conditionals
-Expressions supports two types of conditionals; If-statements and switch-statements.
-Boolean literals are either *true* or *false*, and they can be combined with the *AND* and *OR* operators.
-
-### If
-The syntax for if-statements is; if CONDITIONAL { IfBlock } { ElseBlock }.
-For example:
-```
-if 1 > 2 { 1 } { 2 }
-```
-Which would return 2, as 1 is not larger than 2. 
-
-A slightly more complex example:
-```
-if (1 > 2) OR true { 1 } { 2 }
-```
-Which would return 1.
-
-### Switch
-The switch is useful when having multiple things that can happen. It's basically syntactic sugar for nested if-statements.
-The general structure is as follows: 
-```
-switch Bool1 { Block1 }
-       Bool2 { Block2 }
-       Bool3 { Block3 }
-       else { ElseBlock }
-```
-The statement always have to end on 'else'.
-For example:
-```
-switch  1 == 2 { 1 }
-        2 == 1 { 2 }
-        3 == 1 { 3 }
-        else { 4 }
-```
-Which, of course, returns 4.
-
-## Variables
-In order to define variables in a scope, the *let* keyword is used. The general syntax is as follows:
-```
-let Type1 name1 = expression1, Type2 name2 = expression2 ... TypeN nameN = expressionN {
-}
-```
-The variables are only accessible inside the scope.
 
 ## Comments
 Comments are created using a \# in the code. Currently there only exists one-line comments and they can't be stopped by using another \#.
