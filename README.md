@@ -12,8 +12,8 @@ ToDo list:
 - ~~Lists~~ (Done)
 - ~~Objects~~ (Done)
 - ~~Side conditions~~ (Print, IO and such)
-- Functions as first-class-citizens (Somewhat done)
-- Generics (Somewhat done)
+- ~~Functions as first-class-citizens~~ (Somewhat done)
+- ~~Generics~~ (Done)
 - Variadic functions
 - Type conversions (Will be implemented as functions, like Scheme (number->String sort of))
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
@@ -139,7 +139,7 @@ define ends: [Generic] lst -> [Generic] {
   }
 }
 ```
-Currently, only one type of generic can be used in a function. Meaning that if a function takes a Generic and returns a Generic, they will have to be the same type at runtime.
+Currently, only one type of generic can be used in a function. Meaning that if a function takes a Generic and returns a Generic, they will have to be the same type at runtime. At some point, it should be possible to define multiple types of generics in a function.
 
 ## Objects
 Objects can be defined to contain a number of different values using the *type* keyword. For example:
@@ -181,6 +181,7 @@ define test: (Int, Int -> Int) funcToCall -> Int {
 
 # 'test' can now be called with the parameter 'add', which will then return 20 or 'subtract' which will return 0
 ```
+Function types can't be nested. 
 
 Functions can be declared in objects as well, and used in *let* expressions. Example of usage in *let*:
 ```
