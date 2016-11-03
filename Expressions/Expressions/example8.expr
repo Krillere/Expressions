@@ -16,6 +16,9 @@ define main: -> Int {
 
   print("llength: ")
   printLn(llength([1, 2, 3, 4, 5, 6]))
+
+  print("Ends: ")
+  printLn(ends([1, 2, 3, 4, 5]))
   0
 }
 
@@ -53,8 +56,8 @@ define checkType: Generic obj -> Int {
          else { 0 }
 }
 
-#define ends: [Generic] lst -> [Generic] {
-#  let Generic f = first(lst), Generic l = last(lst) {
-#    append(list(f), l)
-#  }
-#}
+define ends: [Generic] lst -> [Generic] {
+  let Generic f = first(lst), Generic l = last(lst) {
+    append(list(f), l)
+  }
+}

@@ -13,9 +13,14 @@ void print(T obj) {
 template<typename T>
 void print(std::vector<T> obj) {
     typename std::vector<T>::iterator it;
+    print("[");
     for (it = obj.begin() ; it != obj.end(); ++it) {
         print(*it);
+        if(it != obj.end()-1) {
+            print(", ");
+        }
     }
+    print("]");
 }
 void print(std::vector<char> obj) {
     for (std::vector<char>::iterator it = obj.begin() ; it != obj.end(); ++it) {
@@ -25,9 +30,14 @@ void print(std::vector<char> obj) {
 template<typename T>
 void print(std::initializer_list<T> obj) {
     std::vector<T>tmp(obj);
+    print("[");
     for(int n = 0; n < tmp.size(); n++) {
         print(tmp[n]);
+        if(n != tmp.size()-1) {
+            print(", ");
+        }
     }
+    print("]");
 }
 
 void print(std::initializer_list<char> obj) {
