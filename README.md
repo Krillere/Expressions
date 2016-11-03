@@ -194,22 +194,50 @@ let (Int, Int -> Int) addFunc = add {
 Comments are created using a \# in the code. Currently there only exists one-line comments and they can't be stopped by using another \#.
 
 ## Standard functions / built-in functions
-Some functions to handle lists and strings are already implemented (More are to come, of course!).
+
+Functions to handle lists:
 ```
 length(list) # Returns the length of a list
 
 first(list) # Returns the first object in the list
 last(list) # Returns the last object in the list
 
-get(list, nth) # Fetches the nth object in a list
 tail(list) # Returns everything but the first object
 init(list) # Returns everything but the last object
+
+get(list, nth) # Fetches the nth object in a list
 take(list, num) # Returns 'num' items from list
 
 list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 append(lst, obj) # Adds 'obj' to the end of 'lst'
 null(lst) # true of list is empty
+```
+
+Functions for type checking:
+```
+isInt(Generic)
+isFloat(Generic)
+isString(Generic)
+isChar(Generic)
+isBool(Generic)
+```
+
+Functions for changing types. Shows possible input types.
+```
+convertToInt(String)
+convertToInt(Int)
+convertToInt(Float)
+convertToInt(Char)
+
+convertToFloat(Int)
+convertToFloat(String)
+
+convertToChar(Int)
+
+convertToString(Int)
+convertToString(Float)
+convertToString(Char)
 ```
 
 ## Side conditions
