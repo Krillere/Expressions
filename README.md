@@ -15,7 +15,6 @@ ToDo list:
 - ~~Functions as first-class-citizens~~ (Somewhat done)
 - ~~Generics~~ (Done)
 - Variadic functions
-- Type conversions (Will be implemented as functions, like Scheme (number->String sort of))
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
