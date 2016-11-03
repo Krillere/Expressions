@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <typeinfo>
+#include <string>
 
 // Print
 template<typename T>
@@ -172,7 +173,7 @@ bool null(const std::vector<T> obj) {
 
 // Typecheck
 template<typename T>
-bool isInteger(T obj) {
+bool isInt(T obj) {
     return (typeid(obj) == typeid(int));
 }
 template<typename T>
@@ -184,6 +185,52 @@ bool isString(T obj) {
     return (typeid(obj) == typeid(std::vector<char>));
 }
 template<typename T>
-bool isCharacter(T obj) {
+bool isChar(T obj) {
     return (typeid(obj) == typeid(char));
+}
+template<typename T>
+bool isBool(T obj) {
+    return (typeid(obj) == typeid(bool));
+}
+
+// Conversions
+int convertToInt(std::vector<char> str) {
+    std::string tmp(str.begin(), str.end());
+    std::string::size_type sz;
+    return std::stoi(tmp, &sz);
+}
+int convertToInt(float f) {
+    return (int)f;
+}
+int convertToInt(char c) {
+    return (int)c;
+}
+
+float convertToFloat(int i) {
+    return (float)i;
+}
+float convertToFloat(std::vector<char> str) {
+    std::string tmp(str.begin(), str.end());
+    std::string::size_type sz;
+    return std::stof(tmp, &sz);
+}
+
+char convertToChar(int i) {
+    return (char)i;
+}
+
+std::vector<char> convertToString(int i) {
+    std::string tmp;
+    tmp = std::to_string(i);
+    std::vector<char> data(tmp.begin(), tmp.end());
+    return data;
+}
+std::vector<char> convertToString(float f) {
+    std::string tmp;
+    tmp = std::to_string(f);
+    std::vector<char> data(tmp.begin(), tmp.end());
+    return data;
+}
+std::vector<char> convertToString(char c) {
+    return {c};
 }

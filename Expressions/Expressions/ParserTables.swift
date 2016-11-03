@@ -14,7 +14,7 @@ class ParserTables {
     var randomizeNames:Bool = true
     
     var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
-    var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial", "isInteger", "isFloat", "isCharacter", "isString"]
+    var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat"]
     var types:[String] = [] // User defined types
     var genericFunctionNames:[String] = []
     
@@ -23,7 +23,7 @@ class ParserTables {
     
     
     init() {
-        let builtin = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString"]
+        let builtin = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat"]
         for n in builtin {
             nameTranslation[n] = n
         }
