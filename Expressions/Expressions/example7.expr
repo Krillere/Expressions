@@ -1,54 +1,25 @@
 define main: -> Int {
-  print("AddAll: ")
-  printLn(addAll([1, 1, 1, 2]))
+  let String derp = strTest1("asd", 'f'), [String] derp2 = strTest2("asd") {
+    printLn(derp)
+    printLn(derp2)
+    0
+  }
+}
 
-  print("Null: ")
-  printLn(nullTest([])) # True
+define strTest1: String str, Char c -> String {
+  append(str, c)
+}
 
-  print("Largest: ")
-  printLn(largest([1, 99, 20, 101, 3]))
+define strTest2: String str -> [String] {
+  list(str)
+}
 
-  print("llength: ")
-  printLn(llength([1, 2, 3, 4, 5, 6]))
+define strTest3: String str -> Int {
+  if null(str) { 0 }
+               { print(first(str)) strTest3(tail(str)) }
+}
+
+define strTest4: String str -> Int {
+  print(str)
   0
 }
-
-define addAll: [Int] ints -> Int {
-  if length(ints) == 1 { first(ints) }
-                       { first(ints) + addAll(tail(ints)) }
-}
-
-define largest: [Int] ints -> Int {
-  if null(ints) { 0 }
-                { largestHelper(ints, first(ints)) }
-}
-define largestHelper: [Int] ints, Int cur -> Int {
-  switch length(ints) == 0 { cur }
-         first(ints) > cur { largestHelper(tail(ints), first(ints)) }
-         else { largestHelper(tail(ints), cur) }
-}
-
-define nullTest: [Int] ints -> Bool {
-  null(ints)
-}
-define gen: [Generic] lst -> Generic {
-  first(lst)
-}
-
-define llength: [Generic] lst -> Int {
-  if null(lst) { 0 } { 1 + length(tail(lst)) }
-}
-
-define checkType: Generic obj -> Int {
-  switch isInteger(obj) { print("Obj er int") 0 }
-         isFloat(obj) { print("Obj er float") 0 }
-         isCharacter(obj) { print("Obj er char") 0 }
-         isString(obj) { print("Obj er string") 0 }
-         else { 0 }
-}
-
-#define ends: [Generic] lst -> [Generic] {
-#  let Generic f = first(lst), Generic l = last(lst) {
-#    append(list(f), l)
-#  }
-#}

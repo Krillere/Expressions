@@ -213,3 +213,36 @@ ret.push_back(str[i]);
 
 return ret;
 }
+
+std::string list(char c) {
+std::string ret;
+ret.push_back(c);
+
+return ret;
+}
+
+std::string append(std::string str, char c) {
+std::string tmp(str);
+tmp.push_back(c);
+
+return tmp;
+}
+std::string append(std::string str1, std::string str2) {
+std::string tmp(str1);
+tmp.append(str2);
+
+return tmp;
+}
+
+char first(std::string str) {
+return str[0];
+}
+
+char last(std::string str) {
+return str[str.size()-1];
+}
+
+size_t length(std::string str) {
+return str.size();
+}
+

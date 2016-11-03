@@ -10,7 +10,11 @@
 		AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7531DC681D7009A9900 /* example4.expr */; };
 		AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7551DC7BF6B009A9900 /* example6.expr */; };
 		AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7571DC7C27B009A9900 /* std.expr */; };
-		AA09F75B1DC7E986009A9900 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F75A1DC7E980009A9900 /* example7.expr */; };
+		AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F75A1DC7E980009A9900 /* example8.expr */; };
+		AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BB61DCBBDA80025FE27 /* example7.expr */; };
+		AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */; };
+		AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */; };
+		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
 		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
 		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -38,7 +42,8 @@
 			files = (
 				AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */,
 				AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */,
-				AA09F75B1DC7E986009A9900 /* example7.expr in CopyFiles */,
+				AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */,
+				AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */,
 				AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */,
 				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
@@ -57,8 +62,12 @@
 		AA09F7551DC7BF6B009A9900 /* example6.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example6.expr; sourceTree = "<group>"; };
 		AA09F7571DC7C27B009A9900 /* std.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = std.expr; sourceTree = "<group>"; };
 		AA09F7591DC7E8B7009A9900 /* index.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.txt; sourceTree = "<group>"; };
-		AA09F75A1DC7E980009A9900 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
+		AA09F75A1DC7E980009A9900 /* example8.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example8.expr; sourceTree = "<group>"; };
 		AA09F75C1DC7F2D7009A9900 /* stdold */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stdold; sourceTree = "<group>"; };
+		AA0D9BB61DCBBDA80025FE27 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
+		AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTableFiller.swift; sourceTree = "<group>"; };
+		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
+		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -111,6 +120,7 @@
 			children = (
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
+				AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */,
 				AAEAC0361DC4EC0000989910 /* Scanner and Parser */,
 				AAEAC0371DC4EC0D00989910 /* Checking */,
 				AAEAC0381DC4EC1700989910 /* Codegen */,
@@ -128,7 +138,8 @@
 				AA09F7531DC681D7009A9900 /* example4.expr */,
 				AAF443501DC65505004F0917 /* example5.expr */,
 				AA09F7551DC7BF6B009A9900 /* example6.expr */,
-				AA09F75A1DC7E980009A9900 /* example7.expr */,
+				AA0D9BB61DCBBDA80025FE27 /* example7.expr */,
+				AA09F75A1DC7E980009A9900 /* example8.expr */,
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 			);
@@ -151,6 +162,8 @@
 			children = (
 				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
 				AAB4EE941DC518520035F875 /* ScopeChecker.swift */,
+				AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */,
+				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
 			);
 			name = Checking;
 			sourceTree = "<group>";
@@ -229,11 +242,14 @@
 				AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */,
 				AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
+				AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */,
+				AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */,
 				AAB4EE971DC52DE80035F875 /* std.cpp in Sources */,
 				AAEAC02D1DC4E9E200989910 /* Parser.swift in Sources */,
 				AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */,
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,
+				AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */,
 				AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
