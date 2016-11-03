@@ -110,13 +110,13 @@ The variables are only accessible inside the scope.
 ## Types
 The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using single-quotes: ```Char c = 'c'```
 
-Currently there is no support of creating types, but there probably will be in the future.
-
 Lists are created using square brackets. For example, a list of integers from 0-5 can be defined like this in a *let* block:
 ```
 let [Int] myIntegers = [1, 2, 3, 4, 4+1] {
 }
 ```
+Consider a String as [Char].
+
 Nested lists are also possible, simply by adding another layer of square brackets. List literals can be used in all function calls that accepts these. For example:
 ```
 take([1, 2, 3, 4], 2) # Returns [1, 2]
