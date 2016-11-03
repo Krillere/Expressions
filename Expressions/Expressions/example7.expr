@@ -39,3 +39,16 @@ define llength: [Generic] lst -> Int {
   if null(lst) { 0 } { 1 + length(tail(lst)) }
 }
 
+define checkType: Generic obj -> Int {
+  switch isInteger(obj) { print("Obj er int") 0 }
+         isFloat(obj) { print("Obj er float") 0 }
+         isCharacter(obj) { print("Obj er char") 0 }
+         isString(obj) { print("Obj er string") 0 }
+         else { 0 }
+}
+
+#define ends: [Generic] lst -> [Generic] {
+#  let Generic f = first(lst), Generic l = last(lst) {
+#    append(list(f), l)
+#  }
+#}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-//ParserTables.shared.randomizeNames = false
+ParserTables.shared.randomizeNames = false
 
 func compile(code: String) {
     let ps = Parser(input: code)

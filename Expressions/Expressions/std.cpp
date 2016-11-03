@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <typeinfo>
 
 // Print
 template<typename T>
@@ -194,4 +195,22 @@ bool null(const std::vector<T> obj) {
 }
 bool null(std::string obj) {
     return obj.size() == 0;
+}
+
+// Typecheck
+template<typename T>
+bool isInteger(T obj) {
+    return (typeid(obj) == typeid(int));
+}
+template<typename T>
+bool isFloat(T obj) {
+    return (typeid(obj) == typeid(float) || typeid(obj) == typeid(double));
+}
+template<typename T>
+bool isString(T obj) {
+    return (typeid(obj) == typeid(const char *));
+}
+template<typename T>
+bool isCharacter(T obj) {
+    return (typeid(obj) == typeid(char));
 }
