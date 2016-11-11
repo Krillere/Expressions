@@ -156,7 +156,6 @@
 				AAEAC0261DC4E9E200989910 /* Scanner.swift */,
 				AAEAC0231DC4E9E200989910 /* Nodes.swift */,
 				AAEAC0241DC4E9E200989910 /* Parser.swift */,
-				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
 			);
 			name = "Scanner and Parser";
 			sourceTree = "<group>";
@@ -164,8 +163,9 @@
 		AAEAC0371DC4EC0D00989910 /* Checking */ = {
 			isa = PBXGroup;
 			children = (
-				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
+				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
 				AAB4EE941DC518520035F875 /* ScopeChecker.swift */,
+				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
 				AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */,
 				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
 			);

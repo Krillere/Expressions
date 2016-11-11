@@ -8,24 +8,10 @@
 
 import Foundation
 
-// Parser error class
-class ParserError : CustomStringConvertible {
-    var reason:String?
-    var token:Token?
-    
-    init(reason: String, token: Token) {
-        self.reason = reason
-        self.token = token
-    }
-    
-    var description: String {
-        return self.reason!
-    }
-}
 
 class Parser {
     private var scanner:Scanner!
-    private var errors:[ParserError] = []
+    private var errors:[CompilerError] = []
     private var program:ProgramNode?
     private var errorOccurred = false
     
@@ -61,7 +47,7 @@ class Parser {
         
         // No 'main' found
         if !hasEntry {
-            errors.append(ParserError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
+            errors.append(CompilerError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
         
         print("Found: \(program.functions.count) functions!")
@@ -73,7 +59,7 @@ class Parser {
     }
     
     // Getters
-    func getErrors() -> [ParserError] {
+    func getErrors() -> [CompilerError] {
         return self.errors
     }
     
@@ -691,7 +677,8 @@ class Parser {
     private func error(_ reason: String) {
         self.errorOccurred = true
         
-        let error = ParserError(reason: reason, token: scanner.peekToken())
+        let error = CompilerError(reason: reason, token: scanner.peekToken())
+        error.phase = .Parsing
         errors.append(error)
         
         print("ERROR: "+reason)

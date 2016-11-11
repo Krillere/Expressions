@@ -21,6 +21,10 @@ class ParseTableFiller {
         for f in program.functions {
             guard let ident = f.identifier else { continue }
             
+            // Function can now be found using identifier
+            ParserTables.shared.functionDeclarations[ident] = f
+            
+            // Adds generic functions to a list of known generic functions
             if TreeHelper.isGenericFunction(node: f) {
                 ParserTables.shared.genericFunctionNames.append(ident)
             }

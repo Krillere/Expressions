@@ -11,24 +11,33 @@ import Foundation
 class ParserTables {
     static let shared = ParserTables()
     
+    // Set in main
     var randomizeNames:Bool = true
     
+    // Special functions
     var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
-    var functions:[String] = ["first", "last", "length", "reverse", "get", "init", "tail", "append", "list", "factorial", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat"]
-    var types:[String] = [] // User defined types
-    var genericFunctionNames:[String] = []
     
+    // Builtin functions
+    var functions:[String] = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat"]
+    
+    // User defined types
+    var types:[String] = []
+    
+    // User defined function dictionary (identifier -> FunctionNode)
+    var functionDeclarations:[String:FunctionNode] = [:]
+    
+    // Generic function identifiers
+    var genericFunctionNames:[String] = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString"]
+    
+    // Example: myInter -> aB417asdbei (Generated using 'generateNewVariableName')
     var nameTranslation:[String : String] = [:]
     
     
     
     init() {
-        let builtin = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat"]
-        for n in builtin {
+        for n in functions {
             nameTranslation[n] = n
         }
-        
-        self.genericFunctionNames = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString"]
     }
     
     // Creates a renamed variable for identifier

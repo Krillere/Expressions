@@ -9,6 +9,7 @@
 import Foundation
 
 class TreeHelper {
+    
     // Does the function have generics as parameter or return type?
     public static func isGenericFunction(node: FunctionNode) -> Bool {
         var isGeneric = false

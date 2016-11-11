@@ -793,7 +793,7 @@ class CodeGenerator {
         return false
     }
     
-    // Determine (gues..) the type of an array literal (Guess is fine. C++ compiler catches mistakes..)
+    // Determine (gues..) the type of a literal (Array is guessing, rest is pretty straight forward) (Guess is fine. C++ compiler catches mistakes..)
     private func guessType(node: Node) -> String {
 
         if node is ArrayLiteralNode {

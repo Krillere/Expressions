@@ -8,6 +8,34 @@
 
 import Foundation
 
+class CompilerError : CustomStringConvertible {
+    
+    enum Phase {
+        case Parsing
+        case ScopeCheck
+        case TypeCheck
+        case CodeGeneration
+    }
+    
+    var reason:String?
+    var token:Token?
+    var phase:Phase?
+    
+    init(reason: String, token: Token) {
+        self.reason = reason
+        self.token = token
+    }
+    
+    init(reason: String, phase: Phase, node: Node) {
+        self.reason = reason
+        self.phase = phase
+    }
+    
+    var description: String {
+        return self.reason!
+    }
+}
+
 class Compiler {
     
     static func compile(code: String) {
@@ -21,12 +49,32 @@ class Compiler {
         }
         
         if let program = ps.getProgram() {
+            // Fill ParserTables and find functions before doing anything else
             let filler = ParseTableFiller(program: program)
             filler.run()
+
+            // Scope check (Variables and functions)
+            let scope = ScopeChecker(program: program)
+            scope.test()
             
+            if scope.getErrors().count > 0 {
+                print("Skipping type check due to errors during scope checking.")
+                return
+            }
+            
+            // Type check
+            let type = TypeChecker(program: program)
+            type.test()
+            
+            if type.getErrors().count > 0 {
+                print("Skipping code generation due to errors during type checking.")
+            }
+            
+            // Generate intermediate code
             let generator = CodeGenerator(program: program)
             generator.generate()
             
+            // Save to disc
             let intermediate = generator.getIntermediate()
             do {
                 let writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
@@ -39,5 +87,9 @@ class Compiler {
                 print("Error ved gem intermediate: \(error)")
             }
         }
+    }
+    
+    static func error(reason: String, node: Node) {
+        
     }
 }
