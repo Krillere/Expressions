@@ -4,5 +4,6 @@ example3: List tests, along with some list function testing
 example4: Custom types
 example5: Custom types and functions inside and with these
 example6: Side conditions and I/O
-example7: Strings
-example7: Generic testing, along with some useful functions written using generics
+example7: Some strings
+example8: Generic testing, along with some useful functions written using generics
+example9: Variadics

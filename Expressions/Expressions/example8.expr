@@ -19,6 +19,13 @@ define main: -> Int {
 
   print("Ends: ")
   printLn(ends([1, 2, 3, 4, 5]))
+
+  printLn(genericTesting(1))
+  printLn(genericTesting(1.0))
+  printLn(genericTesting("asd"))
+  printLn(genericTesting(true))
+  printLn(genericTesting('a'))
+
   0
 }
 
@@ -60,4 +67,13 @@ define ends: [Generic] lst -> [Generic] {
   let Generic f = first(lst), Generic l = last(lst) {
     append(list(f), l)
   }
+}
+
+define genericTesting: Generic gen -> String {
+switch isInt(gen)    { "Integer" }
+       isFloat(gen)  { "Float" }
+       isString(gen) { "String" }
+       isChar(gen)   { "Char" }
+       isBool(gen)   { "Bool" }
+      else { "Unknown" }
 }

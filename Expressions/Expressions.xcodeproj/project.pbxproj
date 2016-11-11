@@ -15,6 +15,7 @@
 		AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */; };
 		AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */; };
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
+		AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BBE1DCBF27E0025FE27 /* example9.expr */; };
 		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
 		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -44,6 +45,7 @@
 				AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */,
 				AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */,
 				AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */,
+				AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */,
 				AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */,
 				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
@@ -68,6 +70,7 @@
 		AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTableFiller.swift; sourceTree = "<group>"; };
 		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
+		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 				AA09F7551DC7BF6B009A9900 /* example6.expr */,
 				AA0D9BB61DCBBDA80025FE27 /* example7.expr */,
 				AA09F75A1DC7E980009A9900 /* example8.expr */,
+				AA0D9BBE1DCBF27E0025FE27 /* example9.expr */,
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 			);
@@ -206,7 +210,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Christian Lundtofte";
 				TargetAttributes = {
 					AAEAC0141DC4E9CA00989910 = {
@@ -275,6 +279,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -323,6 +328,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -342,6 +348,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};

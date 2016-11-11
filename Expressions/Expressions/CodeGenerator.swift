@@ -484,14 +484,14 @@ class CodeGenerator {
         }
         
         if shouldRet { // End of expression
-            retString += ";"
+            retString += ";\n"
         }
         
         if expr is FunctionCallNode { // Side conditions should be ended too.
             let fc = expr as! FunctionCallNode
             guard let name = fc.identifier else { return retString }
             if ParserTables.shared.sideConditionFunctions.contains(name) {
-                retString += ";"
+                retString += ";\n"
             }
         }
         
@@ -600,29 +600,33 @@ class CodeGenerator {
         guard let identifier = call.identifier else { return "" }
         
         var str = identifier
-        var litType = ""
+//        var litType = ""
         
         var parString = ""
         for n in 0 ..< call.parameters.count {
             let par = call.parameters[n]
             let expr = createExpression(expr: par)
             parString += expr
-            
+            /*
             if n == 0 {
                 litType = guessType(node: par)
             }
-            
+            */
             if n != call.parameters.count-1 {
                 parString += ", "
             }
         }
         
+        /*
         if ParserTables.shared.genericFunctionNames.contains(identifier) {
             if litType != "" {
                 str += "<"+litType+">"
             }
+            else {
+                print("Ingen generisk types type fundet ved \(identifier)")
+            }
         }
-        
+        */
         str += "("
         str += parString
         str += ")"
@@ -759,6 +763,25 @@ class CodeGenerator {
                     }
                 }
             }
+        }
+        else if node is NumberLiteralNode {
+            if let node = node as? NumberLiteralNode {
+                if node.floatValue != nil {
+                    return "float"
+                }
+                else if node.intValue != nil {
+                    return "int"
+                }
+            }
+        }
+        else if node is StringLiteralNode {
+            //return "std::vector<char>"
+        }
+        else if node is CharLiteralNode {
+            return "char"
+        }
+        else if node is BooleanLiteralNode {
+            return "bool"
         }
         
         return ""

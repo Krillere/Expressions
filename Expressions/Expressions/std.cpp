@@ -5,6 +5,63 @@
 #include <typeinfo>
 #include <string>
 
+// Prototypes for std
+template<typename T>
+void print(T obj);
+template<typename T>
+void print(std::vector<T> obj);
+void print(std::vector<char> obj);
+template<typename T>
+void print(std::initializer_list<T> obj);
+void print(std::initializer_list<char> obj);
+template<typename T>
+void printLn(T obj);
+std::vector<char> readFileContents(std::vector<char> pathv);
+void writeFileContents(std::vector<char> pathv, std::vector<char> content);
+template<typename T>
+std::vector<T> list(T obj);
+template<typename T>
+std::vector<T> append(const std::vector<T> lst, T obj);
+template<typename T>
+T first(const std::vector<T> obj);
+template<typename T>
+T last(const std::vector<T> obj);
+template<typename T>
+size_t length(const std::vector<T> obj);
+template<typename T>
+std::vector<T> reverse(const std::vector<T> obj);
+template<typename T>
+T get(const std::vector<T> obj, int index);
+template<typename T>
+std::vector<T> tail(const std::vector<T> obj);
+template<typename T>
+std::vector<T> init(const std::vector<T> obj);
+template<typename T>
+std::vector<T> take(const std::vector<T> obj, int num);
+template<typename T>
+std::vector<T> take(const std::initializer_list<T> tmp, int num);
+template<typename T>
+bool null(const std::vector<T> obj);
+template<typename T>
+bool isInt(T obj);
+template<typename T>
+bool isFloat(T obj);
+template<typename T>
+bool isString(T obj);
+template<typename T>
+bool isChar(T obj);
+template<typename T>
+bool isBool(T obj);
+int convertToInt(std::vector<char> str);
+int convertToInt(float f);
+int convertToInt(char c);
+float convertToFloat(int i);
+float convertToFloat(std::vector<char> str);
+char convertToChar(int i);
+std::vector<char> convertToString(int i);
+std::vector<char> convertToString(float f);
+std::vector<char> convertToString(char c);
+
 // Print
 template<typename T>
 void print(T obj) {
