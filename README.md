@@ -192,6 +192,14 @@ let (Int, Int -> Int) addFunc = add {
 ## Comments
 Comments are created using a \# in the code. Currently there only exists one-line comments and they can't be stopped by using another \#.
 
+A comment: 
+```
+define main: -> Int {
+  # This is ignored by the compiler
+  0
+}
+```
+
 ## Standard functions / built-in functions
 
 Functions to handle lists:
@@ -222,18 +230,21 @@ isChar(Generic)
 isBool(Generic)
 ```
 
-Functions for changing types. Shows possible input types.
+Functions for changing types. Shows possible input types. More functions probably comming here at some point.
 ```
+# Different types to ints
 convertToInt(String)
 convertToInt(Int)
 convertToInt(Float)
 convertToInt(Char)
 
+# Different types to floats
 convertToFloat(Int)
 convertToFloat(String)
 
-convertToChar(Int)
+convertToChar(Int) # Converts int to char (ASCII values)
 
+# Different types to string
 convertToString(Int)
 convertToString(Float)
 convertToString(Char)
@@ -256,7 +267,7 @@ define main: -> Int {
   printLn("This will be printed, along with a newline.")
   print("This will be on a new line!")
   
-  0 # Returns 0
+  0   # Returns
 }
 ```
 Using any one of these but ```readFileContents``` in an expression context (```1 + print("Error") + 2```) will not compile.
@@ -269,7 +280,8 @@ define main: -> Int {
   
     print("From file: ")
     print(readFileContents(path)) # Prints 'This is text.'
+    
+    0   # Returns
   }
-  0
 }
 ```
