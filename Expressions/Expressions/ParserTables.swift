@@ -48,7 +48,7 @@ class ParserTables {
     }
     
     // Generates a 10 digit long random variable name, as to now allow 'collisions' with user functions
-    private func generateNewVariableName() -> String {
+    func generateNewVariableName() -> String {
         var tmp = randomString(length: 10)
         while nameTranslation.values.contains(tmp) {
             tmp = randomString(length: 10)

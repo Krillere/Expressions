@@ -187,6 +187,7 @@ class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
     
 }
 
+// Function type (Int, Int) -> Int
 class FunctionTypeNode : TypeNode, CustomStringConvertible {
     var ret:TypeNode?
     var inputs:[TypeNode] = []

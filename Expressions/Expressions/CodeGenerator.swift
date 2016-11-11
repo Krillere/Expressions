@@ -88,7 +88,7 @@ class CodeGenerator {
         internalCode += str
     }
     
-    // Generer typer
+    // Generates a type declaration
     private func createObjectType(objType: ObjectTypeNode) -> String {
         guard let name = objType.name else { return "" }
         var ret = ""
@@ -170,7 +170,7 @@ class CodeGenerator {
         return ret
     }
 
-    // Generer funktioner
+    // Generates a function declaration
     private func createFunction(function: FunctionNode) -> String {
         guard let retType = function.retType,
             let identifier = function.identifier,
@@ -215,7 +215,7 @@ class CodeGenerator {
         }
     }
     
-    // Laver generisk funktion
+    // Creates a generic function
     private func createGenericFunction(function: FunctionNode) -> String {
         guard let retType = function.retType else { return "" }
         
@@ -283,7 +283,7 @@ class CodeGenerator {
         return vecFunc
     }
     
-    // Laver string med funktionsparametre - (T1 n1, T2 n2 ... )
+    // Creates string with function parameters - (T1 n1, T2 n2 ... )
     private func createFunctionParameters(pars: [ParameterNode]) -> String {
         var str = ""
         
@@ -312,12 +312,18 @@ class CodeGenerator {
     }
     
     
-    // Creates block - { expr }
+    // Creates block - { [expr] }
     private func createBlock(block: BlockNode) -> String {
         
         var str = "{\n"
         
+        // Create expressions in block
         for expr in block.expressions {
+            
+            // Do we need to declare something before the expression? (Function call parameters are declared before the call)
+            str += createFunctionCallParameterDeclarations(expr: expr)
+            
+            // Create the expression itself
             str += createExpression(expr: expr)
         }
         
@@ -326,7 +332,70 @@ class CodeGenerator {
         return str
     }
     
-    // Creates a string from a normal type. Int becomes int, String becomse std::string and so on.
+    // Create function call parameters as variables in the start of the block
+    private func createFunctionCallParameterDeclarations(expr: Node) -> String {
+        if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
+            guard let fc = expr as? FunctionCallNode else { return "" }
+            print("Fundet function call: \(fc.identifier!)")
+            
+            for n in 0 ..< fc.parameters.count {
+                let par = fc.parameters[n]
+            
+                if par is ArrayLiteralNode {
+                    guard let par = par as? ArrayLiteralNode else { return "" }
+                    
+                    // Create a new name and refer it to itself in translation
+                    let newName = ParserTables.shared.generateNewVariableName()
+                    ParserTables.shared.nameTranslation[newName] = newName
+                    
+                    // Replace literal with reference to variable
+                    let replacementNode = VariableNode(identifier: newName)
+                    fc.parameters[n] = replacementNode
+                    
+                    let type = guessType(node: par)
+                    let str = "std::vector<"+type+"> "+newName+" = "+createArrayLiteral(lit: par)+";"
+                    return str
+                }
+                else if par is StringLiteralNode { // String literal used as parameter
+                    guard let par = par as? StringLiteralNode else { return "" }
+                    
+                    // Create a new name and refer it to itself in translation
+                    let newName = ParserTables.shared.generateNewVariableName()
+                    ParserTables.shared.nameTranslation[newName] = newName
+                    
+                    // Replace the literal with a reference to the variable
+                    let replacementNode = VariableNode(identifier: newName)
+                    fc.parameters[n] = replacementNode
+                    
+                    let str = "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";"
+                    return str
+                }
+                else if par is FunctionCallNode {
+                    return createFunctionCallParameterDeclarations(expr: par)
+                }
+            }
+        }
+        else if expr is ParenthesesExpression { // Possibly containing a function call
+            if let tmp = (expr as! ParenthesesExpression).expression {
+                return createFunctionCallParameterDeclarations(expr: tmp)
+            }
+        }
+        else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
+            guard let expr = expr as? ExpressionNode else { return "" }
+            if let exp1 = expr.loperand, let exp2 = expr.roperand {
+                var str = ""
+                
+                str += createFunctionCallParameterDeclarations(expr: exp1)
+                str += createFunctionCallParameterDeclarations(expr: exp2)
+                
+                return str
+            }
+        }
+        
+        return ""
+    }
+    
+    // Creates a string from a normal type. Int becomes int, String becomse std::vector<char> and so on.
     private func createTypeString(type: NormalTypeNode) -> String {
         guard let clearType = type.clearType, let nested = type.numNested else { return "" }
 
@@ -368,7 +437,7 @@ class CodeGenerator {
     }
     
     
-    // Are we before the name or after? (Important for function types due to C++ syntax)
+    // Are we before the name or after? (Important for function types due to C++ syntax, as we need: RetType Name (Pars)   )
     private enum FunctionTypeContext {
         case preName
         case postName
@@ -598,35 +667,19 @@ class CodeGenerator {
     // Laver funktionskald - name "(" [expr] ")"
     private func createFunctionCall(call: FunctionCallNode) -> String {
         guard let identifier = call.identifier else { return "" }
-        
-        var str = identifier
-//        var litType = ""
-        
+
         var parString = ""
         for n in 0 ..< call.parameters.count {
             let par = call.parameters[n]
             let expr = createExpression(expr: par)
             parString += expr
-            /*
-            if n == 0 {
-                litType = guessType(node: par)
-            }
-            */
+
             if n != call.parameters.count-1 {
                 parString += ", "
             }
         }
-        
-        /*
-        if ParserTables.shared.genericFunctionNames.contains(identifier) {
-            if litType != "" {
-                str += "<"+litType+">"
-            }
-            else {
-                print("Ingen generisk types type fundet ved \(identifier)")
-            }
-        }
-        */
+
+        var str = identifier
         str += "("
         str += parString
         str += ")"
@@ -746,7 +799,7 @@ class CodeGenerator {
         if node is ArrayLiteralNode {
             guard let node = node as? ArrayLiteralNode else { return "" }
             if node.contents.count < 1 {
-                return ""
+                return "FUCK"
             }
             
             let fnode = node.contents[0]
@@ -763,6 +816,13 @@ class CodeGenerator {
                     }
                 }
             }
+            else if fnode is ArrayLiteralNode {
+                let str = "std::vector<"+guessType(node: fnode)+">"
+                return str
+            }
+            else if fnode is StringLiteralNode {
+                return "std::vector<char>"
+            }
         }
         else if node is NumberLiteralNode {
             if let node = node as? NumberLiteralNode {
@@ -775,7 +835,7 @@ class CodeGenerator {
             }
         }
         else if node is StringLiteralNode {
-            //return "std::vector<char>"
+            return "std::vector<char>"
         }
         else if node is CharLiteralNode {
             return "char"
