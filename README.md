@@ -250,6 +250,11 @@ convertToString(Float)
 convertToString(Char)
 ```
 
+Other functions:
+```
+CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
+```
+
 ## Side conditions
 Certain functions, even though they have side effects, can be utilized.
 ```
