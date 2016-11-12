@@ -282,6 +282,7 @@ std::vector<char> convertToString(char c) {
     return {c};
 }
 
+// Command line arguments (Created as function, because 'global variables' does not exist in Expressions (Kinda))
 std::vector<std::vector<char>> CLArguments() {
     return internal_arguments;
 }

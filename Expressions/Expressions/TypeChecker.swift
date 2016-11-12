@@ -10,7 +10,6 @@ import Foundation
 
 class TypeChecker {
     private var program:ProgramNode?
-    private var errors:[CompilerError] = []
     
     init(program: ProgramNode) {
         self.program = program
@@ -20,9 +19,4 @@ class TypeChecker {
         guard let program = self.program else { return }
         let _ = program
     }
-    
-    func getErrors() -> [CompilerError] {
-        return self.errors
-    }
-    
 }

@@ -33,6 +33,7 @@ enum TokenType {
     case comma          // ,
     case negate         // !
     case dot            // .
+    case ellipsis       // ... (Used for variadic parameters)
     
     case keyword_if     // "if"
     case keyword_else   // "else"
@@ -446,7 +447,21 @@ class Scanner {
             break
                 
             case ".":
-                token = Token(cont: ".", type: .dot, charIndex: inputIndex)
+                // Test for single dot, or variadic function
+                let test = get()
+                if test == "." {
+                    let test2 = get()
+                    if test2 == "." {
+                        token = Token(cont: "...", type: .ellipsis, charIndex: inputIndex)
+                    }
+                    else {
+                        inputIndex -= 1
+                    }
+                }
+                else {
+                    inputIndex -= 1
+                    token = Token(cont: ".", type: .dot, charIndex: inputIndex)
+                }
             break
                 
             case "#":
@@ -455,6 +470,7 @@ class Scanner {
             break
                 
             default:
+                print("Dropper \(char)")
                 token = Token.emptyToken(inputIndex)
                 break
             }

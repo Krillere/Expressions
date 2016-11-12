@@ -92,6 +92,7 @@ class FunctionNode : Node, CustomStringConvertible {
 class ParameterNode : Node, CustomStringConvertible  {
     var name:String?
     var type: TypeNode?
+    var variadic:Bool = false
     
     init(type: TypeNode, name: String) {
         super.init()
@@ -407,6 +408,17 @@ class LetNode : Node, CustomStringConvertible {
         for v in vars {
             v.parent = self
         }
+    }
+    
+    func getIdentifiers() -> [String] {
+        var tmp:[String] = []
+        
+        for v in vars {
+            guard let name = v.name else { continue }
+            tmp.append(name)
+        }
+        
+        return tmp
     }
     
     var description: String {

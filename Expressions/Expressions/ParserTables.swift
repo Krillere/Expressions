@@ -29,7 +29,7 @@ class ParserTables {
     // Generic function identifiers
     var genericFunctionNames:[String] = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString"]
     
-    // Example: myInter -> aB417asdbei (Generated using 'generateNewVariableName')
+    // Example: myInteger -> aB417asdbei (Generated using 'generateNewVariableName')
     var nameTranslation:[String : String] = [:]
     
     

@@ -37,6 +37,7 @@ class Parser {
         let program = parseProgram()
         self.program = program
         
+        // Do we have a main function declared?
         var hasEntry = false
         for f in ParserTables.shared.functions {
             if f == "main" {
@@ -50,10 +51,12 @@ class Parser {
             errors.append(CompilerError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
         
-        print("Found: \(program.functions.count) functions!")
+        print("Found: \(program.functions.count) functions (Some might be standard functions and skew the count)!")
         print("Found: \(program.types.count) types!")
         
-        print("Errors: \(errors)")
+        if errors.count > 0 {
+            print("Parsing Errors: \(errors)")
+        }
         
         print("Parsing completed")
     }
@@ -183,11 +186,20 @@ class Parser {
                 break
             }
             
+            if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
+            
             // Regular parameter (type name)
             let type = parseType()
             let name = scanner.getToken()
             
-            res.append(ParameterNode(type: type, name: name.content))
+            let parNode = ParameterNode(type: type, name: name.content)
+            if type is NormalTypeNode {
+                if (type as! NormalTypeNode).clearType == "..." {
+                    parNode.variadic = true
+                }
+            }
+            
+            res.append(parNode)
         }
         
         return res
@@ -235,7 +247,12 @@ class Parser {
     private func parseType() -> TypeNode {
         let token = scanner.getToken()
         
-        // Direkte navngiven type
+        // Ellipsis?
+        if token.type == .ellipsis {
+            return NormalTypeNode(full: "...", type: "...", nestedLevel: 0)
+        }
+        
+        // Named type
         if token.type == .string {
             return NormalTypeNode(full: token.content, type: token.content, nestedLevel: 0)
         }
@@ -307,14 +324,9 @@ class Parser {
         var inpTypes:[TypeNode] = []
         
         // Parse input types
-        /*let t = scanner.getToken()
-        if t.type != .lpar {
-            error("Expected ')', got \(t.content)")
-        }
-        */
         while scanner.peekToken().type != .returns {
             if scanner.peekToken().type == .none {
-                error("Error in function declaration. Syntax all fucked up.")
+                error("Error in function type declaration. Syntax all fucked up.")
                 break
             }
             
@@ -579,7 +591,7 @@ class Parser {
         
         while scanner.peekToken().type != .lcurly {
             if scanner.peekToken().type == .none {
-                error("Error in function declaration. Parameters all fucked up.")
+                error("Error in let expression.")
                 break
             }
             

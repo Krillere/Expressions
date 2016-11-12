@@ -10,7 +10,6 @@ import Foundation
 
 class ScopeChecker {
     private var program:ProgramNode?
-    private var errors:[CompilerError] = []
     
     init(program: ProgramNode) {
         self.program = program
@@ -40,7 +39,7 @@ class ScopeChecker {
             
             // Unknown function called
             if !ParserTables.shared.functions.contains(identifier) {
-                Compiler.error(reason: "Function does not exist", node: expr)
+                Compiler.error(reason: "Function '\(identifier)' does not exist.", node: expr, phase: .ScopeCheck)
             }
         }
         else if expr is VariableNode {
@@ -70,9 +69,4 @@ class ScopeChecker {
         }
         // TODO: I hvert fald ArrayLiteral og PropertyValue (Kan indeholde andre variabler)
     }
-    
-    func getErrors() -> [CompilerError] {
-        return self.errors
-    }
-    
 }

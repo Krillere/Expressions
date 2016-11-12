@@ -38,6 +38,8 @@ class CompilerError : CustomStringConvertible {
 
 class Compiler {
     
+    static var errors:[CompilerError] = []
+    
     static func compile(code: String) {
         let ps = Parser(input: code)
         ps.run()
@@ -57,8 +59,9 @@ class Compiler {
             let scope = ScopeChecker(program: program)
             scope.test()
             
-            if scope.getErrors().count > 0 {
+            if errors.count > 0 {
                 print("Skipping type check due to errors during scope checking.")
+                print("Scope check errors: \(errors)")
                 return
             }
             
@@ -66,8 +69,10 @@ class Compiler {
             let type = TypeChecker(program: program)
             type.test()
             
-            if type.getErrors().count > 0 {
+            if errors.count > 0 {
                 print("Skipping code generation due to errors during type checking.")
+                print("Type check errors: \(errors)")
+                return
             }
             
             // Generate intermediate code
@@ -89,7 +94,7 @@ class Compiler {
         }
     }
     
-    static func error(reason: String, node: Node) {
-        
+    static func error(reason: String, node: Node, phase: CompilerError.Phase) {
+        errors.append(CompilerError(reason: reason, phase: phase, node: node))
     }
 }
