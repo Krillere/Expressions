@@ -26,6 +26,8 @@ define main: -> Int {
   printLn(genericTesting(true))
   printLn(genericTesting('a'))
 
+  print("Test af args: ")
+  printLn(first(CLArguments()))
   0
 }
 

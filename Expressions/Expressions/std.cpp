@@ -5,6 +5,9 @@
 #include <typeinfo>
 #include <string>
 
+// Std vars
+std::vector<std::vector<char>> internal_arguments;
+
 // Prototypes for std
 template<typename T>
 void print(T obj);
@@ -39,8 +42,6 @@ std::vector<T> init(const std::vector<T> obj);
 template<typename T>
 std::vector<T> take(const std::vector<T> obj, int num);
 template<typename T>
-std::vector<T> take(const std::initializer_list<T> tmp, int num);
-template<typename T>
 bool null(const std::vector<T> obj);
 template<typename T>
 bool isInt(T obj);
@@ -61,6 +62,7 @@ char convertToChar(int i);
 std::vector<char> convertToString(int i);
 std::vector<char> convertToString(float f);
 std::vector<char> convertToString(char c);
+std::vector<std::vector<char>> CLArguments();
 
 // Print
 template<typename T>
@@ -108,7 +110,6 @@ void printLn(T obj) {
     print(obj);
     print("\n");
 }
-
 
 // readFileContents
 std::vector<char> readFileContents(std::vector<char> pathv) {
@@ -210,17 +211,6 @@ std::vector<T> take(const std::vector<T> obj, int num) {
     
     return ret;
 }
-template<typename T>
-std::vector<T> take(const std::initializer_list<T> tmp, int num) {
-    std::vector<T>obj(tmp);
-    std::vector<T> ret;
-    for(int i = 0; i < num; i++) {
-        ret.push_back(obj[i]);
-    }
-    
-    return ret;
-}
-
 
 // null
 template<typename T>
@@ -290,4 +280,8 @@ std::vector<char> convertToString(float f) {
 }
 std::vector<char> convertToString(char c) {
     return {c};
+}
+
+std::vector<std::vector<char>> CLArguments() {
+    return internal_arguments;
 }

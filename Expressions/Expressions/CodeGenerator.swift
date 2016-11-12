@@ -16,7 +16,8 @@ import Foundation
 class CodeGenerator {
     private var internalCode:String = ""
     private var program:ProgramNode?
-
+    private var doingMainBlock = false
+    
     // Prototyper
     private var declaredFunctions:[String] = []
     
@@ -197,6 +198,7 @@ class CodeGenerator {
                 let declaredFunction:String = "int main(int argc, char *argv[])"
                 declaredFunctions.append(declaredFunction)
                 
+                doingMainBlock = true
                 let funcDecl:String = "\n"+declaredFunction+createBlock(block: block)
                 ret += funcDecl
             }
@@ -327,6 +329,12 @@ class CodeGenerator {
     private func createBlock(block: BlockNode) -> String {
         
         var str = "{\n"
+        
+        // Save arguments!
+        if doingMainBlock {
+            str += "for(int n = 0; n < argc; n++) { std::string argS(argv[n]); std::vector<char> argV(argS.begin(), argS.end()); internal_arguments.push_back(argV); }"
+            doingMainBlock = false
+        }
         
         // Create expressions in block
         for expr in block.expressions {

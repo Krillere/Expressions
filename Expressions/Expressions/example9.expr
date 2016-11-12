@@ -1,3 +1,26 @@
 define main: -> Int {
+  print("Adding multiple numbers: ")
+  printLn(add(1, 2, 3, 4, 5, 6, 7))
+
   0
 }
+
+define myVariadic: Int a, ... variadic -> Int {
+  a + length(variadic)
+}
+
+define myVariadic2: ... variadic -> Int {
+  length(variadic)
+}
+
+
+define nullVar: ... var -> Bool {
+  null(var)
+}
+
+define add: ... var -> Int {
+   first(var) + add(tail(var))
+}
+
+# Error: Can't be done, because when does the list stop and 'a' begin?
+#define test: ... var, Int a -> Int
