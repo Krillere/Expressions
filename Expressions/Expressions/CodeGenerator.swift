@@ -344,16 +344,42 @@ class CodeGenerator {
     }
     
     
-    // MARK: Function call
-    // Create function call parameters as variables in the start of the block
+    // MARK: Function calls
+    // Laver funktionskald - name "(" [expr] ")"
+    private func createFunctionCall(call: FunctionCallNode) -> String {
+        guard let identifier = call.identifier else { return "" }
+        
+        var parString = ""
+        for n in 0 ..< call.parameters.count {
+            let par = call.parameters[n]
+            let expr = createExpression(expr: par)
+            parString += expr
+            
+            if n != call.parameters.count-1 {
+                parString += ", "
+            }
+        }
+        
+        var str = identifier
+        str += "("
+        str += parString
+        str += ")"
+        
+        return str
+    }
+    
+    // Called in 'createBlock', as to declare variables in function calls before the function call itself.
+    // (Array and String literals are easier to handle as declarations, than they are in the calls, I think.)
+    // Example: myFunc([1, 2, 3]) -> std::vector<int> tmp = {1, 2, 3}; myFunc(tmp);
     private func createFunctionCallParameterDeclarations(expr: Node) -> String {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
-            guard let fc = expr as? FunctionCallNode else { return "" }
-            print("Fundet function call: \(fc.identifier!)")
-            
+            guard let fc = expr as? FunctionCallNode, let ident = fc.identifier else { return "" }
+
+            // Iterate parameters (Some might need to be changed)
             for n in 0 ..< fc.parameters.count {
                 let par = fc.parameters[n]
             
+                // ArrayLiterals are replaced
                 if par is ArrayLiteralNode {
                     guard let par = par as? ArrayLiteralNode else { return "" }
                     
@@ -365,11 +391,29 @@ class CodeGenerator {
                     let replacementNode = VariableNode(identifier: newName)
                     fc.parameters[n] = replacementNode
                     
-                    let type = guessType(node: par)
-                    let str = "std::vector<"+type+"> "+newName+" = "+createArrayLiteral(lit: par)+";"
+                    // If the function is generic, guess the type. If not, find in function declaration
+                    var type = ""
+                    if ParserTables.shared.genericFunctionNames.contains(ident) {
+                        type = "std::vector<"+guessType(node: par)+">"
+                    }
+                    else { // 'Normal' function
+                        if let functionDecl = ParserTables.shared.functionDeclarations[ident] {
+                            if n > functionDecl.pars.count {
+                                break
+                            }
+                            
+                            //print("Funktionen \(ident) er ikke generisk, finder type i declaration!")
+                            
+                            if let defParType = functionDecl.pars[n].type as? NormalTypeNode {
+                                type = createTypeString(type: defParType)
+                            }
+                        }
+                    }
+                    
+                    let str = type+" "+newName+" = "+createArrayLiteral(lit: par)+";"
                     return str
                 }
-                else if par is StringLiteralNode { // String literal used as parameter
+                else if par is StringLiteralNode { // String literal used as parameter, replace with std::vector<char>
                     guard let par = par as? StringLiteralNode else { return "" }
                     
                     // Create a new name and refer it to itself in translation
@@ -556,29 +600,7 @@ class CodeGenerator {
         
         return str
     }
-    
-    // Laver funktionskald - name "(" [expr] ")"
-    private func createFunctionCall(call: FunctionCallNode) -> String {
-        guard let identifier = call.identifier else { return "" }
-        
-        var parString = ""
-        for n in 0 ..< call.parameters.count {
-            let par = call.parameters[n]
-            let expr = createExpression(expr: par)
-            parString += expr
-            
-            if n != call.parameters.count-1 {
-                parString += ", "
-            }
-        }
-        
-        var str = identifier
-        str += "("
-        str += parString
-        str += ")"
-        
-        return str
-    }
+
     
     // Creates an expression (Covers all expression types)
     private func createExpression(expr: Node) -> String {
@@ -818,7 +840,7 @@ class CodeGenerator {
         if node is ArrayLiteralNode {
             guard let node = node as? ArrayLiteralNode else { return "" }
             if node.contents.count < 1 {
-                return "FUCK"
+                return "void"
             }
             
             let fnode = node.contents[0]

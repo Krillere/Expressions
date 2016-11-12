@@ -8,7 +8,7 @@ define main: -> Int {
   print("Null igen: ")
   printLn(null([1,2]))
 
-  print("Null igen, igen")
+  print("Null igen, igen: ")
   printLn(null(['a', 'b']))
 
   print("Largest: ")
