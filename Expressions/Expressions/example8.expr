@@ -77,5 +77,5 @@ switch isInt(gen)    { "Integer" }
        isString(gen) { "String" }
        isChar(gen)   { "Char" }
        isBool(gen)   { "Bool" }
-      else { "Unknown" }
+       else { "Unknown" }
 }
