@@ -40,6 +40,7 @@ Overview:
 5.  [Variables](#variables)
 6.  [Comments](#comments)
 7.  [Standard functions](#standard-functions--built-in-functions)
+7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
 
 ## Functions
@@ -265,6 +266,49 @@ Higher order functions:
 ```
 map(lst, func) # Applies 'func' to each element in 'lst'
 filter(lst, func) # Tests each element in 'lst' against 'func', if true, then it is added to the list
+```
+
+## Higher order functions
+Map and filter functions exists in Expressions. They are defined as such:
+```
+# Map function
+define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
+  mapHelper(items, func)
+}
+# Applies function to each object and returns them
+define mapHelper: [Generic] items, (Generic -> Generic) func -> [Generic] {
+  if null(items) { [] }
+                 { append(list(func(first(items))), mapHelper(tail(items), func)) }
+}
+
+# Filter function
+define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+  filterHelper(lst, func)
+}
+# Tests each element against 'func', appens to list of result of 'func' is true
+define filterHelper: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+  switch null(lst) { [] } # Stop if empty
+         func(first(lst)) { append(list(first(lst)), filterHelper(tail(lst), func)) }
+         else { filterHelper(tail(lst), func) }
+}
+```
+
+A simple map example is:
+```
+define addOne: Int a -> Int {
+  a + 1
+}
+
+map([1, 2, 3, 4], addOne) # Returns: [2, 3, 4, 5]
+```
+
+A simple filter example:
+```
+define isOne: Int a -> Bool {
+  a == 1
+}
+
+filter([1, 2, 1, 3, 1], isOne) # Returns: [1, 1, 1]
 ```
 
 ## Side conditions
