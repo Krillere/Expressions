@@ -260,6 +260,8 @@ Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
 factorial(num) # Returns the factorial value of 'num'
+even(int) # Returns true if int is even
+odd(int) # Returns true if int is odd
 ```
 
 Higher order functions:
