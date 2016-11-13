@@ -14,9 +14,9 @@ ToDo list:
 - ~~Side conditions~~ (Print, IO and such)
 - ~~Functions as first-class-citizens~~ (Somewhat done)
 - ~~Generics~~ (Done)
+- ~~Higher order functions~~ (map, filter, simple ones first)
 - Variadic functions
 - Lambdas
-- Higher order functions (map, filter, simple ones first)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
@@ -259,6 +259,12 @@ Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
 factorial(num) # Returns the factorial value of 'num'
+```
+
+Higher order functions:
+```
+map(lst, func) # Applies 'func' to each element in 'lst'
+filter(lst, func) # Tests each element in 'lst' against 'func', if true, then it is added to the list
 ```
 
 ## Side conditions
