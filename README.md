@@ -31,17 +31,17 @@ The code generator traverses the tree created by the parser and produces the C++
 Overview:
 
 1.  [Functions](#functions)
+3.  [Conditionals](#conditionals)
+5.  [Variables](#variables)
 2.  [Types](#types)
 3.  [Generics](#generics)
 3.  [Objects](#objects)
 3.  [Functions as objects](#functions-as-a-type)
-3.  [Conditionals](#conditionals)
-4.  [Switch](#switch)
-5.  [Variables](#variables)
 6.  [Comments](#comments)
 7.  [Standard functions](#standard-functions--built-in-functions)
 7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
+9.  [Variadics](#variadics)
 
 ## Functions
 [functions]:asd
@@ -339,5 +339,15 @@ define main: -> Int {
     
     0   # Returns
   }
+}
+```
+
+## Variadics
+Variadics are also possible to use in Expressions. This allows a function to take an unknown number of arguments, though they still have to be statically typed (Determinable at compile-time). When used, the argument can be accessed as a list inside the function.
+
+An example of a variadic function:
+```
+define addAll: Int ... ints {
+# Something here
 }
 ```
