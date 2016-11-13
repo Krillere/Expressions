@@ -269,19 +269,30 @@ class CodeGenerator {
         var vecPars = "("
         for n in 0 ..< function.pars.count {
             let par = function.pars[n]
+            guard let pname = par.name else { continue }
             
-            guard let pname = par.name, let ptype = par.type as? NormalTypeNode else { continue }
-            if ptype.generic {
-                let tmpType = ptype.copy() as! NormalTypeNode
-                tmpType.clearType = "T"
+            if par.type is NormalTypeNode {
+                guard let ptype = par.type as? NormalTypeNode else { continue }
+                if ptype.generic {
+                    let tmpType = ptype.copy() as! NormalTypeNode
+                    tmpType.clearType = "T"
+                    
+                    vecPars += createTypeString(type: tmpType)
+                }
+                else {
+                    vecPars += createTypeString(type: ptype)
+                }
                 
-                vecPars += createTypeString(type: tmpType)
+                vecPars += " "+pname
             }
-            else {
-                vecPars += createTypeString(type: ptype)
+            else { // Function parameter
+                guard let ptype = par.type as? FunctionTypeNode else { continue }
+                print("Funktionsparameter!")
+                let retType = createFunctionTypeString(type: ptype, context: .preName)
+                let inp = createFunctionTypeString(type: ptype, context: .postName)
+                vecPars += retType+" "+pname+inp
             }
             
-            vecPars += " "+pname
             if n != function.pars.count-1 {
                 vecPars += ", "
             }

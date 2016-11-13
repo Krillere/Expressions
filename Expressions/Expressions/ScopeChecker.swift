@@ -39,7 +39,7 @@ class ScopeChecker {
             
             // Unknown function called
             if !ParserTables.shared.functions.contains(identifier) {
-                Compiler.error(reason: "Function '\(identifier)' does not exist.", node: expr, phase: .ScopeCheck)
+                //Compiler.error(reason: "Function '\(identifier)' does not exist.", node: expr, phase: .ScopeCheck)
             }
         }
         else if expr is VariableNode {
