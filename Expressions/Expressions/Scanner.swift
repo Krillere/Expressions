@@ -197,9 +197,12 @@ class Scanner {
         
         char = get()
         while char != "\"" {
+            
             stringContent.append(Character(char))
             char = get()
         }
+        
+        print("Stoppet ved '\(peek())', fandt: '\(stringContent)'")
         
         return stringContent
     }

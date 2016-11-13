@@ -83,6 +83,17 @@ class FunctionNode : Node, CustomStringConvertible {
     
     override init() { }
     
+    func getParamIdentifiers() -> [String] {
+        var tmp:[String] = []
+        
+        for par in pars {
+            guard let ident = par.name else { continue }
+            tmp.append(ident)
+        }
+        
+        return tmp
+    }
+    
     var description: String {
         return "\(retType) \(identifier)"
     }

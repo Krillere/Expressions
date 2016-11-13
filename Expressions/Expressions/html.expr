@@ -1,21 +1,18 @@
 define main: -> Int {
-  printLn(makeTag("p", [], [], ["asd"]))
-  printLn(filter([1, 2, 1], isOne))
+  printLn(makeTag("p", ["class"], ["myClass"], ["asd"]))
   0
 }
 
 define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
-  append("<", tag " ", makeAttributtes(attrNames, attrValues), ">")
+  append("<", tag " ", makeAttributes(attrNames, attrValues), ">")
 }
-define makeAttributtes: [String] attrNames, [String] attrValues -> String {
-  ""
-}
-
-define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
-  filterHelper(lst, func)
-}
-define filterHelper: [Generic] lst, (Generic -> Bool) func -> [Generic] {
-switch null(lst) { [] } # Stop if empty
-       func(first(lst)) { append(list(first(lst)), filterHelper(tail(lst), func)) }
-       else { filterHelper(tail(lst), func) }
+define makeAttributes: [String] attrNames, [String] attrValues -> String {
+  let String fName = first(attrNames),
+      String fValue = first(attrValues),
+      [String] restNames = tail(attrNames),
+      [String] restValues = tail(attrValues),
+      String attr = append(fName, "=", fValue)
+      {
+    ""
+  }
 }

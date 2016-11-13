@@ -1,3 +1,12 @@
 define main: -> Int {
+  print("AddOne map: ")
+  printLn(map([1, 2, 3, 4], addOne))
+
+  print("Even filter: ")
+  printLn(filter([1, 2, 3, 4, 5, 6], even))
   0
+}
+
+define addOne: Int a -> Int {
+  a + 1
 }

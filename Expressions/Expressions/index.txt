@@ -1,9 +1,12 @@
-example1: Some function definitions, recursion and if-statements
-example2: Switch case, along with string and character
-example3: List tests, along with some list function testing
-example4: Custom types
-example5: Custom types and functions inside and with these
-example6: Side conditions and I/O
-example7: Some strings
-example8: Generic testing, along with some useful functions written using generics
-example9: 
+example1:   Some function definitions, recursion and if-statements
+example2:   Switch case, along with string and character
+example3:   List tests, along with some list function testing
+example4:   Custom types
+example5:   Custom types and functions inside and with these
+example6:   Side conditions and I/O
+example7:   Some strings
+example8:   Generic testing, along with some useful functions written using generics
+example9:   Higher order functions
+example10:  Variadic functions
+
+html:       Some HTML functions

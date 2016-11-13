@@ -16,6 +16,7 @@
 		AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */; };
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
 		AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BBE1DCBF27E0025FE27 /* example9.expr */; };
+		AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA3C72561DD8C80F00FD75DF /* example10.expr */; };
 		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
 		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -48,6 +49,7 @@
 				AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */,
 				AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */,
 				AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */,
+				AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */,
 				AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */,
 				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
@@ -73,6 +75,7 @@
 		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
+		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -147,6 +150,7 @@
 				AA0D9BB61DCBBDA80025FE27 /* example7.expr */,
 				AA09F75A1DC7E980009A9900 /* example8.expr */,
 				AA0D9BBE1DCBF27E0025FE27 /* example9.expr */,
+				AA3C72561DD8C80F00FD75DF /* example10.expr */,
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 				AAE992671DD87FC800DF8CA5 /* html.expr */,

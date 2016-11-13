@@ -160,6 +160,16 @@ std::vector<T> append(const std::vector<T> lst, const std::vector<T> newObjs) {
     return tmp;
 }
 template<typename T>
+std::vector<T> append(const T obj1, const T obj2) {
+    std::vector<T> tmp;
+    tmp.push_back(obj1);
+    tmp.push_back(obj2);
+    
+    return tmp;
+}
+
+// Stjålet
+template<typename T>
 void append_to_vector(std::vector<T>& v1, const std::vector<T>& v2) {
     for (auto& e : v2) v1.push_back(e);
 }

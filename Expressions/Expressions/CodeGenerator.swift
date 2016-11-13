@@ -381,11 +381,7 @@ class CodeGenerator {
             }
         }
         
-        var str = identifier
-        str += "("
-        str += parString
-        str += ")"
-        
+        let str = identifier+"("+parString+")"
         return str
     }
     
@@ -393,6 +389,7 @@ class CodeGenerator {
     // (Array and String literals are easier to handle as declarations, than they are in the calls, I think.)
     // Example: myFunc([1, 2, 3]) -> std::vector<int> tmp = {1, 2, 3}; myFunc(tmp);
     private func createFunctionCallParameterDeclarations(expr: Node) -> String {
+        
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let fc = expr as? FunctionCallNode, let ident = fc.identifier else { return "" }
 
@@ -400,7 +397,7 @@ class CodeGenerator {
             // Iterate parameters (Some might need to be changed)
             for n in 0 ..< fc.parameters.count {
                 let par = fc.parameters[n]
-            
+                
                 // ArrayLiterals are replaced
                 if par is ArrayLiteralNode {
                     guard let par = par as? ArrayLiteralNode else { continue }
@@ -470,6 +467,31 @@ class CodeGenerator {
                 return str
             }
         }
+        else if expr is LetNode {
+            guard let expr = expr as? LetNode else { return "" }
+            var str = ""
+            for v in expr.vars {
+                guard let vnode = v.value else { continue }
+                str += createFunctionCallParameterDeclarations(expr: vnode)
+            }
+            
+            return str
+        }
+        else if expr is IfElseNode {
+            guard let expr = expr as? IfElseNode, let econd = expr.condition else { return "" }
+            return createFunctionCallParameterDeclarations(expr: econd)
+        }
+        else if expr is SwitchNode {
+            guard let expr = expr as? SwitchNode else { return "" }
+            var str = ""
+            
+            for c in expr.cases {
+                guard let cexpr = c.expr else { continue }
+                str += createFunctionCallParameterDeclarations(expr: cexpr)
+            }
+            
+            return str
+        }
         
         return ""
     }
@@ -492,7 +514,7 @@ class CodeGenerator {
             return clearType // Må være objekt
         }
         
-        var str = ""
+        var str = "const "
         
         for i in 0 ..< nested {
             str += "std::vector<"
