@@ -305,9 +305,11 @@ class CodeGenerator {
             guard let tmpType = par.type, let name = par.name else { continue }
             
             if tmpType is NormalTypeNode { // Normal type, just 'Type Name'
-                let type = createTypeString(type: tmpType as! NormalTypeNode)
-                str += type+" "+name
+                str += createTypeString(type: tmpType as! NormalTypeNode)
 
+                if !par.variadic {
+                    str += " "+name
+                }
             }
             else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
                 let retType = createFunctionTypeString(type: tmpType as! FunctionTypeNode, context: .preName)
@@ -383,13 +385,14 @@ class CodeGenerator {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let fc = expr as? FunctionCallNode, let ident = fc.identifier else { return "" }
 
+            var str = ""
             // Iterate parameters (Some might need to be changed)
             for n in 0 ..< fc.parameters.count {
                 let par = fc.parameters[n]
             
                 // ArrayLiterals are replaced
                 if par is ArrayLiteralNode {
-                    guard let par = par as? ArrayLiteralNode else { return "" }
+                    guard let par = par as? ArrayLiteralNode else { continue }
                     
                     // Create a new name and refer it to itself in translation
                     let newName = ParserTables.shared.generateNewVariableName()
@@ -418,11 +421,10 @@ class CodeGenerator {
                         }
                     }
                     
-                    let str = type+" "+newName+" = "+createArrayLiteral(lit: par)+";"
-                    return str
+                    str += type+" "+newName+" = "+createArrayLiteral(lit: par)+";"
                 }
                 else if par is StringLiteralNode { // String literal used as parameter, replace with std::vector<char>
-                    guard let par = par as? StringLiteralNode else { return "" }
+                    guard let par = par as? StringLiteralNode else { continue }
                     
                     // Create a new name and refer it to itself in translation
                     let newName = ParserTables.shared.generateNewVariableName()
@@ -432,13 +434,14 @@ class CodeGenerator {
                     let replacementNode = VariableNode(identifier: newName)
                     fc.parameters[n] = replacementNode
                     
-                    let str = "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";"
-                    return str
+                    str += "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";"
                 }
                 else if par is FunctionCallNode {
-                    return createFunctionCallParameterDeclarations(expr: par)
+                    str += createFunctionCallParameterDeclarations(expr: par)
                 }
             }
+            
+            return str
         }
         else if expr is ParenthesesExpression { // Possibly containing a function call
             if let tmp = (expr as! ParenthesesExpression).expression {
@@ -510,7 +513,7 @@ class CodeGenerator {
         case postName
     }
     
-    // Creates a function type string (Other syntax than nnormal types)
+    // Creates a function type string (Other syntax than normal types)
     private func createFunctionTypeString(type: FunctionTypeNode, context: FunctionTypeContext) -> String {
         
         if context == .preName {

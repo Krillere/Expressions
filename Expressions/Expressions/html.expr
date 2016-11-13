@@ -1,0 +1,15 @@
+define main: -> Int {
+  printLn(makeTag("p", [], [], ["asd"]))
+  0
+}
+
+define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
+  append("<", tag " ", makeAttributtes(attrNames, attrValues), ">")
+}
+define makeAttributtes: [String] attrNames, [String] attrValues -> String {
+  ""
+}
+
+define myMap: [Generic] items, (Generic -> Generic) func -> [Generic] {
+  0
+}

@@ -22,6 +22,7 @@
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE991DC53E3D0035F875 /* example3.expr */; };
+		AAE992681DD8805F00DF8CA5 /* html.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAE992671DD87FC800DF8CA5 /* html.expr */; };
 		AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */; };
 		AAEAC02B1DC4E9E200989910 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0221DC4E9E200989910 /* main.swift */; };
 		AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0231DC4E9E200989910 /* Nodes.swift */; };
@@ -41,6 +42,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				AAE992681DD8805F00DF8CA5 /* html.expr in CopyFiles */,
 				AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */,
 				AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */,
 				AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */,
@@ -76,6 +78,7 @@
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
 		AAB4EE961DC52DE80035F875 /* std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = std.cpp; sourceTree = "<group>"; };
 		AAB4EE991DC53E3D0035F875 /* example3.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example3.expr; sourceTree = "<group>"; };
+		AAE992671DD87FC800DF8CA5 /* html.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = html.expr; sourceTree = "<group>"; };
 		AAEAC0151DC4E9CA00989910 /* Expressions */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Expressions; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		AAEAC0221DC4E9E200989910 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 				AA0D9BBE1DCBF27E0025FE27 /* example9.expr */,
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
+				AAE992671DD87FC800DF8CA5 /* html.expr */,
 			);
 			name = "Code examples (Tests)";
 			sourceTree = "<group>";

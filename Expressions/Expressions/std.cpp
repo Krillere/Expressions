@@ -26,6 +26,8 @@ std::vector<T> list(T obj);
 template<typename T>
 std::vector<T> append(const std::vector<T> lst, T obj);
 template<typename T>
+std::vector<T> append(const std::vector<T> lst, const std::vector<T> newObjs);
+template<typename T>
 T first(const std::vector<T> obj);
 template<typename T>
 T last(const std::vector<T> obj);
@@ -63,6 +65,8 @@ std::vector<char> convertToString(int i);
 std::vector<char> convertToString(float f);
 std::vector<char> convertToString(char c);
 std::vector<std::vector<char>> CLArguments();
+template<typename T>
+std::vector<T> map(const std::vector<T> lst, T (*func)(T));
 
 // Print
 template<typename T>
@@ -149,6 +153,33 @@ std::vector<T> append(const std::vector<T> lst, T obj) {
     tmp.push_back(obj);
     
     return tmp;
+}
+template<typename T>
+std::vector<T> append(const std::vector<T> lst, const std::vector<T> newObjs) {
+    std::vector<T> tmp(lst);
+    tmp.insert(tmp.end(), newObjs.begin(), newObjs.end());
+    
+    return tmp;
+}
+template<typename T>
+void append_to_vector(std::vector<T>& v1, const std::vector<T>& v2) {
+    for (auto& e : v2) v1.push_back(e);
+}
+template<typename T, typename... A>
+void append_aux(std::vector<T>& v1, const std::vector<T>& v2) {
+    append_to_vector(v1, v2);
+}
+
+template<typename T, typename... A>
+void append_aux(std::vector<T>& v1, const std::vector<T>& v2, const A&... vr) {
+    append_to_vector(v1, v2);
+    append_aux(v1, vr...);
+}
+
+template<typename T, typename... A>
+std::vector<T> append(std::vector<T> v1, const A&... vr) {
+    append_aux(v1, vr...);
+    return v1;
 }
 
 // First
@@ -285,4 +316,16 @@ std::vector<char> convertToString(char c) {
 // Command line arguments (Created as function, because 'global variables' does not exist in Expressions (Kinda))
 std::vector<std::vector<char>> CLArguments() {
     return internal_arguments;
+}
+
+template<typename T>
+std::vector<T> map(const std::vector<T> lst, T (*func)(T)) {
+    std::vector<T> tmp;
+    
+    for(int n = 0; n < lst.size(); n++) {
+        T obj = lst[n];
+        tmp.push_back(func(obj));
+    }
+    
+    return tmp;
 }
