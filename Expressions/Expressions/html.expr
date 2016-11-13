@@ -1,18 +1,5 @@
 define main: -> Int {
-  printLn(makeTag("p", ["class"], ["myClass"], ["asd"]))
-  0
-}
-
-define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
-  append("<", tag " ", makeAttributes(attrNames, attrValues), ">")
-}
-define makeAttributes: [String] attrNames, [String] attrValues -> String {
-  let String fName = first(attrNames),
-      String fValue = first(attrValues),
-      [String] restNames = tail(attrNames),
-      [String] restValues = tail(attrValues),
-      String attr = append(fName, "=", fValue)
-      {
-    ""
-  }
+    let String tmp = "=\" asd" {
+      0
+    }
 }

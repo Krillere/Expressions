@@ -196,13 +196,29 @@ class Scanner {
         var stringContent = ""
         
         char = get()
+        var escape = false
         while char != "\"" {
             
             stringContent.append(Character(char))
             char = get()
+            
+            if char == "\"" && escape == true {
+                stringContent.append(Character(char))
+                char = get()
+                
+                escape = false
+            }
+            
+            if char == "\\" {
+                escape = true
+            }
+            
+            // Error
+            if char == UnicodeScalar(1) {
+                print("Error in scanning.")
+                break
+            }
         }
-        
-        print("Stoppet ved '\(peek())', fandt: '\(stringContent)'")
         
         return stringContent
     }
@@ -473,7 +489,7 @@ class Scanner {
             break
                 
             default:
-                print("Dropper \(char)")
+                print("Ignores '\(char)' (Probably due to an error)")
                 token = Token.emptyToken(inputIndex)
                 break
             }

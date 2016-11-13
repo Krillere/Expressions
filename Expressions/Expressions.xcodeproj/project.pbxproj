@@ -76,6 +76,7 @@
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
+		AA3C72581DD8D32900FD75DF /* stupidparser.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stupidparser.expr; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -154,6 +155,7 @@
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 				AAE992671DD87FC800DF8CA5 /* html.expr */,
+				AA3C72581DD8D32900FD75DF /* stupidparser.expr */,
 			);
 			name = "Code examples (Tests)";
 			sourceTree = "<group>";
