@@ -271,26 +271,19 @@ filter(lst, func) # Tests each element in 'lst' against 'func', if true, then it
 ## Higher order functions
 Map and filter functions exists in Expressions. They are defined as such:
 ```
-# Map function
+# Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
-  mapHelper(items, func)
-}
-# Applies function to each object and returns them
-define mapHelper: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
-                 { append(list(func(first(items))), mapHelper(tail(items), func)) }
+                 { append(list(func(first(items))), map(tail(items), func)) }
 }
 
-# Filter function
+# Filter function (Tests each object using 'func', if true, add to list)
 define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
-  filterHelper(lst, func)
+  switch null(lst)        { [] } # Stop if empty
+         func(first(lst)) { append(list(first(lst)), filter(tail(lst), func)) }
+         else             { filter(tail(lst), func) }
 }
-# Tests each element against 'func', appens to list of result of 'func' is true
-define filterHelper: [Generic] lst, (Generic -> Bool) func -> [Generic] {
-  switch null(lst) { [] } # Stop if empty
-         func(first(lst)) { append(list(first(lst)), filterHelper(tail(lst), func)) }
-         else { filterHelper(tail(lst), func) }
-}
+
 ```
 
 A simple map example is:
@@ -304,11 +297,11 @@ map([1, 2, 3, 4], addOne) # Returns: [2, 3, 4, 5]
 
 A simple filter example:
 ```
-define isOne: Int a -> Bool {
-  a == 1
+define even: Int a -> Bool {
+  (a % 2) == 0
 }
 
-filter([1, 2, 1, 3, 1], isOne) # Returns: [1, 1, 1]
+filter([1, 2, 3, 4, 5, 6], even) # Returns: [2, 4, 6]
 ```
 
 ## Side conditions
