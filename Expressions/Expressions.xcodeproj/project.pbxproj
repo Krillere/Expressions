@@ -17,6 +17,7 @@
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
 		AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BBE1DCBF27E0025FE27 /* example9.expr */; };
 		AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA3C72561DD8C80F00FD75DF /* example10.expr */; };
+		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
 		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
 		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -77,6 +78,7 @@
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C72581DD8D32900FD75DF /* stupidparser.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stupidparser.expr; sourceTree = "<group>"; };
+		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -108,6 +110,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA3C72591DD8DC1000FD75DF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		AAEAC00C1DC4E9CA00989910 = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +138,7 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				AA3C72591DD8DC1000FD75DF /* Extensions */,
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
 				AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */,
@@ -264,6 +275,7 @@
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,
 				AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */,
+				AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */,
 				AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

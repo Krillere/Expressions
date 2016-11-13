@@ -1,5 +1,6 @@
 define main: -> Int {
     let String tmp = "=\" asd" {
+      print(tmp)
       0
     }
 }

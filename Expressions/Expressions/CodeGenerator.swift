@@ -580,8 +580,25 @@ class CodeGenerator {
         var str = "{"
 
         var n = 0
-        for c in litContent.characters {
-            str += "'"+String(c)+"'"
+        while n < litContent.characters.count {
+            let c = litContent.charAt(index: n)
+            
+            // Escaping something?
+            if c == "\\" {
+                let nc = litContent.charAt(index: n+1)
+                
+                if nc == "\"" { // Quote, no need to escape
+                    str += "'"+String(nc)+"'"
+                }
+                else { // Something else, like \n, \t and so.
+                    str += "'"+String(c)+String(nc)+"'"
+                }
+                
+                n += 1
+            }
+            else { // Regular char
+                str += "'"+String(c)+"'"
+            }
             
             if n != litContent.characters.count-1 {
                 str += ", "
