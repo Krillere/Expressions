@@ -287,7 +287,7 @@ class CodeGenerator {
             }
             else { // Function parameter
                 guard let ptype = par.type as? FunctionTypeNode else { continue }
-                print("Funktionsparameter!")
+                
                 let retType = createFunctionTypeString(type: ptype, context: .preName)
                 let inp = createFunctionTypeString(type: ptype, context: .postName)
                 vecPars += retType+" "+pname+inp

@@ -1,3 +1,24 @@
 define factorial: Int num -> Int {
   if num <= 1 { 1 } { num * factorial(num-1) }
 }
+
+# Map function
+define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
+  mapHelper(items, func)
+}
+# Applies function to each object and returns them
+define mapHelper: [Generic] items, (Generic -> Generic) func -> [Generic] {
+  if null(items) { [] }
+                 { append(list(func(first(items))), mapHelper(tail(items), func)) }
+}
+
+# Filter function
+define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+  filterHelper(lst, func)
+}
+# Tests each element against 'func', appens to list of result of 'func' is true
+define filterHelper: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+  switch null(lst) { [] } # Stop if empty
+         func(first(lst)) { append(list(first(lst)), filterHelper(tail(lst), func)) }
+         else { filterHelper(tail(lst), func) }
+}

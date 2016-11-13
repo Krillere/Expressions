@@ -65,8 +65,6 @@ std::vector<char> convertToString(int i);
 std::vector<char> convertToString(float f);
 std::vector<char> convertToString(char c);
 std::vector<std::vector<char>> CLArguments();
-template<typename T>
-std::vector<T> map(const std::vector<T> lst, T (*func)(T));
 
 // Print
 template<typename T>
@@ -316,16 +314,4 @@ std::vector<char> convertToString(char c) {
 // Command line arguments (Created as function, because 'global variables' does not exist in Expressions (Kinda))
 std::vector<std::vector<char>> CLArguments() {
     return internal_arguments;
-}
-
-template<typename T>
-std::vector<T> map(const std::vector<T> lst, T (*func)(T)) {
-    std::vector<T> tmp;
-    
-    for(int n = 0; n < lst.size(); n++) {
-        T obj = lst[n];
-        tmp.push_back(func(obj));
-    }
-    
-    return tmp;
 }

@@ -1,5 +1,6 @@
 define main: -> Int {
   printLn(makeTag("p", [], [], ["asd"]))
+  printLn(filter([1, 2, 1], isOne))
   0
 }
 
@@ -10,6 +11,11 @@ define makeAttributtes: [String] attrNames, [String] attrValues -> String {
   ""
 }
 
-define myMap: [Generic] items, (Generic -> Generic) func -> [Generic] {
-  0
+define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+  filterHelper(lst, func)
+}
+define filterHelper: [Generic] lst, (Generic -> Bool) func -> [Generic] {
+switch null(lst) { [] } # Stop if empty
+       func(first(lst)) { append(list(first(lst)), filterHelper(tail(lst), func)) }
+       else { filterHelper(tail(lst), func) }
 }

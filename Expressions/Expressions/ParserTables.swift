@@ -18,7 +18,7 @@ class ParserTables {
     var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
     
     // Builtin functions
-    var functions:[String] = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat", "CLArguments", "map"]
+    var functions:[String] = ["print", "printLn", "append", "list", "first", "last", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "null", "main", "isInteger", "isFloat", "isCharacter", "isString", "convertToString", "convertToInt", "convertToCharacter", "convertToFloat", "CLArguments", "map", "filter"]
     
     // User defined types
     var types:[String] = []
@@ -27,7 +27,7 @@ class ParserTables {
     var functionDeclarations:[String:FunctionNode] = [:]
     
     // Generic function identifiers
-    var genericFunctionNames:[String] = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString", "map"]
+    var genericFunctionNames:[String] = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString", "map", "filter"]
     
     // Example: myInteger -> aB417asdbei (Generated using 'generateNewVariableName')
     var nameTranslation:[String : String] = [:]
