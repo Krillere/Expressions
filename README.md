@@ -205,6 +205,7 @@ define main: -> Int {
 Functions to handle lists:
 ```
 length(list) # Returns the length of a list
+null(lst) # true of list is empty
 
 first(list) # Returns the first object in the list
 last(list) # Returns the last object in the list
@@ -217,8 +218,10 @@ take(list, num) # Returns 'num' items from list
 
 list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
-append(lst, obj) # Adds 'obj' to the end of 'lst'
-null(lst) # true of list is empty
+
+append(lst, obj) # Appends 'obj' to the end of 'lst'
+append(lst, listObj) # Appends all the objects from 'listObj' to the end of 'lst'
+
 ```
 
 Functions for type checking:
@@ -253,6 +256,7 @@ convertToString(Char)
 Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
+factorial(num) # Returns the factorial value of 'num'
 ```
 
 ## Side conditions
