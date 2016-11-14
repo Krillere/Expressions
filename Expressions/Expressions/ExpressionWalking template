@@ -1,0 +1,43 @@
+private func fixVariadicFunctions(expr: Node) {
+if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
+guard let fc = expr as? FunctionCallNode,
+let ident = fc.identifier else { return }
+
+// Iterate parameters (Some might need to be changed)
+for n in 0 ..< fc.parameters.count {
+let par = fc.parameters[n]
+
+
+}
+}
+else if expr is ParenthesesExpression { // Possibly containing a function call
+if let tmp = (expr as! ParenthesesExpression).expression {
+fixVariadicFunctions(expr: tmp)
+}
+}
+else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
+guard let expr = expr as? ExpressionNode else { return }
+if let exp1 = expr.loperand, let exp2 = expr.roperand {
+fixVariadicFunctions(expr: exp1)
+fixVariadicFunctions(expr: exp2)
+}
+}
+else if expr is LetNode {
+guard let expr = expr as? LetNode else { return }
+for v in expr.vars {
+guard let vnode = v.value else { continue }
+fixVariadicFunctions(expr: vnode)
+}
+}
+else if expr is IfElseNode {
+guard let expr = expr as? IfElseNode, let econd = expr.condition else { return }
+fixVariadicFunctions(expr: econd)
+}
+else if expr is SwitchNode {
+guard let expr = expr as? SwitchNode else { return }
+for c in expr.cases {
+guard let cexpr = c.expr else { continue }
+fixVariadicFunctions(expr: cexpr)
+}
+}
+}

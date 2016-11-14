@@ -76,6 +76,7 @@
 		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
+		AA0F7FBB1DDA508000C77C97 /* ExpressionWalking template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ExpressionWalking template"; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C72581DD8D32900FD75DF /* stupidparser.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stupidparser.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -110,6 +111,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA0F7FBA1DDA507300C77C97 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				AA0F7FBB1DDA508000C77C97 /* ExpressionWalking template */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
 		AA3C72591DD8DC1000FD75DF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +147,7 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				AA0F7FBA1DDA507300C77C97 /* Misc */,
 				AA3C72591DD8DC1000FD75DF /* Extensions */,
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,

@@ -23,5 +23,6 @@ define myFunc3: Int a, Int b, Int ... var -> Int {
   0
 }
 define add: Int ... var -> Int {
-   first(var) + add(tail(var))
+  if null(var) { 0 }
+               { first(var) + add(tail(var)) }
 }

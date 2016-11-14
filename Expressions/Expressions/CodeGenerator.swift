@@ -357,6 +357,9 @@ class CodeGenerator {
         // Create expressions in block
         for expr in block.expressions {
             
+            // Variadic parameters -> [lists]
+            fixVariadicFunctions(expr: expr)
+            
             // Do we need to declare something before the expression? (Function call parameters are declared before the call)
             str += createFunctionCallParameterDeclarations(expr: expr)
             
@@ -371,56 +374,100 @@ class CodeGenerator {
     
     
     // MARK: Function calls
-    // Laver funktionskald - name "(" [expr] ")"
+    // Creates a function call - name "(" [expr] ")"
     private func createFunctionCall(call: FunctionCallNode) -> String {
         guard let identifier = call.identifier else { return "" }
         
         var parString = ""
         
-        // Expression function call (Possibly variadic -> list)
-        if let funcNode = ParserTables.shared.functionDeclarations[identifier] {
-            for n in 0 ..< funcNode.pars.count {
-                let decPar = funcNode.pars[n]
-                
-                if decPar.variadic {
-                    if n == call.parameters.count { // Bail if no variadic arguments are present
-                        parString += "{}"
-                        break
-                    }
-                    
-                    // Create array literal with variadic arguments
-                    for i in n ..< call.parameters.count {
-                        let par = call.parameters[i]
-                        print("I '\(identifier)', er \(par) variadic parameter!")
-                    }
-                    
-                    break
-                }
-                else { // Almindeligt parameter
-                    let par = call.parameters[n]
-                    let expr = createExpression(expr: par)
-                    parString += expr
-                }
-                
-                if n != funcNode.pars.count-1 {
-                    parString += ", "
-                }
-            }
-        }
-        else { // Direct c++ function call
-            for n in 0 ..< call.parameters.count {
-                let par = call.parameters[n]
-                let expr = createExpression(expr: par)
-                parString += expr
-                
-                if n != call.parameters.count-1 {
-                    parString += ", "
-                }
+        for n in 0 ..< call.parameters.count {
+            let par = call.parameters[n]
+            let expr = createExpression(expr: par)
+            parString += expr
+            
+            if n != call.parameters.count-1 {
+                parString += ", "
             }
         }
         
         let str = identifier+"("+parString+")"
         return str
+    }
+    
+    // Transforms variadic parameters to array literals
+    private func fixVariadicFunctions(expr: Node) {
+        if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
+            guard let call = expr as? FunctionCallNode,
+                let identifier = call.identifier else { return }
+            
+            for par in call.parameters {
+                if par is FunctionCallNode {
+                    fixVariadicFunctions(expr: par)
+                }
+            }
+            
+            // funcNode is the functionDeclaration
+            guard let funcNode = ParserTables.shared.functionDeclarations[identifier] else { return }
+            
+            for n in 0 ..< funcNode.pars.count {
+                let decPar = funcNode.pars[n]
+                
+                if decPar.variadic {
+                    var litCont:[Node] = []
+                    
+                    if n == call.parameters.count { // Bail if no variadic arguments are present
+                    }
+                    else {
+                        for i in n ..< call.parameters.count {
+                            let par = call.parameters[i]
+                            litCont.append(par)
+                        }
+                    }
+                    
+                    // Create array literal with variadic arguments
+                    let newLit = ArrayLiteralNode(nodes: litCont)
+                    var newCallPars:[Node] = []
+                    for i in 0 ..< n {
+                        newCallPars.append(call.parameters[i])
+                    }
+                    newCallPars.append(newLit)
+                    call.parameters = newCallPars
+                    
+                    break
+                }
+            }
+
+        }
+        else if expr is ParenthesesExpression { // Possibly containing a function call
+            if let tmp = (expr as! ParenthesesExpression).expression {
+                fixVariadicFunctions(expr: tmp)
+            }
+        }
+        else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
+            guard let expr = expr as? ExpressionNode else { return }
+            if let exp1 = expr.loperand, let exp2 = expr.roperand {
+                fixVariadicFunctions(expr: exp1)
+                fixVariadicFunctions(expr: exp2)
+            }
+        }
+        else if expr is LetNode {
+            guard let expr = expr as? LetNode else { return }
+            for v in expr.vars {
+                guard let vnode = v.value else { continue }
+                fixVariadicFunctions(expr: vnode)
+            }
+        }
+        else if expr is IfElseNode {
+            guard let expr = expr as? IfElseNode, let econd = expr.condition else { return }
+            fixVariadicFunctions(expr: econd)
+        }
+        else if expr is SwitchNode {
+            guard let expr = expr as? SwitchNode else { return }
+            for c in expr.cases {
+                guard let cexpr = c.expr else { continue }
+                fixVariadicFunctions(expr: cexpr)
+            }
+        }
     }
     
     // Called in 'createBlock', as to declare variables in function calls before the function call itself, at the start of a block
@@ -429,7 +476,8 @@ class CodeGenerator {
     private func createFunctionCallParameterDeclarations(expr: Node) -> String {
         
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
-            guard let fc = expr as? FunctionCallNode, let ident = fc.identifier else { return "" }
+            guard let fc = expr as? FunctionCallNode,
+                  let ident = fc.identifier else { return "" }
 
             var str = ""
             // Iterate parameters (Some might need to be changed)
@@ -462,7 +510,12 @@ class CodeGenerator {
                             //print("Funktionen \(ident) er ikke generisk, finder type i declaration!")
                             
                             if let defParType = functionDecl.pars[n].type as? NormalTypeNode {
-                                type = createTypeString(type: defParType)
+                                if functionDecl.pars[n].variadic {
+                                    type = "std::vector<"+createTypeString(type: defParType)+">"
+                                }
+                                else {
+                                    type = createTypeString(type: defParType)
+                                }
                             }
                         }
                     }
