@@ -68,6 +68,8 @@ class Token : CustomStringConvertible {
 }
 
 class Scanner {
+    var owner:Parser?
+    
     // Char classes
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
@@ -199,6 +201,10 @@ class Scanner {
         var escape = false
         while char != "\"" {
             
+            if char == "\\" {
+                escape = true
+            }
+            
             stringContent.append(Character(char))
             char = get()
             
@@ -215,7 +221,9 @@ class Scanner {
             
             // Error
             if char == UnicodeScalar(1) {
-                print("Error in scanning.")
+                if let owner = self.owner {
+                    owner.error("Error while scanning string literal")
+                }
                 break
             }
         }
@@ -227,6 +235,13 @@ class Scanner {
     func removeComment() {
         while char != "\n" {
             char = get()
+            
+            if char == UnicodeScalar(1) {
+                if let owner = self.owner {
+                    owner.error("Error while scanning comment")
+                }
+                break
+            }
         }
     }
     

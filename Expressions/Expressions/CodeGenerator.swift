@@ -316,10 +316,15 @@ class CodeGenerator {
             guard let tmpType = par.type, let name = par.name else { continue }
             
             if tmpType is NormalTypeNode { // Normal type, just 'Type Name'
-                str += createTypeString(type: tmpType as! NormalTypeNode)
-
+                
                 if !par.variadic {
-                    str += " "+name
+                    str += createTypeString(type: tmpType as! NormalTypeNode)+" "+name
+                }
+                else { // Variadic
+                    let fix = (tmpType as! NormalTypeNode).copy() as! NormalTypeNode
+                    fix.numNested = 1
+                    
+                    str += createTypeString(type: fix)+" "+name
                 }
             }
             else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
@@ -371,13 +376,46 @@ class CodeGenerator {
         guard let identifier = call.identifier else { return "" }
         
         var parString = ""
-        for n in 0 ..< call.parameters.count {
-            let par = call.parameters[n]
-            let expr = createExpression(expr: par)
-            parString += expr
-            
-            if n != call.parameters.count-1 {
-                parString += ", "
+        
+        // Expression function call (Possibly variadic -> list)
+        if let funcNode = ParserTables.shared.functionDeclarations[identifier] {
+            for n in 0 ..< funcNode.pars.count {
+                let decPar = funcNode.pars[n]
+                
+                if decPar.variadic {
+                    if n == call.parameters.count { // Bail if no variadic arguments are present
+                        parString += "{}"
+                        break
+                    }
+                    
+                    // Create array literal with variadic arguments
+                    for i in n ..< call.parameters.count {
+                        let par = call.parameters[i]
+                        print("I '\(identifier)', er \(par) variadic parameter!")
+                    }
+                    
+                    break
+                }
+                else { // Almindeligt parameter
+                    let par = call.parameters[n]
+                    let expr = createExpression(expr: par)
+                    parString += expr
+                }
+                
+                if n != funcNode.pars.count-1 {
+                    parString += ", "
+                }
+            }
+        }
+        else { // Direct c++ function call
+            for n in 0 ..< call.parameters.count {
+                let par = call.parameters[n]
+                let expr = createExpression(expr: par)
+                parString += expr
+                
+                if n != call.parameters.count-1 {
+                    parString += ", "
+                }
             }
         }
         
@@ -385,7 +423,7 @@ class CodeGenerator {
         return str
     }
     
-    // Called in 'createBlock', as to declare variables in function calls before the function call itself.
+    // Called in 'createBlock', as to declare variables in function calls before the function call itself, at the start of a block
     // (Array and String literals are easier to handle as declarations, than they are in the calls, I think.)
     // Example: myFunc([1, 2, 3]) -> std::vector<int> tmp = {1, 2, 3}; myFunc(tmp);
     private func createFunctionCallParameterDeclarations(expr: Node) -> String {
@@ -417,7 +455,7 @@ class CodeGenerator {
                     }
                     else { // 'Normal' function
                         if let functionDecl = ParserTables.shared.functionDeclarations[ident] {
-                            if n > functionDecl.pars.count {
+                            if n >= functionDecl.pars.count {
                                 break
                             }
                             
@@ -595,6 +633,9 @@ class CodeGenerator {
                 }
                 
                 n += 1
+            }
+            else if c == "'" {
+                str += "'\''"
             }
             else { // Regular char
                 str += "'"+String(c)+"'"

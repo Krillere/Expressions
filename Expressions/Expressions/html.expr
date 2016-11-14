@@ -1,6 +1,38 @@
 define main: -> Int {
-    let String tmp = "=\" asd" {
-      print(tmp)
-      0
+  printLn(makeTag("p", ["class", "id"], ["myClass", "myID"], ["content"]))
+  printLn(head([title(["myTitle"])]))
+  0
+}
+define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
+  append("<", tag, makeAttributes(attrNames, attrValues), ">", makeContents(content), "</", tag, ">")
+}
+
+define makeAttributes: [String] attrNames, [String] attrValues -> String {
+  if null(attrNames) OR null(attrValues) { "" }
+  {
+    let String fName = first(attrNames),
+    String fValue = first(attrValues),
+    String attr = append(" ", fName, "=\"", fValue, "\"")
+    {
+      append(attr, makeAttributes(tail(attrNames), tail(attrValues)))
     }
+  }
+}
+define makeContents: [String] content -> String {
+  if null(content) { "" }
+                   { first(content) }
+}
+
+# Wrappers
+define html: [String] content -> String {
+  makeTag("html", [], [], content)
+}
+define head: [String] content -> String {
+  makeTag("head", [], [], content)
+}
+define body: [String] content -> String {
+  makeTag("body", [], [], content)
+}
+define title: [String] content -> String {
+  makeTag("title", [], [], content)
 }

@@ -237,6 +237,12 @@ class NumberLiteralNode : Node, CustomStringConvertible {
     }
     
     var description: String {
+        if intValue != nil {
+            return String(intValue!)
+        }
+        if floatValue != nil {
+            return String(floatValue!)
+        }
         return "Tal"
     }
 }

@@ -1,3 +1,27 @@
 define main: -> Int {
+  print("AddAll: ")
+  printLn(add(1, 2, 3, 4, 5))
+
+  print("myFunc2: ")
+  printLn(myFunc2(1, 2, 2, 2))
+
+  print("myFunc3: ")
+  printLn(myFunc3(1, 1, 2, 2, 2))
+
+  print("myFunc32: ")
+  printLn(myFunc3(1, 1))
+
   0
+}
+define myFunc: Int ... var -> Int {
+  0
+}
+define myFunc2: Int a, Int ... var -> Int {
+  0
+}
+define myFunc3: Int a, Int b, Int ... var -> Int {
+  0
+}
+define add: Int ... var -> Int {
+   first(var) + add(tail(var))
 }

@@ -30,6 +30,7 @@ class Parser {
         code += input
         
         self.scanner = Scanner(input: code)
+        self.scanner.owner = self
     }
     
     // Runs the parser on the input.
@@ -190,14 +191,16 @@ class Parser {
             
             // Regular parameter (type name)
             let type = parseType()
+            var variadic = false
+            
+            if scanner.peekToken().type == .ellipsis {
+                let _ = scanner.getToken()
+                variadic = true
+            }
             let name = scanner.getToken()
             
             let parNode = ParameterNode(type: type, name: name.content)
-            if type is NormalTypeNode {
-                if (type as! NormalTypeNode).clearType == "..." {
-                    parNode.variadic = true
-                }
-            }
+            parNode.variadic = variadic
             
             res.append(parNode)
         }
@@ -222,6 +225,10 @@ class Parser {
         var exprs:[Node] = []
         
         while scanner.peekToken().type != .rcurly {
+            
+            if errors.count > 0 {
+                break
+            }
             
             let t = scanner.peekToken().type
             if t == .none {
@@ -508,6 +515,8 @@ class Parser {
             return ExpressionNode(op: op, loperand: opNode, roperand: expr2)
         }
         
+        error("Error parsing expression")
+        
         return Node()
     }
 
@@ -686,7 +695,7 @@ class Parser {
     }
     
     // Creates an error
-    private func error(_ reason: String) {
+    func error(_ reason: String) {
         self.errorOccurred = true
         
         let error = CompilerError(reason: reason, token: scanner.peekToken())
