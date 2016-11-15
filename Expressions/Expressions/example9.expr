@@ -5,8 +5,8 @@ define main: -> Int {
   print("Even filter: ")
   printLn(filter([1, 2, 3, 4, 5, 6], even))
 
-  print("lmap: ")
-  printLn(lmap([1, 2, 3, 4], [4, 3, 2, 1], addNumbers))
+  print("map med to lister: ")
+  printLn(map([1, 2, 3, 4], [4, 3, 2, 1], addNumbers))
   0
 }
 
