@@ -15,7 +15,7 @@ ToDo list:
 - ~~Functions as first-class-citizens~~ (Somewhat done)
 - ~~Generics~~ (Done)
 - ~~Higher order functions~~ (map, filter, simple ones first)
-- Variadic functions
+- ~~Variadic functions~~ (Seems to work)
 - Lambdas
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
@@ -259,6 +259,7 @@ convertToString(Char)
 Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
+
 factorial(num) # Returns the factorial value of 'num'
 even(int) # Returns true if int is even
 odd(int) # Returns true if int is odd
@@ -347,7 +348,12 @@ Variadics are also possible to use in Expressions. This allows a function to tak
 
 An example of a variadic function:
 ```
-define addAll: Int ... ints {
-# Something here
+define add: Int ... var -> Int {
+  if null(var) { 0 }
+               { first(var) + add(tail(var)) }
 }
+
+add(1, 2, 3, 4, 5) # Result is 15
 ```
+
+Consider variadics to be syntactic sugar for a lists as parameters.
