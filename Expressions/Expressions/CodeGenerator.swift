@@ -207,6 +207,9 @@ class CodeGenerator {
                 if retType is NormalTypeNode {
                     type = createTypeString(type: retType as! NormalTypeNode)
                 }
+                else if retType  is FunctionTypeNode {
+                    type = createFunctionTypeString(type: retType as! FunctionTypeNode)
+                }
                 
                 let pars:String = createFunctionParameters(pars: function.pars)
                 

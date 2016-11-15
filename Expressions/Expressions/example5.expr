@@ -12,6 +12,14 @@ define main: -> Int {
   print("ftest med subtract: ")
   printLn(ftest(subtract))
 
+  let (Int, Int -> Int) test = retFunc(1), (Int, Int -> Int) test2 = retFunc(0) {
+    print("test: ")
+    printLn(test(1, 1))
+
+    print("test2: ")
+    printLn(test2(1, 1))
+  }
+
   0 # Can be called with 'add' or 'subtract'
 }
 
@@ -38,4 +46,8 @@ define testing: Int a -> Int {
   let (Int, Int -> Int) addFunc = add {
     a + addFunc(1, 1) # 3
   }
+}
+define retFunc: Int a -> (Int, Int -> Int) {
+  if a == 1 { add }
+            { subtract }
 }
