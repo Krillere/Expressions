@@ -4,15 +4,12 @@ define main: -> Int {
 
   print("Even filter: ")
   printLn(filter([1, 2, 3, 4, 5, 6], even))
+
+  print("lmap: ")
+  printLn(lmap([1, 2, 3, 4], [4, 3, 2, 1], addNumbers))
   0
 }
 
 define addOne: Int a -> Int {
   a + 1
 }
-
-
-#define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
-#  if null(items) { [] }
-#  { first(items1)  }
-#}

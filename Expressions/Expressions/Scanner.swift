@@ -465,7 +465,7 @@ class Scanner {
                 }
                 else {
                     inputIndex -= 1
-                    token = Token(cont: "!", type: .op, charIndex: inputIndex)
+                    token = Token(cont: "!", type: .negate, charIndex: inputIndex)
                 }
             break
                 

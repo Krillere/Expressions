@@ -7,6 +7,10 @@ define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
                  { append(list(func(first(items))), map(tail(items), func)) }
 }
+define lmap: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
+  if (length(items1) != length(items2)) OR null(items1) OR null(items2) { [] }
+  { append(list(func(first(items1), first(items2))), lmap(tail(items1), tail(items2), func))  }
+}
 
 # Filter function (Tests each object using 'func', if true, add to list)
 define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
@@ -20,5 +24,8 @@ define even: Int a -> Bool {
 }
 
 define odd: Int a -> Bool {
-  if even(a) { false } { true }
+  !even(a)
+}
+define addNumbers: Int a, Int b -> Int {
+  a + b
 }

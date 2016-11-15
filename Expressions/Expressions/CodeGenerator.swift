@@ -452,6 +452,10 @@ class CodeGenerator {
                 fixVariadicFunctions(expr: tmp)
             }
         }
+        else if expr is NegateExpression {
+            guard let expr = expr as? NegateExpression, let nested = expr.expression else { return }
+            fixVariadicFunctions(expr: nested)
+        }
         else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
             guard let expr = expr as? ExpressionNode else { return }
             if let exp1 = expr.loperand, let exp2 = expr.roperand {
@@ -592,6 +596,10 @@ class CodeGenerator {
                 
                 return str
             }
+        }
+        else if expr is NegateExpression {
+            guard let expr = expr as? NegateExpression, let nestedExpr = expr.expression else { return "" }
+            return createFunctionCallParameterDeclarations(expr: nestedExpr)
         }
         else if expr is LetNode {
             guard let expr = expr as? LetNode else { return "" }
@@ -887,6 +895,11 @@ class CodeGenerator {
             retString += createParenthesisExpression(expr: (expr as! ParenthesesExpression))
             break
             
+        case is NegateExpression:
+            guard let nested = (expr as! NegateExpression).expression else { break }
+            retString += "!"+createExpression(expr: nested)
+            break
+            
         case is StringLiteralNode:
             retString += createStringLiteral(string: (expr as! StringLiteralNode))
             break
@@ -1056,6 +1069,9 @@ class CodeGenerator {
                 return false
             }
             else if par is ArrayLiteralNode {
+                return false
+            }
+            else if par is NegateExpression {
                 return false
             }
             else {

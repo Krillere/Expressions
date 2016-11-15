@@ -456,6 +456,16 @@ class Parser {
             
             opNode = node
         }
+        else if tmpToken.type == .negate { // ! EXPR
+            let _ = scanner.getToken()
+            let negNode = NegateExpression(expr: parseExpression())
+            
+            if !isNextOp() {
+                return negNode
+            }
+            
+            opNode = negNode
+        }
         else if tmpToken.type == .lpar {
             let t1 = scanner.getToken() // lpar
             if !t1.content.contains("(") {

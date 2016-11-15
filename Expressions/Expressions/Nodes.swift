@@ -276,7 +276,7 @@ class NumberLiteralNode : Node, CustomStringConvertible {
     }
 }
 
-// true || false
+// true or false
 class BooleanLiteralNode : Node, CustomStringConvertible {
     var value:String = "false"
     
@@ -317,7 +317,7 @@ class CharLiteralNode : Node, CustomStringConvertible {
     }
 }
 
-// Accessing a property from a type
+// Accessing a property from a type ( obj.property )
 class PropertyValueNode : Node, CustomStringConvertible {
     var name:String?
     var property:String?
@@ -380,6 +380,21 @@ class ParenthesesExpression: Node, CustomStringConvertible {
     
     var description: String {
         return "(\(self.expression))"
+    }
+}
+
+class NegateExpression: Node, CustomStringConvertible {
+    var expression:Node?
+    
+    init(expr: Node) {
+        super.init()
+        
+        self.expression = expr
+        self.expression?.parent = self
+    }
+    
+    var description: String {
+        return "!\(self.expression)"
     }
 }
 
