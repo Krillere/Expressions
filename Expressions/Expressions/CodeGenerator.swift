@@ -330,8 +330,15 @@ class CodeGenerator {
                 }
             }
             else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
+                
                 let typeString = createFunctionTypeString(type: tmpType as! FunctionTypeNode)
-                str += typeString+" "+name
+                
+                if !par.variadic {
+                    str += typeString+" "+name
+                }
+                else {
+                    str += "std::vector<"+typeString+"> "+name
+                }
             }
             
             if n != pars.count-1 {
@@ -395,7 +402,8 @@ class CodeGenerator {
         return str
     }
     
-    // Transforms variadic parameters to array literals
+    // Transforms variadic parameters to array literals 
+    // Changes the tree, replaces variadic arguments with a ArrayLiteral node instead containing the variadic arguments.
     private func fixVariadicFunctions(expr: Node) {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let call = expr as? FunctionCallNode,
@@ -489,6 +497,10 @@ class CodeGenerator {
                 if par is ArrayLiteralNode {
                     guard let par = par as? ArrayLiteralNode else { continue }
                     
+                    for c in par.contents {
+                        str += createFunctionCallParameterDeclarations(expr: c)
+                    }
+                    
                     // Create a new name and refer it to itself in translation
                     let newName = ParserTables.shared.generateNewVariableName()
                     ParserTables.shared.nameTranslation[newName] = newName
@@ -536,8 +548,30 @@ class CodeGenerator {
                     
                     str += "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";"
                 }
-                else if par is FunctionCallNode {
+                else if par is FunctionCallNode { // Do the same for nested function calls
                     str += createFunctionCallParameterDeclarations(expr: par)
+                }
+                else if par is VariableNode {
+                    guard let par = par as? VariableNode,
+                          let identifier = par.identifier,
+                          let funcDecl = ParserTables.shared.functionDeclarations[ident],
+                          let tryCallingDecl = ParserTables.shared.functionDeclarations[identifier] else { return "" }
+                    
+                    // If this is a function type argument, pre-declare it.
+                    if funcDecl.isFunctionType(index: n) {
+                        
+                        // Create a new name and refer it to itself in translation
+                        let newName = ParserTables.shared.generateNewVariableName()
+                        ParserTables.shared.nameTranslation[newName] = newName
+                        
+                        // Replace literal with reference to variable
+                        let replacementNode = VariableNode(identifier: newName)
+                        fc.parameters[n] = replacementNode
+                        
+                        let tmpStr = createFunctionTypeDefinition(function: tryCallingDecl)+" "+newName+" = "+identifier+";"
+                        str += tmpStr
+                    }
+
                 }
             }
             
@@ -586,6 +620,43 @@ class CodeGenerator {
         }
         
         return ""
+    }
+    
+    func createFunctionTypeDefinition(function: FunctionNode) -> String {
+        guard let retType = function.retType else { return "" }
+        
+        var str = "std::function<"
+        
+        // Ret
+        if retType is NormalTypeNode {
+            str += createTypeString(type: retType as! NormalTypeNode)
+        }
+        else {
+            str += createFunctionTypeString(type: retType as! FunctionTypeNode)
+        }
+        
+        str += "("
+        
+        // Pars
+        for n in 0 ..< function.pars.count {
+            let p = function.pars[n]
+        
+            guard let type = p.type else { continue }
+            if type is NormalTypeNode {
+                str += createTypeString(type: type as! NormalTypeNode)
+            }
+            else if type is FunctionTypeNode {
+                str += createFunctionTypeString(type: type as! FunctionTypeNode)
+            }
+            
+            if n != function.pars.count-1 {
+                str += ", "
+            }
+        }
+        
+        str += ")>"
+        
+        return str
     }
     
     

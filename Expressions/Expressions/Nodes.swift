@@ -94,6 +94,35 @@ class FunctionNode : Node, CustomStringConvertible {
         return tmp
     }
     
+    func isVariadic(varName: String) -> Bool {
+        for par in pars {
+            guard let ident = par.name else { continue }
+            if ident == varName && par.variadic {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func isVariadic(index: Int) -> Bool {
+        if index > pars.count-1 { return false }
+        
+        let par = pars[index]
+        return par.variadic
+    }
+    
+    func isFunctionType(index: Int) -> Bool {
+        if index > pars.count-1 { print("Nope, leder efter \(index) ud af \(pars.count)"); return false }
+        
+        let par = pars[index]
+        if par.type is FunctionTypeNode {
+            return true
+        }
+        
+        return false
+    }
+    
     var description: String {
         return "\(retType) \(identifier)"
     }

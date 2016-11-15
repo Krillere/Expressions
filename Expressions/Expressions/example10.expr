@@ -26,3 +26,6 @@ define add: Int ... var -> Int {
   if null(var) { 0 }
                { first(var) + add(tail(var)) }
 }
+define tests: (Int -> Bool) ... vars -> Int {
+  0
+}

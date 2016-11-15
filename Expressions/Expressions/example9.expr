@@ -10,3 +10,9 @@ define main: -> Int {
 define addOne: Int a -> Int {
   a + 1
 }
+
+
+#define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
+#  if null(items) { [] }
+#  { first(items1)  }
+#}
