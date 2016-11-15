@@ -117,9 +117,8 @@ class CodeGenerator {
             else if ttype is FunctionTypeNode { // Function type
                 guard let ttype = ttype as? FunctionTypeNode else { return "" }
                 
-                let retType = createFunctionTypeString(type: ttype, context: .preName)
-                let inp = createFunctionTypeString(type: ttype, context: .postName)
-                typeDecl += retType+" (*"+vname+")"+inp+";\n"
+                let typeString = createFunctionTypeString(type: ttype)
+                typeDecl += " "+typeString+" "+vname+";\n"
             }
             
             
@@ -145,9 +144,10 @@ class CodeGenerator {
             }
             else if ttype is FunctionTypeNode {
                 guard let ttype = ttype as? FunctionTypeNode else { return "" }
-                let retType = createFunctionTypeString(type: ttype, context: .preName)
-                let inp = createFunctionTypeString(type: ttype, context: .postName)
-                typeInit += retType+" "+vname+inp
+                
+                let typeString = createFunctionTypeString(type: ttype)
+
+                typeInit += typeString+" "+vname
             }
             
             if n != objType.variables.count-1 {
@@ -288,9 +288,8 @@ class CodeGenerator {
             else { // Function parameter
                 guard let ptype = par.type as? FunctionTypeNode else { continue }
                 
-                let retType = createFunctionTypeString(type: ptype, context: .preName)
-                let inp = createFunctionTypeString(type: ptype, context: .postName)
-                vecPars += retType+" "+pname+inp
+                let typeString = createFunctionTypeString(type: ptype)
+                vecPars += typeString+" "+pname
             }
             
             if n != function.pars.count-1 {
@@ -328,9 +327,8 @@ class CodeGenerator {
                 }
             }
             else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
-                let retType = createFunctionTypeString(type: tmpType as! FunctionTypeNode, context: .preName)
-                let inp = createFunctionTypeString(type: tmpType as! FunctionTypeNode, context: .postName)
-                str += retType+" "+name+inp
+                let typeString = createFunctionTypeString(type: tmpType as! FunctionTypeNode)
+                str += typeString+" "+name
             }
             
             if n != pars.count-1 {
@@ -631,36 +629,41 @@ class CodeGenerator {
     }
     
     
-    // Are we before the name or after? (Important for function types due to C++ syntax, as we need: RetType Name (Pars)   )
-    private enum FunctionTypeContext {
-        case preName
-        case postName
-    }
-    
     // Creates a function type string (Other syntax than normal types)
-    private func createFunctionTypeString(type: FunctionTypeNode, context: FunctionTypeContext) -> String {
+    private func createFunctionTypeString(type: FunctionTypeNode) -> String {
         
-        if context == .preName {
-            return createTypeString(type: type.ret as! NormalTypeNode)
+        guard let ret = type.ret else { return "" }
+        var str = "std::function<"
+        
+        if ret is NormalTypeNode {
+            str += createTypeString(type: ret as! NormalTypeNode)
         }
-        else if context == .postName {
-            var str = "("
+        else if ret is FunctionTypeNode {
+            str += createFunctionTypeString(type: ret as! FunctionTypeNode)
+        }
+        
+        str += "("
+        
+        for n in 0 ..< type.inputs.count {
+            let t = type.inputs[n]
             
-            for n in 0 ..< type.inputs.count {
-                let t = type.inputs[n]
+            if t is NormalTypeNode {
                 str += createTypeString(type: t as! NormalTypeNode)
-                
-                if n != type.inputs.count-1 {
-                    str += ", "
-                }
+            }
+            else if t is FunctionTypeNode {
+                str += createFunctionTypeString(type: t as! FunctionTypeNode)
             }
             
-            str += ")"
-            
-            return str
+            if n != type.inputs.count-1 {
+                str += ", "
+            }
         }
-
-        return ""
+        
+        str += ")"
+        
+        str += ">"
+        
+        return str
     }
     
     
@@ -920,9 +923,9 @@ class CodeGenerator {
             else if ttype is FunctionTypeNode { // Function type
                 guard let ttype = ttype as? FunctionTypeNode else { return "" }
                 
-                let retType = createFunctionTypeString(type: ttype, context: .preName)
-                let inp = createFunctionTypeString(type: ttype, context: .postName)
-                str += retType+" (*"+name+")"+inp+" = "+createExpression(expr: expr)
+                let typeString = createFunctionTypeString(type: ttype)
+                
+                str += typeString+" "+name+" = "+createExpression(expr: expr)
             }
             
             str += ";\n"
