@@ -350,7 +350,7 @@ class CodeGenerator {
         
         // Save arguments!
         if doingMainBlock {
-            str += "for(int n = 0; n < argc; n++) { std::string argS(argv[n]); std::vector<char> argV(argS.begin(), argS.end()); internal_arguments.push_back(argV); }"
+            str += "for(int n = 0; n < argc; n++) { std::string argS(argv[n]); std::vector<char> argV(argS.begin(), argS.end()); internal_arguments.push_back(argV); }\n"
             doingMainBlock = false
         }
         
