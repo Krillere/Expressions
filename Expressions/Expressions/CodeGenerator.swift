@@ -559,14 +559,13 @@ class CodeGenerator {
                 else if par is VariableNode {
                     guard let par = par as? VariableNode,
                           let variableIdentifier = par.identifier,
-                          let callFuncDecls = ParserTables.shared.functionDeclarations[ident], // Function we're calling
+                          let _ = ParserTables.shared.functionDeclarations[ident], // Function we're calling
                           let tryCallFuncs = ParserTables.shared.functionDeclarations[variableIdentifier] else { return "" }
                     
                     
                     // Figure out the exact function, based on the call (Necessary for overloading)
                     if let funcDecl = determineFunctionNodeForCall(call: fc) {
                         let tryCallingDecl = tryCallFuncs[0]
-                        print("Undersøger om \(variableIdentifier) (\(tryCallingDecl)) skal laves om, i kald til \(ident) (\(funcDecl)")
                         
                         // If this is a function type argument, pre-declare it.
                         if funcDecl.isFunctionType(index: n) {
