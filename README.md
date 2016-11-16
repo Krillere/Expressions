@@ -15,7 +15,7 @@ ToDo list:
 - ~~Functions as first-class-citizens~~ (Somewhat done)
 - ~~Generics~~ (Done)
 - ~~Higher order functions~~ (map, filter, simple ones first)
-- ~~Variadic functions~~ (Seems to work)
+- ~~Variadic functions~~ (Seems to work, sometimes at least)
 - Lambdas
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
@@ -62,6 +62,8 @@ A function can be declared without any parameters, for example the required *mai
 define main: -> Int {
 }
 ```
+
+Functions can be overloaded, meaning that different versions of the same function can be created. An example is the built in function ```map```, which has two definitions; one for a list and a function, and one for two lists and a function. The compiler should be able to figure out which one you want.
 
 ## Conditionals
 Expressions supports two types of conditionals; If-statements and switch-statements.
@@ -268,26 +270,12 @@ odd(int) # Returns true if int is odd
 Higher order functions:
 ```
 map(lst, func) # Applies 'func' to each element in 'lst'
+map(lst, lst, func) # Applies 'func' to elements of each list, adding them to one list. 
 filter(lst, func) # Tests each element in 'lst' against 'func', if true, then it is added to the list
 ```
 
 ## Higher order functions
-Map and filter functions exists in Expressions. They are defined as such:
-```
-# Map function (Applies 'func' to each object in 'items')
-define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
-  if null(items) { [] }
-                 { append(list(func(first(items))), map(tail(items), func)) }
-}
-
-# Filter function (Tests each object using 'func', if true, add to list)
-define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
-  switch null(lst)        { [] } # Stop if empty
-         func(first(lst)) { append(list(first(lst)), filter(tail(lst), func)) }
-         else             { filter(tail(lst), func) }
-}
-
-```
+Map and filter functions exists in Expressions. Map is used to apply a function to one or two lists, and filter is used for filtering a list using a function.
 
 A simple map example is:
 ```
@@ -296,6 +284,13 @@ define addOne: Int a -> Int {
 }
 
 map([1, 2, 3, 4], addOne) # Returns: [2, 3, 4, 5]
+
+# Other map function:
+define addNumbers: Int a, Int b -> Int {
+  a + b
+}
+
+map([1, 2, 3, 4], [4, 3, 2, 1], addNumbers) # Returns [5, 5, 5, 5]
 ```
 
 A simple filter example:
@@ -342,6 +337,8 @@ define main: -> Int {
   }
 }
 ```
+
+The ```CLArguments``` function could be considered as a function with side effects. This function returns a string list, containing the arguments passed to the program. The first one is always the path of the executable and is always present.
 
 ## Variadics
 Variadics are also possible to use in Expressions. This allows a function to take an unknown number of arguments, though they still have to be statically typed (Determinable at compile-time). When used, the argument can be accessed as a list inside the function.
