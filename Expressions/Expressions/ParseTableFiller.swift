@@ -22,7 +22,13 @@ class ParseTableFiller {
             guard let ident = f.identifier else { continue }
             
             // Function can now be found using identifier
-            ParserTables.shared.functionDeclarations[ident] = f
+            if var list = ParserTables.shared.functionDeclarations[ident] {
+                list.append(f)
+                ParserTables.shared.functionDeclarations[ident] = list
+            }
+            else {
+                ParserTables.shared.functionDeclarations[ident] = [f]
+            }
             
             // Adds generic functions to a list of known generic functions
             if TreeHelper.isGenericFunction(node: f) {

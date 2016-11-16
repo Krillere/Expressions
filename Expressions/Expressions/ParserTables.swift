@@ -24,7 +24,7 @@ class ParserTables {
     var types:[String] = []
     
     // User defined function dictionary (identifier -> FunctionNode)
-    var functionDeclarations:[String:FunctionNode] = [:]
+    var functionDeclarations:[String:[FunctionNode]] = [:]
     
     // Generic function identifiers
     var genericFunctionNames:[String] = ["print", "printLn", "null", "length", "append", "list", "get", "take", "first", "last", "init", "tails", "reverse", "isInteger", "isFloat", "isCharacter", "isString", "map", "filter"]

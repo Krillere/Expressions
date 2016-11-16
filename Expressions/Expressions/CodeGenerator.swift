@@ -416,8 +416,8 @@ class CodeGenerator {
             }
             
             // funcNode is the functionDeclaration
-            guard let funcNode = ParserTables.shared.functionDeclarations[identifier] else { return }
-            
+            guard let funcNodes = ParserTables.shared.functionDeclarations[identifier] else { return }
+            let funcNode = funcNodes[0]
             for n in 0 ..< funcNode.pars.count {
                 let decPar = funcNode.pars[n]
                 
@@ -519,7 +519,8 @@ class CodeGenerator {
                         type = "std::vector<"+guessType(node: par)+">"
                     }
                     else { // 'Normal' function
-                        if let functionDecl = ParserTables.shared.functionDeclarations[ident] {
+                        if let functionDecls = ParserTables.shared.functionDeclarations[ident] {
+                            let functionDecl = functionDecls[0]
                             if n >= functionDecl.pars.count {
                                 break
                             }
@@ -557,25 +558,31 @@ class CodeGenerator {
                 }
                 else if par is VariableNode {
                     guard let par = par as? VariableNode,
-                          let identifier = par.identifier,
-                          let funcDecl = ParserTables.shared.functionDeclarations[ident],
-                          let tryCallingDecl = ParserTables.shared.functionDeclarations[identifier] else { return "" }
+                          let variableIdentifier = par.identifier,
+                          let callFuncDecls = ParserTables.shared.functionDeclarations[ident], // Function we're calling
+                          let tryCallFuncs = ParserTables.shared.functionDeclarations[variableIdentifier] else { return "" }
                     
-                    // If this is a function type argument, pre-declare it.
-                    if funcDecl.isFunctionType(index: n) {
+                    
+                    // Figure out the exact function, based on the call (Necessary for overloading)
+                    if let funcDecl = determineFunctionNodeForCall(call: fc) {
+                        let tryCallingDecl = tryCallFuncs[0]
+                        print("Undersøger om \(variableIdentifier) (\(tryCallingDecl)) skal laves om, i kald til \(ident) (\(funcDecl)")
                         
-                        // Create a new name and refer it to itself in translation
-                        let newName = ParserTables.shared.generateNewVariableName()
-                        ParserTables.shared.nameTranslation[newName] = newName
-                        
-                        // Replace literal with reference to variable
-                        let replacementNode = VariableNode(identifier: newName)
-                        fc.parameters[n] = replacementNode
-                        
-                        let tmpStr = createFunctionTypeDefinition(function: tryCallingDecl)+" "+newName+" = "+identifier+";"
-                        str += tmpStr
+                        // If this is a function type argument, pre-declare it.
+                        if funcDecl.isFunctionType(index: n) {
+                            
+                            // Create a new name and refer it to itself in translation
+                            let newName = ParserTables.shared.generateNewVariableName()
+                            ParserTables.shared.nameTranslation[newName] = newName
+                            
+                            // Replace literal with reference to variable
+                            let replacementNode = VariableNode(identifier: newName)
+                            fc.parameters[n] = replacementNode
+                            
+                            let tmpStr = createFunctionTypeDefinition(function: tryCallingDecl)+" "+newName+" = "+variableIdentifier+";"
+                            str += tmpStr
+                        }
                     }
-
                 }
             }
             
@@ -630,6 +637,7 @@ class CodeGenerator {
         return ""
     }
     
+    // Creates a function type definition based on a FunctionNode: 'define test: Int a, Int b -> Int' becomes std::function<int(int, int)>
     func createFunctionTypeDefinition(function: FunctionNode) -> String {
         guard let retType = function.retType else { return "" }
         
@@ -998,24 +1006,7 @@ class CodeGenerator {
         
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
-            
-            // Normal type
-            if ttype is NormalTypeNode {
-                guard let ttype = ttype as? NormalTypeNode else { return "" }
-                
-                let type = createTypeString(type: ttype)
-                str += type+" "+name+" = "
-                str += createExpression(expr: expr)
-            }
-            else if ttype is FunctionTypeNode { // Function type
-                guard let ttype = ttype as? FunctionTypeNode else { return "" }
-                
-                let typeString = createFunctionTypeString(type: ttype)
-                
-                str += typeString+" "+name+" = "+createExpression(expr: expr)
-            }
-            
-            str += ";\n"
+            str += createVariableDeclaration(identifier: name, type: ttype, expr: expr)
         }
         
         for bexpr in block.expressions {
@@ -1023,6 +1014,26 @@ class CodeGenerator {
         }
         str += "}"
         
+        return str
+    }
+    
+    // Creates a declaration. For example: int i = 1;
+    private func createVariableDeclaration(identifier: String, type: TypeNode, expr: Node) -> String {
+        var str = ""
+        
+        var typeString = ""
+        if type is NormalTypeNode {
+            typeString = createTypeString(type: type as! NormalTypeNode)
+            
+        }
+        else if type is FunctionTypeNode {
+            typeString = createFunctionTypeString(type: type as! FunctionTypeNode)
+        }
+        
+        str += typeString+" "+identifier+" = "
+        str += createExpression(expr: expr)
+        
+        str += ";\n"
         return str
     }
     
@@ -1134,5 +1145,34 @@ class CodeGenerator {
         }
         
         return ""
+    }
+    
+    // Attempt to determine which version of a function is being called (For overloading purposes)
+    private func determineFunctionNodeForCall(call: FunctionCallNode) -> FunctionNode? {
+        guard let identifier = call.identifier else { return nil }
+        guard let declList = ParserTables.shared.functionDeclarations[identifier] else { return nil }
+        
+        // Nothing or exactly one found
+        if declList.count == 0 {
+            return nil
+        }
+        if declList.count == 1 {
+            return declList[0]
+        }
+        
+        // We have something overloaded
+        for n in 0 ..< declList.count {
+            let decl = declList[n]
+            
+            if decl.pars.count == call.parameters.count { // If formal and actual parameter count matches, we can assume this is the correct one (C++ compiler will figure it out otherwise.)
+                return decl
+            }
+        }
+        
+        // Still not found, meaning that it's probably a variadic call
+        print("Funktionen \(identifier) er stadig ikke fundet.. Shit.")
+        
+        
+        return nil
     }
 }

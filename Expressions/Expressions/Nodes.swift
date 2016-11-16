@@ -124,7 +124,10 @@ class FunctionNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "\(retType) \(identifier)"
+        guard let ret = retType, let ident = identifier else { return "" }
+        
+        let str:String = String(describing: ret)+" "+ident
+        return str
     }
 }
 
