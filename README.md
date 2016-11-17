@@ -15,8 +15,8 @@ ToDo list:
 - ~~Functions as first-class-citizens~~ (Somewhat done)
 - ~~Generics~~ (Done)
 - ~~Higher order functions~~ (map, filter, simple ones first)
-- ~~Variadic functions~~ (Seems to work, sometimes at least)
-- Lambdas
+- ~~Variadic functions~~ (Seems to work, not thoroughly tested)
+- ~~Lambdas~~ (Done)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
@@ -36,7 +36,8 @@ Overview:
 2.  [Types](#types)
 3.  [Generics](#generics)
 3.  [Objects](#objects)
-3.  [Functions as objects](#functions-as-a-type)
+3.  [Functions as objects](#functions-as-objects)
+4.  [Lambdas](#lambdas)
 6.  [Comments](#comments)
 7.  [Standard functions](#standard-functions--built-in-functions)
 7.  [Higher order functions](#higher-order-functions)
@@ -169,7 +170,7 @@ let Int tmp = myType.myInteger
 let Int tmp = myType.myFunction(1, 2) # Assume MyType contains a function called 'myFunction'
 ```
 
-## Functions as a type
+## Functions as objects
 Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following (InpType1, InpType2, ... InpTypeN -> RetType). An example:
 ```
 define add: Int a, Int b -> Int {
@@ -193,6 +194,31 @@ let (Int, Int -> Int) addFunc = add {
   1 + addFunc(1, 1) # 3
 }
 ```
+
+## Lambdas
+Lambdas, or anonymous functions, can be used instead of defining a function. The general syntax is: ```lambda (Type1 name1, Type2 name2 ... TypeN nameN) -> Type { expression }```
+The lambda keyword is inline equivalent of ```define```.
+
+The following example uses ```map```, explained at [Higher order functions](#higher-order-functions), but uses a lambda instead of defining a function to perform the mapping. The example shows how to do a simple mapping using lambdas, and one using functions. Lambdas mostly make sense when a specific function is only used once. If it's used multiple times, it's easier to define it as a function, instead of defining the lambda each time it's needed.
+```
+# Without lambdas:
+define addOne: Int a -> Int {
+  a + 1
+}
+map([1, 2, 3, 4], addOne) # Returns [2, 3, 4, 5]
+
+#Lambda:
+map([1, 2, 3, 4], lambda (Int a -> Int) { a + 1})
+```
+
+Lambdas can also be used in ```let``` expressions, although it's not very pretty.
+```
+let (Int, Int -> Int) func = lambda (Int a, Int b -> Int) { a + b } {
+  func(1, 2)
+}
+```
+
+
 
 ## Comments
 Comments are created using a \# in the code. Currently there only exists one-line comments and they can't be stopped by using another \#.
