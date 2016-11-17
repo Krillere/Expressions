@@ -13,3 +13,8 @@ define tMap3: -> [Int] {
     map([1, 2, 3, 4], lambda (Int a -> Int) { a + toAdd })
   }
 }
+define tMap4: -> Int {
+  let (Int, Int -> Int) func = lambda (Int a, Int b -> Int) { a + b } {
+    func(1, 2)
+  }
+}

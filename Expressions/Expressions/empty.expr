@@ -1,3 +1,6 @@
 define main: -> Int {
-  0
+  let String test = "This is a string!", String test2 = append(test, "123", "abc") {
+    printLn(test2)
+    0
+  }
 }

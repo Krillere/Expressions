@@ -81,7 +81,6 @@
 		AA0F7FBB1DDA508000C77C97 /* ExpressionWalking template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ExpressionWalking template"; sourceTree = "<group>"; };
 		AA265DF61DDE1BDF00E6B9C7 /* example11.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example11.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
-		AA3C72581DD8D32900FD75DF /* stupidparser.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stupidparser.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 				AAE992671DD87FC800DF8CA5 /* html.expr */,
-				AA3C72581DD8D32900FD75DF /* stupidparser.expr */,
 			);
 			name = "Code examples (Tests)";
 			sourceTree = "<group>";

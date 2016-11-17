@@ -23,10 +23,14 @@ std::vector<char> readFileContents(std::vector<char> pathv);
 void writeFileContents(std::vector<char> pathv, std::vector<char> content);
 template<typename T>
 std::vector<T> list(T obj);
+/*
 template<typename T>
 std::vector<T> append(const std::vector<T> lst, T obj);
 template<typename T>
 std::vector<T> append(const std::vector<T> lst, const std::vector<T> newObjs);
+template<typename T, typename... A>
+std::vector<T> append(std::vector<T> v1, const A&... vr);
+ */
 template<typename T>
 T first(const std::vector<T> obj);
 template<typename T>
@@ -146,16 +150,39 @@ std::vector<T> list(T obj) {
 
 // Append
 template<typename T>
-std::vector<T> append(const std::vector<T> lst, T obj) {
+std::vector<T> append(const std::vector<T> lst) {
+    std::vector<T> tmp(lst);
+    return tmp;
+}
+template<typename T>
+std::vector<T> append(const std::vector<T> lst, std::vector<T> obj) {
     std::vector<T>tmp(lst);
-    tmp.push_back(obj);
+    tmp.insert(tmp.end(), obj.begin(), obj.end());
     
     return tmp;
 }
+template <typename T, typename ... Rest>
+std::vector<T> append(const std::vector<T> lst, const std::vector<T>& obj, const Rest&... rest) {
+    std::vector<T> tmp(lst);
+    tmp.insert(tmp.end(), obj.begin(), obj.end());
+    return append(tmp, rest...);
+}
+
+/*
 template<typename T>
 std::vector<T> append(const std::vector<T> lst, const std::vector<T> newObjs) {
     std::vector<T> tmp(lst);
     tmp.insert(tmp.end(), newObjs.begin(), newObjs.end());
+    
+    return tmp;
+}
+template<typename T>
+std::vector<T> append(const std::vector<T> lst, const std::vector<std::vector<T>> newObjList) {
+    std::vector<T> tmp(lst);
+    for(int i = 0; i < newObjList.size; i++) {
+        std::vector<T> tmpNested = newObjList[i];
+        tmp.insert(tmp.end(), tmpNested.begin(), tmpNested.end());
+    }
     
     return tmp;
 }
@@ -168,6 +195,27 @@ std::vector<T> append(const T obj1, const T obj2) {
     return tmp;
 }
 
+template<typename T>
+void append_to_vector(std::vector<T>& v1, const std::vector<T>& v2) {
+    for (auto& e : v2) v1.push_back(e);
+}
+template<typename T, typename... A>
+void append_aux(std::vector<T>& v1, const std::vector<T>& v2) {
+    append_to_vector(v1, v2);
+}
+
+template<typename T, typename... A>
+void append_aux(std::vector<T>& v1, const std::vector<T>& v2, const A&... vr) {
+    append_to_vector(v1, v2);
+    append_aux(v1, vr...);
+}
+
+template<typename T, typename... A>
+std::vector<T> append(std::vector<T> v1, const A&... vr) {
+    append_aux(v1, vr...);
+    return v1;
+}
+*/
 // First
 template<typename T>
 T first(const std::vector<T> obj) {

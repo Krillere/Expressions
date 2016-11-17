@@ -521,6 +521,7 @@ class CodeGenerator {
                     else { // 'Normal' function
                         if let functionDecl = determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.pars.count {
+                                print("Break")
                                 break
                             }
                             
@@ -557,7 +558,7 @@ class CodeGenerator {
                     guard let par = par as? VariableNode,
                           let variableIdentifier = par.identifier,
                           let _ = ParserTables.shared.functionDeclarations[ident], // Function we're calling
-                          let tryCallFuncs = ParserTables.shared.functionDeclarations[variableIdentifier] else { return "" }
+                          let tryCallFuncs = ParserTables.shared.functionDeclarations[variableIdentifier] else { continue }
                     
                     
                     // Figure out the exact function, based on the call (Necessary for overloading)
@@ -581,7 +582,7 @@ class CodeGenerator {
                     }
                 }
                 else if par is LambdaNode {
-                    guard let par = par as? LambdaNode, let retType = par.retType, let block = par.block else { print("Nope"); return "" }
+                    guard let par = par as? LambdaNode, let retType = par.retType, let block = par.block else { continue }
                     // Replace node with variable
                     let newName = ParserTables.shared.generateNewVariableName()
                     ParserTables.shared.nameTranslation[newName] = newName

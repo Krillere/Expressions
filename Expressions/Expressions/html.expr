@@ -1,9 +1,11 @@
 define main: -> Int {
-  printLn(makeTag("p", ["class", "id"], ["myClass", "myID"], ["content"]))
-  printLn(head([title(["myTitle"])]))
+  printLn(makeTag("p", ["class", "id"], ["myClass", "myID"], "content"))
+  printLn(head(title("myTitle"),script("asd")))
   0
 }
-define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
+
+
+define makeTag: String tag, [String] attrNames, [String] attrValues, String ... content -> String {
   append("<", tag, makeAttributes(attrNames, attrValues), ">", makeContents(content), "</", tag, ">")
 }
 
@@ -20,19 +22,22 @@ define makeAttributes: [String] attrNames, [String] attrValues -> String {
 }
 define makeContents: [String] content -> String {
   if null(content) { "" }
-                   { first(content) }
+                   { append(first(content), makeContents(tail(content))) }
 }
 
 # Wrappers
-define html: [String] content -> String {
-  makeTag("html", [], [], content)
+define html: String content -> String {
+  makeTag("html", [], [], list(content))
 }
-define head: [String] content -> String {
+define head: String ... content -> String {
   makeTag("head", [], [], content)
 }
-define body: [String] content -> String {
+define script: String ... content -> String {
+  makeTag("script", [], [], content)
+}
+define body: String ... content -> String {
   makeTag("body", [], [], content)
 }
-define title: [String] content -> String {
-  makeTag("title", [], [], content)
+define title: String content -> String {
+  makeTag("title", [], [], list(content))
 }
