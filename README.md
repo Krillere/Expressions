@@ -197,7 +197,7 @@ let (Int, Int -> Int) addFunc = add {
 
 ## Lambdas
 Lambdas, or anonymous functions, can be used instead of defining a function. The general syntax is: ```lambda (Type1 name1, Type2 name2 ... TypeN nameN) -> Type { expression }```
-The lambda keyword is inline equivalent of ```define```.
+The ```lambda``` keyword is the inline equivalent of ```define```.
 
 The following example uses ```map```, explained at [Higher order functions](#higher-order-functions), but uses a lambda instead of defining a function to perform the mapping. The example shows how to do a simple mapping using lambdas, and one using functions. Lambdas mostly make sense when a specific function is only used once. If it's used multiple times, it's easier to define it as a function, instead of defining the lambda each time it's needed.
 ```
