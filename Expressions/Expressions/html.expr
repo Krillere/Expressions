@@ -1,14 +1,16 @@
 define main: -> Int {
-  printLn(makeTag("p", ["class", "id"], ["myClass", "myID"], "content"))
-  printLn(head(title("myTitle"),script("asd")))
+  let String HTML = html(head(title("csar13 calendar")), body("asd")) {
+    printLn(HTML)
+  }
   0
 }
 
-
+# Creates a tag, with attributes and content
 define makeTag: String tag, [String] attrNames, [String] attrValues, String ... content -> String {
   append("<", tag, makeAttributes(attrNames, attrValues), ">", makeContents(content), "</", tag, ">")
 }
 
+# Creates attributes for the element.
 define makeAttributes: [String] attrNames, [String] attrValues -> String {
   if null(attrNames) OR null(attrValues) { "" }
   {
@@ -20,14 +22,16 @@ define makeAttributes: [String] attrNames, [String] attrValues -> String {
     }
   }
 }
+
+# Creates the contents of the HTML tag
 define makeContents: [String] content -> String {
   if null(content) { "" }
                    { append(first(content), makeContents(tail(content))) }
 }
 
 # Wrappers
-define html: String content -> String {
-  makeTag("html", [], [], list(content))
+define html: String ... content -> String {
+  makeTag("html", [], [], content)
 }
 define head: String ... content -> String {
   makeTag("head", [], [], content)
