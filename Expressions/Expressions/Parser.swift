@@ -237,6 +237,9 @@ class Parser {
             }
             
             let expr = parseExpression()
+            if expr is ErrorNode {
+                break
+            }
             exprs.append(expr)
         }
         
@@ -367,8 +370,7 @@ class Parser {
     // Parser en expression (Største type af alle)
     private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
-        
-        
+
         // Typer (if, let, switch)
         if tmpToken.type == .keyword_if { // If-else
             return parseIf()
@@ -386,6 +388,14 @@ class Parser {
             }
             
             return ElseNode()
+        }
+        else if tmpToken.type == .keyword_lambda {
+            let t1 = scanner.getToken()
+            if !t1.content.contains("lambda") {
+                error("Expected 'lambda', got \(t1.content)")
+            }
+            
+            return parseLambda()
         }
         
         // Variabler og literals
@@ -458,7 +468,12 @@ class Parser {
         }
         else if tmpToken.type == .negate { // ! EXPR
             let _ = scanner.getToken()
-            let negNode = NegateExpression(expr: parseExpression())
+            let e = parseExpression()
+            if e is ErrorNode {
+                return ErrorNode()
+            }
+            
+            let negNode = NegateExpression(expr: e)
             
             if !isNextOp() {
                 return negNode
@@ -473,6 +488,9 @@ class Parser {
             }
             
             let expr = parseExpression()
+            if expr is ErrorNode {
+                return ErrorNode()
+            }
             
             let t2 = scanner.getToken() // rpar
             if !t2.content.contains(")") {
@@ -522,12 +540,14 @@ class Parser {
             let op = OperatorNode(op: opToken.content)
             
             let expr2 = parseExpression()
+            if expr2 is ErrorNode {
+                return ErrorNode()
+            }
             return ExpressionNode(op: op, loperand: opNode, roperand: expr2)
         }
         
         error("Error parsing expression")
-        
-        return Node()
+        return ErrorNode()
     }
 
     private func parseTypeProperty(name: String) -> PropertyValueNode {
@@ -567,6 +587,7 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let expr = parseExpression()
+            
             literalNodes.append(expr)
         }
         
@@ -675,6 +696,7 @@ class Parser {
         return FunctionCallNode(identifier: identifier, parameters: pars)
     }
     
+    // Parses the parameters for a function call
     func parseFunctionCallParameters() -> [Node] {
         var res:[Node] = []
         
@@ -695,6 +717,33 @@ class Parser {
         return res
     }
     
+    
+    // MARK: Lambda
+    func parseLambda() -> LambdaNode {
+        let t1 = scanner.getToken()
+        if t1.type != .lpar {
+            error("Expected '(', got \(t1)")
+            return LambdaNode()
+        }
+        
+        let pars = parseParameters()
+        
+        let t2 = scanner.getToken()
+        if !t2.content.contains(">") {
+            error("Expected '>', got \(t2.content)")
+        }
+        
+        let retType = parseType()
+        
+        let t3 = scanner.getToken()
+        if t3.type != .rpar {
+            error("Expected ')', got \(t3)")
+        }
+        
+        let block = parseBlock()
+        
+        return LambdaNode(pars: pars, ret: retType, block: block)
+    }
     
     
     // MARK: Helpers

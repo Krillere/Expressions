@@ -15,7 +15,9 @@ class Node {
     init() { }
 }
 
-
+class ErrorNode : Node {
+    
+}
 
 // General program. Contains types and functions
 class ProgramNode : Node {
@@ -56,6 +58,26 @@ class ObjectTypeVariableNode : Node, CustomStringConvertible {
     
     var description: String {
         return "VariableNode"
+    }
+}
+
+// MARK:
+class LambdaNode : Node, CustomStringConvertible {
+    
+    var pars:[ParameterNode] = []
+    var block:BlockNode?
+    var retType:TypeNode?
+    
+    init(pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
+        self.pars = pars
+        self.block = block
+        self.retType = ret
+    }
+    
+    override init() { }
+    
+    var description: String {
+        return "Lambda"
     }
 }
 

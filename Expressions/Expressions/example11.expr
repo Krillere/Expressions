@@ -1,0 +1,15 @@
+define main: -> Int {
+  0
+}
+
+define tMap: -> [Int] {
+  map([1, 2, 3, 4], lambda (Int a -> Int) { a + 1 })
+}
+define tMap2: -> [Int] {
+  map([1, 2, 3, 4], [4, 3, 2, 1], lambda (Int a, Int b -> Int) { a + b })
+}
+define tMap3: -> [Int] {
+  let Int toAdd = 2 {
+    map([1, 2, 3, 4], lambda (Int a -> Int) { a + toAdd })
+  }
+}

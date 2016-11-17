@@ -406,8 +406,7 @@ class CodeGenerator {
     // Changes the tree, replaces variadic arguments with a ArrayLiteral node instead containing the variadic arguments.
     private func fixVariadicFunctions(expr: Node) {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
-            guard let call = expr as? FunctionCallNode,
-                let identifier = call.identifier else { return }
+            guard let call = expr as? FunctionCallNode else { return }
             
             for par in call.parameters {
                 if par is FunctionCallNode {
@@ -416,8 +415,8 @@ class CodeGenerator {
             }
             
             // funcNode is the functionDeclaration
-            guard let funcNodes = ParserTables.shared.functionDeclarations[identifier] else { return }
-            let funcNode = funcNodes[0]
+            guard let funcNode = determineFunctionNodeForCall(call: call) else { return }
+            
             for n in 0 ..< funcNode.pars.count {
                 let decPar = funcNode.pars[n]
                 
@@ -501,6 +500,7 @@ class CodeGenerator {
                 if par is ArrayLiteralNode {
                     guard let par = par as? ArrayLiteralNode else { continue }
                     
+                    // Replacements for contents of array literal (Could contain nested lists or calls or something)
                     for c in par.contents {
                         str += createFunctionCallParameterDeclarations(expr: c)
                     }
@@ -519,13 +519,10 @@ class CodeGenerator {
                         type = "std::vector<"+guessType(node: par)+">"
                     }
                     else { // 'Normal' function
-                        if let functionDecls = ParserTables.shared.functionDeclarations[ident] {
-                            let functionDecl = functionDecls[0]
+                        if let functionDecl = determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.pars.count {
                                 break
                             }
-                            
-                            //print("Funktionen \(ident) er ikke generisk, finder type i declaration!")
                             
                             if let defParType = functionDecl.pars[n].type as? NormalTypeNode {
                                 if functionDecl.pars[n].variadic {
@@ -582,6 +579,24 @@ class CodeGenerator {
                             str += tmpStr
                         }
                     }
+                }
+                else if par is LambdaNode {
+                    guard let par = par as? LambdaNode, let retType = par.retType, let block = par.block else { print("Nope"); return "" }
+                    // Replace node with variable
+                    let newName = ParserTables.shared.generateNewVariableName()
+                    ParserTables.shared.nameTranslation[newName] = newName
+                    
+                    let repNode = VariableNode(identifier: newName)
+                    fc.parameters[n] = repNode
+                    
+                    // Create lambda definition (Create tmp function so we can reuse 'createFunctionTypeDefinition)
+                    let tmpNode = FunctionNode(identifier: "", pars: par.pars, ret: retType, block: block)
+                    str += createFunctionTypeDefinition(function: tmpNode)
+                    
+                    // Anonumous function
+                    let lambda = createLambdaNode(node: par)
+                    
+                    str += " "+newName+" = "+lambda+";"
                 }
             }
             
@@ -860,6 +875,9 @@ class CodeGenerator {
         else if expr is SwitchNode {
             return createSwitchNode(node: (expr as! SwitchNode))
         }
+        else if expr is LambdaNode {
+            return createLambdaNode(node: (expr as! LambdaNode))
+        }
         
         var retString = ""
         
@@ -1001,17 +1019,14 @@ class CodeGenerator {
         
 
         // Lav funktionens indhold
-        var str = "{"
+        var str = ""
         
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
             str += createVariableDeclaration(identifier: name, type: ttype, expr: expr)
         }
         
-        for bexpr in block.expressions {
-            str += createExpression(expr: bexpr)
-        }
-        str += "}"
+        str += createBlock(block: block)
         
         return str
     }
@@ -1036,6 +1051,24 @@ class CodeGenerator {
         return str
     }
     
+    // Creates a lambda node
+    private func createLambdaNode(node: LambdaNode) -> String {
+        guard let block = node.block, let retType = node.retType else { return "" }
+        
+        var str = "[=]"
+        
+        let parString:String = createFunctionParameters(pars: node.pars)
+
+        str += "("+parString+") -> "
+        
+        if retType is NormalTypeNode {
+            str += createTypeString(type: retType as! NormalTypeNode)
+        }
+        
+        str += createBlock(block: block)
+        
+        return str
+    }
     
     // MARK: Helpers
     // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
@@ -1160,15 +1193,33 @@ class CodeGenerator {
         }
         
         // We have something overloaded
+        var highestParCount = 0
         for n in 0 ..< declList.count {
             let decl = declList[n]
             
-            if decl.pars.count == call.parameters.count { // If formal and actual parameter count matches, we can assume this is the correct one (C++ compiler will figure it out otherwise.)
+            if highestParCount > decl.pars.count {
+                highestParCount = decl.pars.count
+            }
+            
+            // If formal and actual parameter count matches, we can assume this is the correct one (C++ compiler will figure it out otherwise.)
+            if decl.pars.count == call.parameters.count {
                 return decl
             }
         }
         
         // Still not found, meaning that it's probably a variadic call
+        if call.parameters.count > highestParCount {
+            // Check for a function which contains a variadic parameter
+            for decl in declList {
+                for p in decl.pars {
+                    if p.variadic {
+                        return decl
+                    }
+                }
+            }
+        }
+        
+        // Don't know what it is.
         print("Funktionen \(identifier) er stadig ikke fundet.. Shit.")
         
         
