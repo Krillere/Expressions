@@ -1,6 +1,13 @@
 define main: -> Int {
-  let String HTML = html(head(title("csar13 calendar")), body("asd")) {
+  let String HTML = html(
+                        head(title("csar13 calendar"), script("function test() { alert(1); }")),
+                        body(a(["href", "onclick"], ["javascript:void(0);", "test();"], "Alert test"), makeTable([["td1tr1", "td2tr1"], ["td1tr2", "td2tr2"]]))
+                        )
+  {
+    printLn("Content-type:text/html\n")
     printLn(HTML)
+    printLn(CLArguments())
+    #printLn()
   }
   0
 }
@@ -12,7 +19,7 @@ define makeTag: String tag, [String] attrNames, [String] attrValues, String ... 
 
 # Creates attributes for the element.
 define makeAttributes: [String] attrNames, [String] attrValues -> String {
-  if null(attrNames) OR null(attrValues) { "" }
+  if null(attrNames) OR null(attrValues) OR (length(attrNames) != length(attrValues)) { "" }
   {
     let String fName = first(attrNames),
     String fValue = first(attrValues),
@@ -44,4 +51,44 @@ define body: String ... content -> String {
 }
 define title: String content -> String {
   makeTag("title", [], [], list(content))
+}
+define p: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("p", attrNames, attrValues, content)
+}
+define b: String ... content -> String {
+  makeTag("b", [], [], content)
+}
+define a: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("a", attrNames, attrValues, content)
+}
+
+define table: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("table", attrNames, attrValues, content)
+}
+define thead: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("thead", attrNames, attrValues, content)
+}
+define tbody: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("tbody", attrNames, attrValues, content)
+}
+
+# Functions to make tables easier (Nested list, the inner list contains '<td>' contents, each outer list creates a '<tr>' which creates '<td>' for the inner one.)
+define makeTable: [[String]] tableContents -> String {
+  append("<table>", makeTRs(tableContents), "</table>")
+}
+define makeTRs: [[String]] trContent -> String {
+  if null(trContent) { "" }
+  {
+    let [String] tdConts = first(trContent),
+    let String tds = makeTDs(tdConts) {
+      append("<tr>", tds, "</tr>", makeTRs(tail(trContent)))
+    }
+  }
+}
+# Create TD elements from 'tdConts'
+define makeTDs: [String] tdConts -> String {
+  if null(tdConts) { "" }
+  {
+    append("<td>", first(tdConts), "</td>", makeTDs(tail(tdConts)))
+  }
 }

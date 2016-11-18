@@ -209,7 +209,7 @@ class Scanner {
             stringContent.append(Character(char))
             char = get()
             
-            if char == "\"" && escape == true {
+            if escape == true {
                 stringContent.append(Character(char))
                 char = get()
                 

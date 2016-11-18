@@ -29,6 +29,6 @@ else { // Default. Use an example.
         Compiler.compile(code: cont)
     }
     else {
-        print("Ingen fil fundet..")
+        print("No file found..")
     }
 }
