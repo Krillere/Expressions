@@ -251,7 +251,7 @@ list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 
 append(lst, obj) # Appends 'obj' to the end of 'lst'
-append(lst, listObj) # Appends all the objects from 'listObj' to the end of 'lst'
+append(lst, ... lists) # Appends all the objects from 'lists' (Variadic) to 'lst'
 
 ```
 
