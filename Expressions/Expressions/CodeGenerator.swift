@@ -371,7 +371,6 @@ class CodeGenerator {
             // Do we need to declare something before the expression? (Function call parameters are declared before the call)
             str += createFunctionCallParameterDeclarations(expr: expr)
             
-            // Create the expression itself
             str += createExpression(expr: expr)
         }
         
@@ -494,7 +493,7 @@ class CodeGenerator {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let fc = expr as? FunctionCallNode,
                   let ident = fc.identifier else { return "" }
-            print("Fikser variabler i kald til '\(ident)'")
+            
             var str = ""
             // Iterate parameters (Some might need to be changed)
             for n in 0 ..< fc.parameters.count {
@@ -525,7 +524,6 @@ class CodeGenerator {
                     else { // 'Normal' function
                         if let functionDecl = determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.pars.count {
-                                print("Break")
                                 break
                             }
                             
@@ -539,7 +537,6 @@ class CodeGenerator {
                             }
                         }
                     }
-                    
                     str += type+" "+newName+" = "+createArrayLiteral(lit: par)+";\n"
                 }
                 else if par is StringLiteralNode { // String literal used as parameter, replace with std::vector<char>
@@ -634,16 +631,6 @@ class CodeGenerator {
             guard let expr = expr as? NegateExpression, let nestedExpr = expr.expression else { return "" }
             return createFunctionCallParameterDeclarations(expr: nestedExpr)
         }
-        else if expr is LetNode {
-            guard let expr = expr as? LetNode else { return "" }
-            var str = ""
-            for v in expr.vars {
-                guard let vnode = v.value else { continue }
-                str += createFunctionCallParameterDeclarations(expr: vnode)
-            }
- 
-            return str
-        }
         else if expr is IfElseNode {
             guard let expr = expr as? IfElseNode, let econd = expr.condition else { return "" }
             return createFunctionCallParameterDeclarations(expr: econd)
@@ -658,6 +645,10 @@ class CodeGenerator {
             }
             
             return str
+        }
+        else if expr is ArrayLiteralNode {
+            guard let expr = expr as? ArrayLiteralNode else { return "" }
+            
         }
         
         return ""
@@ -1034,6 +1025,8 @@ class CodeGenerator {
         
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
+            fixVariadicFunctions(expr: expr)
+            str += createFunctionCallParameterDeclarations(expr: expr)
             str += createVariableDeclaration(identifier: name, type: ttype, expr: expr)
         }
         
