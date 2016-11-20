@@ -287,6 +287,7 @@ convertToString(Char)
 Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
+environmentVariable(str) # Returns the environment value for 'str'
 
 factorial(num) # Returns the factorial value of 'num'
 even(int) # Returns true if int is even
