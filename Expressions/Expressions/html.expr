@@ -1,12 +1,13 @@
 define main: -> Int {
-  let String table = makeTable([["td1tr1", "td2tr1"], ["td1tr2", "td2tr2"]]), String HTML = html(
+  let String table = makeTable([["td1tr1", "td2tr1"], ["td1tr2", "td2tr2"]]),
+      String HTML = html(
                         head(title("csar13 calendar"), script("function test() { alert(1); }")),
                         body(a(["href", "onclick"], ["javascript:void(0);", "test();"], "Alert test"), table)
                         )
   {
     printLn("Content-type:text/html\n")
     printLn(HTML)
-    printLn(CLArguments())
+    #writeFileContents("/Users/Christian/Desktop/test.html", HTML)
     #printLn()
   }
   0
