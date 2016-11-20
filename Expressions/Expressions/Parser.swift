@@ -17,6 +17,7 @@ class Parser {
     
     init(input: String) {
         var code = ""
+        /*
         if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
             do {
                 let stdCont = try String(contentsOfFile: p)
@@ -26,9 +27,9 @@ class Parser {
                 
             }
         }
-        
+        */
         code += input
-        
+ 
         self.scanner = Scanner(input: code)
         self.scanner.owner = self
     }

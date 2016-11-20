@@ -303,3 +303,19 @@ std::vector<char> convertToString(char c) {
 std::vector<std::vector<char>> CLArguments() {
     return internal_arguments;
 }
+
+// Environment variables
+std::vector<char> environmentVariable(std::vector<char> name) {
+    std::string stringName(name.begin(), name.end());
+    char const* tmp = getenv(stringName.c_str());
+    
+    if(tmp == NULL) {
+        std::vector<char> ret;
+        return ret;
+    }
+    else {
+        std::string retString = std::string(tmp);
+        std::vector<char> retVector(retString.begin(), retString.end());
+        return retVector;
+    }
+}

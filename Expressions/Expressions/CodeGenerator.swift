@@ -408,6 +408,7 @@ class CodeGenerator {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let call = expr as? FunctionCallNode else { return }
             
+            // Fix call parameters
             for par in call.parameters {
                 if par is FunctionCallNode {
                     fixVariadicFunctions(expr: par)
@@ -416,6 +417,9 @@ class CodeGenerator {
             
             // funcNode is the functionDeclaration
             guard let funcNode = determineFunctionNodeForCall(call: call) else { return }
+            if !TreeHelper.isVariadicFunction(node: funcNode) {
+                return
+            }
             
             for n in 0 ..< funcNode.pars.count {
                 let decPar = funcNode.pars[n]
@@ -490,7 +494,7 @@ class CodeGenerator {
         if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
             guard let fc = expr as? FunctionCallNode,
                   let ident = fc.identifier else { return "" }
-
+            print("Fikser variabler i kald til '\(ident)'")
             var str = ""
             // Iterate parameters (Some might need to be changed)
             for n in 0 ..< fc.parameters.count {
@@ -536,7 +540,7 @@ class CodeGenerator {
                         }
                     }
                     
-                    str += type+" "+newName+" = "+createArrayLiteral(lit: par)+";"
+                    str += type+" "+newName+" = "+createArrayLiteral(lit: par)+";\n"
                 }
                 else if par is StringLiteralNode { // String literal used as parameter, replace with std::vector<char>
                     guard let par = par as? StringLiteralNode else { continue }
@@ -549,10 +553,17 @@ class CodeGenerator {
                     let replacementNode = VariableNode(identifier: newName)
                     fc.parameters[n] = replacementNode
                     
-                    str += "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";"
+                    str += "std::vector<char> "+newName+" = "+createStringLiteral(string: par)+";\n"
                 }
                 else if par is FunctionCallNode { // Do the same for nested function calls
                     str += createFunctionCallParameterDeclarations(expr: par)
+                    // TODO: Lav færdig
+                    /*
+                    let newName = ParserTables.shared.generateNewVariableName()
+                    ParserTables.shared.nameTranslation[newName] = newName
+                    
+                    str += createFunctionCall(call: (par as! FunctionCallNode))
+                    */
                 }
                 else if par is VariableNode {
                     guard let par = par as? VariableNode,
@@ -576,7 +587,7 @@ class CodeGenerator {
                             let replacementNode = VariableNode(identifier: newName)
                             fc.parameters[n] = replacementNode
                             
-                            let tmpStr = createFunctionTypeDefinition(function: tryCallingDecl)+" "+newName+" = "+variableIdentifier+";"
+                            let tmpStr = createFunctionTypeDefinition(function: tryCallingDecl)+" "+newName+" = "+variableIdentifier+";\n"
                             str += tmpStr
                         }
                     }
@@ -597,7 +608,7 @@ class CodeGenerator {
                     // Anonumous function
                     let lambda = createLambdaNode(node: par)
                     
-                    str += " "+newName+" = "+lambda+";"
+                    str += " "+newName+" = "+lambda+";\n"
                 }
             }
             
@@ -630,7 +641,7 @@ class CodeGenerator {
                 guard let vnode = v.value else { continue }
                 str += createFunctionCallParameterDeclarations(expr: vnode)
             }
-            
+ 
             return str
         }
         else if expr is IfElseNode {
@@ -1017,7 +1028,6 @@ class CodeGenerator {
     // Laver let - "let" [Type name "=" expr] block
     private func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block else { return "" }
-        
 
         // Lav funktionens indhold
         var str = ""
@@ -1070,6 +1080,7 @@ class CodeGenerator {
         
         return str
     }
+    
     
     // MARK: Helpers
     // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))

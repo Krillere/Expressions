@@ -35,4 +35,14 @@ class TreeHelper {
         
         return isGeneric
     }
+    
+    public static func isVariadicFunction(node: FunctionNode) -> Bool {
+        for p in node.pars {
+            if p.variadic {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
