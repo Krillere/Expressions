@@ -246,12 +246,14 @@ init(list) # Returns everything but the last object
 
 get(list, nth) # Fetches the nth object in a list
 take(list, num) # Returns 'num' items from list
+subset(list, from, to) # Returns a subset of the list, between and including 'from' and 'to'
+indexOf(list, obj) # Returns the first encountered index of 'obj' in 'list', or -1 of 'list' does not contain 'obj'
 
 list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 
-append(lst, obj) # Appends 'obj' to the end of 'lst'
-append(lst, ... lists) # Appends all the objects from 'lists' (Variadic) to 'lst'
+append(list, obj) # Appends 'obj' to the end of 'list'
+append(list, ... lists) # Appends all the objects from 'lists' (Variadic) to 'list'
 
 ```
 
@@ -296,9 +298,9 @@ odd(int) # Returns true if int is odd
 
 Higher order functions:
 ```
-map(lst, func) # Applies 'func' to each element in 'lst'
-map(lst, lst, func) # Applies 'func' to elements of each list, adding them to one list. 
-filter(lst, func) # Tests each element in 'lst' against 'func', if true, then it is added to the list
+map(list, func) # Applies 'func' to each element in 'list'
+map(list, list, func) # Applies 'func' to elements of each list, adding them to one list. 
+filter(list, func) # Tests each element in 'list' against 'func', if true, then it is added to the list
 ```
 
 ## Higher order functions
