@@ -42,3 +42,13 @@ define subsetHelper: [Generic] lst, Int from, Int to, Int cur -> [Generic] {
            cur == to { list(first(lst)) }
            else { [] }
 }
+
+# Gets the first index of a value, or -1
+define indexOf: [Generic] lst, Generic item -> Int {
+  indexOfHelper(lst, item, 0)
+}
+define indexOfHelper: [Generic] lst, Generic item, Int curIndex -> Int {
+  switch null(lst) { -1 }
+         first(lst) == item { curIndex }
+         else { indexOfHelper(tail(lst), item, curIndex+1) }
+}

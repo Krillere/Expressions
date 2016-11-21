@@ -458,6 +458,10 @@ class CodeGenerator {
             guard let expr = expr as? NegateExpression, let nested = expr.expression else { return }
             fixVariadicFunctions(expr: nested)
         }
+        else if expr is MinusExpression {
+            guard let expr = expr as? MinusExpression, let nested = expr.expression else { return }
+            fixVariadicFunctions(expr: nested)
+        }
         else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
             guard let expr = expr as? ExpressionNode else { return }
             if let exp1 = expr.loperand, let exp2 = expr.roperand {
@@ -629,6 +633,10 @@ class CodeGenerator {
         }
         else if expr is NegateExpression {
             guard let expr = expr as? NegateExpression, let nestedExpr = expr.expression else { return "" }
+            return createFunctionCallParameterDeclarations(expr: nestedExpr)
+        }
+        else if expr is MinusExpression {
+            guard let expr = expr as? MinusExpression, let nestedExpr = expr.expression else { return "" }
             return createFunctionCallParameterDeclarations(expr: nestedExpr)
         }
         else if expr is IfElseNode {
@@ -867,6 +875,7 @@ class CodeGenerator {
     }
 
     
+    // MARK: Create Expression Main
     // Creates an expression (Covers all expression types)
     private func createExpression(expr: Node) -> String {
         if expr is IfElseNode {
@@ -926,6 +935,11 @@ class CodeGenerator {
         case is NegateExpression:
             guard let nested = (expr as! NegateExpression).expression else { break }
             retString += "!"+createExpression(expr: nested)
+            break
+            
+        case is MinusExpression:
+            guard let nested = (expr as! MinusExpression).expression else { break }
+            retString += "-"+createExpression(expr: nested)
             break
             
         case is StringLiteralNode:
@@ -1120,6 +1134,9 @@ class CodeGenerator {
                 return false
             }
             else if par is NegateExpression {
+                return false
+            }
+            else if par is MinusExpression {
                 return false
             }
             else {

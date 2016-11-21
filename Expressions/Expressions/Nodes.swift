@@ -423,6 +423,22 @@ class NegateExpression: Node, CustomStringConvertible {
     }
 }
 
+
+class MinusExpression: Node, CustomStringConvertible {
+    var expression:Node?
+    
+    init(expr: Node) {
+        super.init()
+        
+        self.expression = expr
+        self.expression?.parent = self
+    }
+    
+    var description: String {
+        return "-\(expression)"
+    }
+}
+
 // Node wrapper for operators
 class OperatorNode : Node, CustomStringConvertible {
     var op: String?

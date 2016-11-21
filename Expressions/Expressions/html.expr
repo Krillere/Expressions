@@ -10,6 +10,7 @@ define main: -> Int {
     printLn(HTML)
     printLn(environmentVariable("QUERY_STRING"))
     printLn(subset([1, 2, 3, 4, 5, 6], 1, 4))
+    printLn(indexOf([1, 2, 3, 4], 2))
     #writeFileContents("/Users/Christian/Desktop/test.html", HTML)
     #printLn()
   }
@@ -103,3 +104,9 @@ define makeTDs: [String] tdConts -> String {
     append("<td>", first(tdConts), "</td>", makeTDs(tail(tdConts)))
   }
 }
+
+
+# Split list at specific type
+#define split: [Generic] lst, Generic split -> [[Generic]] {
+
+#}

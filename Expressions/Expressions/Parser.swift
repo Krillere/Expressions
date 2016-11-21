@@ -368,29 +368,29 @@ class Parser {
     }
 
     
-    // Parser en expression (Største type af alle)
+    // Parses an expression (if-else for all types of expressions)
     private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
 
-        // Typer (if, let, switch)
+        // Special types (if, let, switch)
         if tmpToken.type == .keyword_if { // If-else
             return parseIf()
         }
         else if tmpToken.type == .keyword_let { // let vars block
             return parseLet()
         }
-        else if tmpToken.type == .keyword_switch { // Snedig if-else
+        else if tmpToken.type == .keyword_switch { // Switch case
             return parseSwitch()
         }
         else if tmpToken.type == .keyword_else {
-            let t1 = scanner.getToken() // Drop 'else'
+            let t1 = scanner.getToken() // Remove 'else'
             if !t1.content.contains("else") {
                 error("Expected 'else', got \(t1.content)")
             }
             
             return ElseNode()
         }
-        else if tmpToken.type == .keyword_lambda {
+        else if tmpToken.type == .keyword_lambda { // Lambda node
             let t1 = scanner.getToken()
             if !t1.content.contains("lambda") {
                 error("Expected 'lambda', got \(t1.content)")
@@ -399,9 +399,9 @@ class Parser {
             return parseLambda()
         }
         
-        // Variabler og literals
+        // Variables and literals
         var opNode:Node?
-        if tmpToken.type == .string { // Variabelnavn (identifier) eller evt. funktionskald?
+        if tmpToken.type == .string { // Name (identifier) or function call or something
             let stringToken = scanner.getToken()
             
             let funcCheck = scanner.peekToken()
@@ -435,7 +435,7 @@ class Parser {
                 opNode = variableNode
             }
         }
-        else if tmpToken.type == .number { // Tal literal
+        else if tmpToken.type == .number { // Number literal
             let numToken = scanner.getToken()
             var node:NumberLiteralNode?
             
@@ -482,7 +482,7 @@ class Parser {
             
             opNode = negNode
         }
-        else if tmpToken.type == .lpar {
+        else if tmpToken.type == .lpar { // ( EXPR )
             let t1 = scanner.getToken() // lpar
             if !t1.content.contains("(") {
                 error("Expected '(', got \(t1.content)")
@@ -506,12 +506,7 @@ class Parser {
             
             opNode = parexp
         }
-        else if tmpToken.type == .stringLiteral {
-            /*let t1 = scanner.getToken() // "
-            if !t1.content.contains("\"") {
-                error("Expected '\"', got \(t1.content)")
-            }
-            */
+        else if tmpToken.type == .stringLiteral { // String literal
             let stringContent = scanner.getToken()
             let expr = StringLiteralNode(content: stringContent.content)
             
@@ -532,10 +527,29 @@ class Parser {
             
             opNode = node
         }
-        else if tmpToken.type  == .lsquare {
+        else if tmpToken.type  == .lsquare { // Array literal
             return parseArrayLiteral()
         }
+        else if tmpToken.type == .op { // Operator. Hopefully '-' (Nothing else really makes sense..)
+            
+            // Expand here if other tokens can be used before an expression (Possibly +, as it doesn't really change anything)
+            if tmpToken.content != "-" {
+                error("Unexpected operator: \(tmpToken)")
+                return ErrorNode()
+            }
+            
+            // Parse the expression after minus
+            let _ = scanner.getToken()
+            let e = parseExpression()
+            if e is ErrorNode {
+                return ErrorNode()
+            }
+            
+            let minusNode = MinusExpression(expr: e)
+            return minusNode
+        }
         
+        // If an operator was found, parse the next part of the expression
         if let opNode = opNode {
             let opToken = scanner.getToken()
             let op = OperatorNode(op: opToken.content)
@@ -551,6 +565,7 @@ class Parser {
         return ErrorNode()
     }
 
+    // Parses a property type or function call ( name.name or name.name(pars) )
     private func parseTypeProperty(name: String) -> PropertyValueNode {
         let _ = scanner.getToken() // '.'
         let property = scanner.getToken()
