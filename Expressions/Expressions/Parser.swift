@@ -17,7 +17,7 @@ class Parser {
     
     init(input: String) {
         var code = ""
-        /*
+        
         if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
             do {
                 let stdCont = try String(contentsOfFile: p)
@@ -27,7 +27,7 @@ class Parser {
                 
             }
         }
-        */
+ 
         code += input
  
         self.scanner = Scanner(input: code)
@@ -547,7 +547,7 @@ class Parser {
             return ExpressionNode(op: op, loperand: opNode, roperand: expr2)
         }
         
-        error("Error parsing expression")
+        error("Error parsing expression. Got token: \(tmpToken)")
         return ErrorNode()
     }
 
@@ -588,7 +588,9 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let expr = parseExpression()
-            
+            if expr is ErrorNode {
+                break
+            }
             literalNodes.append(expr)
         }
         
@@ -646,7 +648,9 @@ class Parser {
                 error("Expected '=', got \(t1.content)")
             }
             let value = parseExpression()
-
+            if value is ErrorNode {
+                break
+            }
             let vNode = LetVariableNode(type: type, name: name, value: value)
             
             res.append(vNode)
@@ -666,6 +670,9 @@ class Parser {
         
         while scanner.peekToken().type != .none {
             let condition = parseExpression()
+            if condition is ErrorNode {
+                break
+            }
             let block = parseBlock()
             
             let c = SwitchCaseNode(expr: condition, block: block)
@@ -712,6 +719,9 @@ class Parser {
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
             
             let val = parseExpression()
+            if val is ErrorNode {
+                break
+            }
             res.append(val)
         }
         

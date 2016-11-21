@@ -29,3 +29,16 @@ define odd: Int a -> Bool {
 define addNumbers: Int a, Int b -> Int {
   a + b
 }
+
+# Subsets a list
+define subset: [Generic] lst, Int from, Int to -> [Generic] {
+    subsetHelper(lst, from, to, 0)
+}
+define subsetHelper: [Generic] lst, Int from, Int to, Int cur -> [Generic] {
+    switch null(lst) { [] } # No more in lst
+           cur < from { subsetHelper(tail(lst), from, to, cur+1) } # We haven't reached from yet
+           cur == from { append(list(first(lst)), subsetHelper(tail(lst), from, to, cur+1)) } # Start subsetting
+           cur < to AND cur > from { append(list(first(lst)), subsetHelper(tail(lst), from, to, cur+1)) }
+           cur == to { list(first(lst)) }
+           else { [] }
+}

@@ -1,12 +1,15 @@
 define main: -> Int {
   let String table = makeTable([["td1tr1", "td2tr1"], ["td1tr2", "td2tr2"]]),
+      String form = makeForm(["method", "action"], ["GET", ""], input("text", "", "Tekst her!", "textbox"), input("submit", "Go!", "", "")),
       String HTML = html(
-                        head(title("csar13 calendar"), script("function test() { alert(1); }")),
-                        body(a(["href", "onclick"], ["javascript:void(0);", "test();"], "Alert test"), table)
+                         head(title("CGI test"), script("function test() { alert(1); }")),
+                         body(a(["href", "onclick"], ["javascript:void(0);", "test();"], "Alert test"), table, form)
                         )
   {
     printLn("Content-type:text/html\n")
     printLn(HTML)
+    printLn(environmentVariable("QUERY_STRING"))
+    printLn(subset([1, 2, 3, 4, 5, 6], 1, 4))
     #writeFileContents("/Users/Christian/Desktop/test.html", HTML)
     #printLn()
   }
@@ -61,6 +64,13 @@ define b: String ... content -> String {
 }
 define a: [String] attrNames, [String] attrValues, String ... content -> String {
   makeTag("a", attrNames, attrValues, content)
+}
+
+define makeForm: [String] attrNames, [String] attrValues, String ... content -> String {
+  makeTag("form", attrNames, attrValues, content)
+}
+define input: String inputType, String value, String placeholder, String name -> String {
+  makeTag("input", ["type", "value", "name", "placeholder"], [inputType, value, name, placeholder], "")
 }
 
 define table: [String] attrNames, [String] attrValues, String ... content -> String {

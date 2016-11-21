@@ -426,8 +426,7 @@ class CodeGenerator {
                 if decPar.variadic {
                     var litCont:[Node] = []
                     
-                    if n == call.parameters.count { // Bail if no variadic arguments are present
-                    }
+                    if n >= call.parameters.count { } // Bail if no variadic arguments are present
                     else {
                         for i in n ..< call.parameters.count {
                             let par = call.parameters[i]
@@ -438,7 +437,8 @@ class CodeGenerator {
                     // Create array literal with variadic arguments
                     let newLit = ArrayLiteralNode(nodes: litCont)
                     var newCallPars:[Node] = []
-                    for i in 0 ..< n {
+
+                    for i in 0 ..< (n > call.parameters.count ? call.parameters.count : n) {
                         newCallPars.append(call.parameters[i])
                     }
                     newCallPars.append(newLit)
@@ -710,7 +710,7 @@ class CodeGenerator {
             return clearType // Må være objekt
         }
         
-        var str = "const "
+        var str = ""//"const "
         
         for i in 0 ..< nested {
             str += "std::vector<"

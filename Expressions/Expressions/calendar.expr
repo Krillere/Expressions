@@ -1,3 +1,4 @@
+# All types
 type DateTime {
   Int day,
   Int month,
@@ -17,3 +18,50 @@ type Calendar {
   [Appointment] appointments,
 }
 
+#
+#  Calendar functions
+#
+
+# Adds an appointment to a calendar
+define addAppointment: Calendar cal, Appointment app -> Calendar {
+  Calendar(cal.calendars, append(cal.appointments, app))
+}
+
+# Adds a calendar to a calendar
+define addCalendar: Calendar cal, Calendar calToAdd -> Calendar {
+  Calendar(append(cal.calendars, calToAdd), cal.appointments)
+}
+
+define equalCalendars: Calendar cal1, Calendar cal2 -> Bool {
+  false
+}
+
+#
+#  Appointment functions
+#
+
+# Does app1 equal app2?
+define equalAppointments: Appointment app1, Appointment app2 -> Bool {
+  equalDateTimes(app1.startTime, app2.startTime) AND
+  equalDateTimes(app1.endTime, app2.endTime) AND
+  app1.description == app2.description
+}
+
+
+#
+#  DateTime functions
+#
+
+# Does t1 equal t2?
+define equalDateTimes: DateTime t1, DateTime t2 -> Bool {
+  t1.day == t2.day AND
+  t1.month == t2.month AND
+  t1.year == t2.year AND
+  t1.hours == t2.hours AND
+  t1.minutes == t2.minutes
+}
+
+
+define main: -> Int {
+  0
+}

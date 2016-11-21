@@ -167,6 +167,12 @@ std::vector<T> append(const std::vector<T> lst, const std::vector<T>& obj, const
     tmp.insert(tmp.end(), obj.begin(), obj.end());
     return append(tmp, rest...);
 }
+/*template<typename T>
+std::vector<T> append(const std::vector<T> lst, T obj) {
+    std::vector<T> tmp(lst);
+    tmp.push_back(obj);
+    return tmp;
+}*/
 
 // First
 template<typename T>
