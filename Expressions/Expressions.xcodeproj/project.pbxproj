@@ -72,13 +72,11 @@
 		AA09F7571DC7C27B009A9900 /* std.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = std.expr; sourceTree = "<group>"; };
 		AA09F7591DC7E8B7009A9900 /* index.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.txt; sourceTree = "<group>"; };
 		AA09F75A1DC7E980009A9900 /* example8.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example8.expr; sourceTree = "<group>"; };
-		AA09F75C1DC7F2D7009A9900 /* stdold */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stdold; sourceTree = "<group>"; };
 		AA0D9BB61DCBBDA80025FE27 /* example7.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example7.expr; sourceTree = "<group>"; };
 		AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTableFiller.swift; sourceTree = "<group>"; };
 		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
-		AA0F7FBB1DDA508000C77C97 /* ExpressionWalking template */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ExpressionWalking template"; sourceTree = "<group>"; };
 		AA265DF61DDE1BDF00E6B9C7 /* example11.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example11.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -96,7 +94,7 @@
 		AAEAC0251DC4E9E200989910 /* ParserTables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTables.swift; sourceTree = "<group>"; };
 		AAEAC0261DC4E9E200989910 /* Scanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		AAEAC0271DC4E9E200989910 /* TypeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeChecker.swift; sourceTree = "<group>"; };
-		AAEAC0311DC4E9EA00989910 /* ENBF.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ENBF.txt; path = Expressions/ENBF.txt; sourceTree = "<group>"; };
+		AAEAC0311DC4E9EA00989910 /* EBNF.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = EBNF.txt; path = Expressions/EBNF.txt; sourceTree = "<group>"; };
 		AAEAC0321DC4E9EF00989910 /* example1.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example1.expr; sourceTree = "<group>"; };
 		AAEAC0421DC4FE2D00989910 /* example2.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example2.expr; sourceTree = "<group>"; };
 		AAF443501DC65505004F0917 /* example5.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example5.expr; sourceTree = "<group>"; };
@@ -113,14 +111,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AA0F7FBA1DDA507300C77C97 /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				AA0F7FBB1DDA508000C77C97 /* ExpressionWalking template */,
-			);
-			name = Misc;
-			sourceTree = "<group>";
-		};
 		AA3C72591DD8DC1000FD75DF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,7 +122,7 @@
 		AAEAC00C1DC4E9CA00989910 = {
 			isa = PBXGroup;
 			children = (
-				AAEAC0311DC4E9EA00989910 /* ENBF.txt */,
+				AAEAC0311DC4E9EA00989910 /* EBNF.txt */,
 				AAEAC0171DC4E9CA00989910 /* Expressions */,
 				AAEAC0161DC4E9CA00989910 /* Products */,
 			);
@@ -149,7 +139,6 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
-				AA0F7FBA1DDA507300C77C97 /* Misc */,
 				AA3C72591DD8DC1000FD75DF /* Extensions */,
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
@@ -211,7 +200,6 @@
 				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
 				AAB4EE961DC52DE80035F875 /* std.cpp */,
 				AA09F7571DC7C27B009A9900 /* std.expr */,
-				AA09F75C1DC7F2D7009A9900 /* stdold */,
 			);
 			name = Codegen;
 			sourceTree = "<group>";

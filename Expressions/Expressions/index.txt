@@ -12,3 +12,5 @@ examlpe11:  Lambdas
 
 
 html:       Some HTML functions
+calendar:   Trying to rewrite a school project in Expressions.
+empty:      Used for quickly testing some code

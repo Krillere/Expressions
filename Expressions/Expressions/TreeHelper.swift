@@ -36,6 +36,7 @@ class TreeHelper {
         return isGeneric
     }
     
+    // Does the function have any variadic parameters?
     public static func isVariadicFunction(node: FunctionNode) -> Bool {
         for p in node.pars {
             if p.variadic {
