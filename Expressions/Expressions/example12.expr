@@ -1,0 +1,9 @@
+define main: -> Int {
+  0
+}
+
+define ifNested: Int a -> Int {
+  let Int b = if a == 1 { a } { 2 } {
+    b
+  }
+}

@@ -19,6 +19,8 @@
 		AA265DF71DDE1BEB00E6B9C7 /* example11.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA265DF61DDE1BDF00E6B9C7 /* example11.expr */; };
 		AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA3C72561DD8C80F00FD75DF /* example10.expr */; };
 		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
+		AA718B3F1DEF33EC00638028 /* example12.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA718B3E1DEF33E700638028 /* example12.expr */; };
+		AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA718B411DEF3F0D00638028 /* TreeWalker.swift */; };
 		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
 		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -52,6 +54,7 @@
 				AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */,
 				AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */,
 				AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */,
+				AA718B3F1DEF33EC00638028 /* example12.expr in CopyFiles */,
 				AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */,
 				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
 				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
@@ -80,6 +83,8 @@
 		AA265DF61DDE1BDF00E6B9C7 /* example11.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example11.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		AA718B3E1DEF33E700638028 /* example12.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example12.expr; sourceTree = "<group>"; };
+		AA718B411DEF3F0D00638028 /* TreeWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeWalker.swift; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -119,6 +124,14 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		AA718B401DEF3EFF00638028 /* Treewalker */ = {
+			isa = PBXGroup;
+			children = (
+				AA718B411DEF3F0D00638028 /* TreeWalker.swift */,
+			);
+			name = Treewalker;
+			sourceTree = "<group>";
+		};
 		AAEAC00C1DC4E9CA00989910 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +152,7 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				AA718B401DEF3EFF00638028 /* Treewalker */,
 				AA3C72591DD8DC1000FD75DF /* Extensions */,
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
@@ -165,6 +179,7 @@
 				AA0D9BBE1DCBF27E0025FE27 /* example9.expr */,
 				AA3C72561DD8C80F00FD75DF /* example10.expr */,
 				AA265DF61DDE1BDF00E6B9C7 /* example11.expr */,
+				AA718B3E1DEF33E700638028 /* example12.expr */,
 				AAA9F1EB1DC8BF2A0099538B /* calendar.expr */,
 				AA9AAFBB1DC935040013C75A /* empty.expr */,
 				AAE992671DD87FC800DF8CA5 /* html.expr */,
@@ -265,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */,
+				AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */,
 				AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
 				AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */,

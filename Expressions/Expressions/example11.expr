@@ -18,3 +18,7 @@ define tMap4: -> Int {
     func(1, 2)
   }
 }
+
+define addFuncTest: (Int -> Int) func -> Int {
+  func(1)
+}

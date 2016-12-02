@@ -24,7 +24,7 @@ if args.count == 2 {
     }
 }
 else { // Default. Use an example.
-    if let p = Bundle.main.path(forResource: "html", ofType: "expr") {
+    if let p = Bundle.main.path(forResource: "example12", ofType: "expr") {
         let cont = try String(contentsOfFile: p)
         Compiler.compile(code: cont)
     }

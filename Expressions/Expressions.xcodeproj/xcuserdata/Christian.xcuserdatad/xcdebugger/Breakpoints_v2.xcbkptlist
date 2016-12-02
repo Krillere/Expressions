@@ -90,11 +90,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Expressions/CodeGenerator.swift"
-            timestampString = "501457068.90526"
+            timestampString = "502226197.390393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1211"
-            endingLineNumber = "1211"
+            startingLineNumber = "1230"
+            endingLineNumber = "1230"
+            landmarkName = "CodeGenerator"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Expressions/CodeGenerator.swift"
+            timestampString = "502226197.390393"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1233"
+            endingLineNumber = "1233"
             landmarkName = "determineFunctionNodeForCall(call:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Expressions/CodeGenerator.swift"
-            timestampString = "501457068.90526"
+            timestampString = "501630834.152067"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1214"
-            endingLineNumber = "1214"
-            landmarkName = "determineFunctionNodeForCall(call:)"
+            startingLineNumber = "809"
+            endingLineNumber = "809"
+            landmarkName = "createStringLiteral(string:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -11,6 +11,7 @@ define main: -> Int {
     printLn(environmentVariable("QUERY_STRING"))
     printLn(subset([1, 2, 3, 4, 5, 6], 1, 4))
     printLn(indexOf([1, 2, 3, 4], 2))
+    printLn(split("hej med dig", ' '))
     #writeFileContents("/Users/Christian/Desktop/test.html", HTML)
     #printLn()
   }
@@ -106,7 +107,23 @@ define makeTDs: [String] tdConts -> String {
 }
 
 
-# Split list at specific type
-#define split: [Generic] lst, Generic split -> [[Generic]] {
-
-#}
+# Split list at specific object
+define split: [Generic] lst, Generic spl -> [[Generic]] {
+  if indexOf(lst, spl) == -1 { [[]] }
+  {  splitHelper(lst, spl, 0) }
+}
+define splitHelper: [Generic] lst, Generic spl, Int curIndex -> [[Generic]] {
+  print("Soger efter '") print(spl) print("' i: ") printLn(lst)
+  if null(lst) { [[]] } # Stop if lst is empty
+  {
+    print("List: ") printLn(lst)
+    let Int index = indexOf(lst, spl) { # Does lst contain spl and where?
+      if index == -1 { [[]] } # Stop if it does not
+      {
+        let [Generic] sub = subset(lst, curIndex, index) {
+          append(list(sub), splitHelper(subset(lst, index+1, length(lst)), spl, index+1))
+        }
+      }
+    }
+  }
+}

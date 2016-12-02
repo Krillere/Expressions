@@ -806,7 +806,7 @@ class CodeGenerator {
                 n += 1
             }
             else if c == "'" {
-                str += "'\''"
+                str += "'\\''"
             }
             else { // Regular char
                 str += "'"+String(c)+"'"
@@ -989,6 +989,8 @@ class CodeGenerator {
     
     // MARK: Special expressions (let, switch, if-else)
     // Creates switch (if(){} else if(){} and so on)
+    
+    // MARK: Switch
     func createSwitchNode(node: SwitchNode) -> String {
         var str = ""
         
@@ -1015,9 +1017,17 @@ class CodeGenerator {
         return str
     }
 
+    // MARK: If-Else
     // Laver if-else - "if" expr block block
     private func createIfElseNode(ifElse: IfElseNode) -> String {
-        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition else { return "" }
+        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition, let parent = ifElse.parent else { return "" }
+        
+        // Special case (if used in 'let' definition)
+        /*if parent is LetVariableNode {
+            return createLetIfElseNode(ifElse: ifElse)
+        }
+        */
+        // Normal if
         var str = ""
         
         str += "if("
@@ -1030,6 +1040,15 @@ class CodeGenerator {
         return str
     }
     
+    private func createLetIfElseNode(ifElse: IfElseNode) -> String {
+        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition, let parent = ifElse.parent else { return "" }
+        
+        var str = ""
+
+        return str
+    }
+    
+    // MARK: Let
     // Laver let - "let" [Type name "=" expr] block
     private func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block else { return "" }
@@ -1062,13 +1081,15 @@ class CodeGenerator {
             typeString = createFunctionTypeString(type: type as! FunctionTypeNode)
         }
         
-        str += typeString+" "+identifier+" = "
+        str += typeString+" "+identifier+";\n"
+        str += identifier+" = "
         str += createExpression(expr: expr)
         
         str += ";\n"
         return str
     }
     
+    // MARK: Lambda
     // Creates a lambda node
     private func createLambdaNode(node: LambdaNode) -> String {
         guard let block = node.block, let retType = node.retType else { return "" }
@@ -1090,7 +1111,7 @@ class CodeGenerator {
     
     
     // MARK: Helpers
-    // Burde vi returnere denne expression? (Nej hvis f.eks. if(1 == 2), skal jo ikke være if(return 1 == 2))
+    // Should this expression be returned? (No for example: 'if 1 == 2', because we don't want 'if return 1 == 2'
     private func shouldReturn(node: Node) -> Bool {
         
         var tmpNode:Node = node
