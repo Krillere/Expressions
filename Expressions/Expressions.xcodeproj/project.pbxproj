@@ -152,9 +152,9 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AA718B401DEF3EFF00638028 /* Treewalker */,
 				AA3C72591DD8DC1000FD75DF /* Extensions */,
-				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AAEAC0221DC4E9E200989910 /* main.swift */,
 				AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */,
 				AAEAC0361DC4EC0000989910 /* Scanner and Parser */,

@@ -1092,16 +1092,19 @@ class CodeGenerator {
     // MARK: Lambda
     // Creates a lambda node
     private func createLambdaNode(node: LambdaNode) -> String {
-        guard let block = node.block, let retType = node.retType else { return "" }
+        guard let block = node.block else { return "" }
         
         var str = "[=]"
         
         let parString:String = createFunctionParameters(pars: node.pars)
 
-        str += "("+parString+") -> "
+        str += "("+parString+")"
         
-        if retType is NormalTypeNode {
-            str += createTypeString(type: retType as! NormalTypeNode)
+        // Lambda return value
+        if let retType = node.retType {
+            if retType is NormalTypeNode {
+                str += " -> "+createTypeString(type: retType as! NormalTypeNode)
+            }
         }
         
         str += createBlock(block: block)
