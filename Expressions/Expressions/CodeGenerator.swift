@@ -997,7 +997,7 @@ class CodeGenerator {
         for n in 0 ..< node.cases.count {
             let c = node.cases[n]
             
-            if !(c.expr is ElseNode) { // Almindelig
+            if !(c.expr is ElseNode) { // Case node
                 
                 if n != 0 {
                     str += " else"
@@ -1008,7 +1008,7 @@ class CodeGenerator {
                 str += ")"
                 str += createBlock(block: c.block!)
             }
-            else { // Sjovt nok, else!
+            else { // Else node
                 str += " else "
                 str += createBlock(block: c.block!)
             }
@@ -1023,10 +1023,10 @@ class CodeGenerator {
         guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition, let parent = ifElse.parent else { return "" }
         
         // Special case (if used in 'let' definition)
-        /*if parent is LetVariableNode {
+        if parent is LetVariableNode {
             return createLetIfElseNode(ifElse: ifElse)
         }
-        */
+        
         // Normal if
         var str = ""
         
@@ -1040,10 +1040,15 @@ class CodeGenerator {
         return str
     }
     
+    // Creates a lambdanode that handles the if statement
     private func createLetIfElseNode(ifElse: IfElseNode) -> String {
-        guard let iblock = ifElse.ifBlock, let eblock = ifElse.elseBlock, let cond = ifElse.condition, let parent = ifElse.parent else { return "" }
+        guard let _ = ifElse.ifBlock, let _ = ifElse.elseBlock, let _ = ifElse.condition, let _ = ifElse.parent else { return "" }
         
-        var str = ""
+        var str = "[=]"
+        
+        let newBlock = BlockNode(exprs: [ifElse])
+        str += createBlock(block: newBlock)
+        str += "()"
 
         return str
     }
