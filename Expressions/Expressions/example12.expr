@@ -7,3 +7,11 @@ define ifNested: Int a -> Int {
     b
   }
 }
+
+define switchNested: Int a -> Int {
+  let Int b = switch a == 1 { 1 }
+                     a == 2 { 2 }
+                     else { 3 } {
+   b
+ }
+}

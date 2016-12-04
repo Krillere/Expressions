@@ -992,6 +992,14 @@ class CodeGenerator {
     
     // MARK: Switch
     func createSwitchNode(node: SwitchNode) -> String {
+        
+        // SPecial case
+        if let parent = node.parent {
+            if parent is LetVariableNode {
+                return createLetSwitchNode(node: node)
+            }
+        }
+        
         var str = ""
         
         for n in 0 ..< node.cases.count {
@@ -1013,6 +1021,16 @@ class CodeGenerator {
                 str += createBlock(block: c.block!)
             }
         }
+        
+        return str
+    }
+    
+    private func createLetSwitchNode(node: SwitchNode) -> String {
+        var str = "[=]"
+        
+        let newBlock = BlockNode(exprs: [node])
+        str += createBlock(block: newBlock)
+        str += "()"
         
         return str
     }
