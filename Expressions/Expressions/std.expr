@@ -53,3 +53,24 @@ define indexOfHelper: [Generic] lst, Generic item, Int curIndex -> Int {
          first(lst) == item { curIndex }
          else { indexOfHelper(tail(lst), item, curIndex+1) }
 }
+
+# Split list at specific object
+define split: [Generic] lst, Generic spl -> [[Generic]] {
+  if indexOf(lst, spl) == -1 { [[]] }
+                             {  splitHelper(lst, spl) }
+}
+
+define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
+  if null(lst) { [[]] } # Stop if lst is empty
+  {
+    let Int index = indexOf(lst, spl) # Does lst contain spl and where?
+    {
+      if index == -1 { list(lst) } # Stop if it does not
+      {
+        let [Generic] sub = subset(lst, 0, index-1) {
+          append(list(sub), splitHelper(subset(lst, index+1, length(lst)), spl))
+        }
+      }
+    }
+  }
+}
