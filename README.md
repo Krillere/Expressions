@@ -26,7 +26,7 @@ The scanner creates tokens from the input source code. The parser determines the
 The validator will, at some point, validate the scope of variables, and the typechecker will determine if types are correct. Currently, this is only handled by the C++ compiler.
 The code generator traverses the tree created by the parser and produces the C++ intermediate code. This intermediate code is saved on the users desktop in the file intermediate.cpp.
 
-Some standard functions are implemented in Expressions, but some are implemented in C++. The '''std.expr''' file contains the standard functions implemented in Expressions.
+Some standard functions are implemented in Expressions, but some are implemented in C++. The ```std.expr``` file contains the standard functions implemented in Expressions.
 
 # The language
 
