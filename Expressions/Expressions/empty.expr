@@ -1,5 +1,4 @@
 define main: -> Int {
-  printLn(split("hej med dig", ' '))
   0
 }
 

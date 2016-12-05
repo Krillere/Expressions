@@ -39,8 +39,10 @@ class CompilerError : CustomStringConvertible {
 class Compiler {
     
     static var errors:[CompilerError] = []
+    static var intermediateCode:String?
     
     static func compile(code: String) {
+        // Run scanner and parser
         let ps = Parser(input: code)
         ps.run()
         
@@ -50,6 +52,7 @@ class Compiler {
             return
         }
         
+        // Parsing succeeded, continue!
         if let program = ps.getProgram() {
             // Fill ParserTables and find functions before doing anything else
             let filler = ParseTableFiller(program: program)
@@ -79,18 +82,9 @@ class Compiler {
             let generator = CodeGenerator(program: program)
             generator.generate()
             
-            // Save to disc
+            // Save intermediate code
             let intermediate = generator.getIntermediate()
-            do {
-                let writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
-                try intermediate.write(toFile: writePath, atomically: true, encoding: String.Encoding.utf8)
-                
-                print("To compile and run: g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate")
-                // g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate
-            }
-            catch {
-                print("Error ved gem intermediate: \(error)")
-            }
+            self.intermediateCode = intermediate
         }
     }
     

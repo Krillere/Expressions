@@ -11,24 +11,44 @@ import Foundation
 ParserTables.shared.randomizeNames = false
 
 
-// Did the user specify a file?
 let args = CommandLine.arguments
-if args.count == 2 {
+
+// Bail if no input file is specified
+if args.count < 2 {
+    print("Error: No input file specified.")
+    exit(0)
+}
+
+
+do {
+    // Read input file and compile
+    let path = args[1]
+    let cont = try String(contentsOfFile: path)
+    Compiler.compile(code: cont)
+    
+    // Try saving it
+    guard let intermediate = Compiler.intermediateCode else { exit(0) }
     do {
-        let path = args[1]
-        let cont = try String(contentsOfFile: path)
-        Compiler.compile(code: cont)
+        let writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
+        try intermediate.write(toFile: writePath, atomically: true, encoding: String.Encoding.utf8)
+        
+        print("To compile and run: g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate")
+        // g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate
     }
     catch {
-        print("Error: \(error)")
+        print("Error ved gem intermediate: \(error)")
     }
 }
-else { // Default. Use an example.
-    if let p = Bundle.main.path(forResource: "empty", ofType: "expr") {
-        let cont = try String(contentsOfFile: p)
-        Compiler.compile(code: cont)
-    }
-    else {
-        print("No file found..")
-    }
+catch {
+    print("File error: \(error)")
 }
+
+/*
+if let p = Bundle.main.path(forResource: "empty", ofType: "expr") {
+    let cont = try String(contentsOfFile: p)
+    Compiler.compile(code: cont)
+}
+else {
+    print("No file found..")
+}
+*/
