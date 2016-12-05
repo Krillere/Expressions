@@ -7,12 +7,12 @@ ToDo list:
 - ~~Function implementation~~ (Done)
 - ~~Switch implementation~~ (Done)
 - ~~Let implementation~~ (Done)
-- ~~Built-in functions~~ (Mostly done for now. Missing some important ones.)
+- ~~Built-in functions~~ (Done. More to come though.)
 - ~~Simple types~~ (Done)
 - ~~Lists~~ (Done)
 - ~~Objects~~ (Done)
 - ~~Side conditions~~ (Print, IO and such)
-- ~~Functions as first-class-citizens~~ (Somewhat done)
+- ~~Functions as first-class-citizens~~ (Done)
 - ~~Generics~~ (Done)
 - ~~Higher order functions~~ (map, filter, simple ones first)
 - ~~Variadic functions~~ (Seems to work, not thoroughly tested)
@@ -20,11 +20,13 @@ ToDo list:
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
-The compiler consists of four major parts; scanner, parser, validator and code generation.
+The compiler consists of four major parts; scanner, parser, validator and code generation, with some tree handling before code generation.
 
-The scanner creates tokens from the input source code. The parser determines the code structure and syntactical correctness and creates the program tree. The root node being a 'program', with multiple functions.
-The validator will, at some point, validate the scope of variables, types and such. Currently, this is only handled by the C++ compiler.
+The scanner creates tokens from the input source code. The parser determines the code structure and syntactical correctness and creates the program tree. The root node being a 'program', with multiple functions and/or types.
+The validator will, at some point, validate the scope of variables, and the typechecker will determine if types are correct. Currently, this is only handled by the C++ compiler.
 The code generator traverses the tree created by the parser and produces the C++ intermediate code. This intermediate code is saved on the users desktop in the file intermediate.cpp.
+
+Some standard functions are implemented in Expressions, but some are implemented in C++. The '''std.expr''' file contains the standard functions implemented in Expressions.
 
 # The language
 
