@@ -255,6 +255,7 @@ reverse(list) # Reverses a list
 append(list, obj) # Appends 'obj' to the end of 'list'
 append(list, ... lists) # Appends all the objects from 'lists' (Variadic) to 'list'
 
+split(lst, spl) # Splits 'lst' at 'spl'. Returns a nested list. For example: split("this is test", ' ') -> ["this", "is", "test"]
 ```
 
 Functions for type checking:
