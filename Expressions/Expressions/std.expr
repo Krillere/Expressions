@@ -3,6 +3,21 @@ define factorial: Int num -> Int {
   if num <= 1 { 1 } { num * factorial(num-1) }
 }
 
+# Is the list empty?
+define null: [Generic] lst -> Bool {
+  length(lst) == 0
+}
+
+# First object in list
+define first: [Generic] lst -> Generic {
+  get(lst, 0)
+}
+
+# Last object in list
+define last: [Generic] lst -> Generic {
+  get(lst, length(lst)-1)
+}
+
 # Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }

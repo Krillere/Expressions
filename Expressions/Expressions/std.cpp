@@ -32,10 +32,6 @@ std::vector<T> append(const std::vector<T> lst, std::vector<T> obj);
 template <typename T, typename ... Rest>
 std::vector<T> append(const std::vector<T> lst, const std::vector<T>& obj, const Rest&... rest);
 template<typename T>
-T first(const std::vector<T> obj);
-template<typename T>
-T last(const std::vector<T> obj);
-template<typename T>
 size_t length(const std::vector<T> obj);
 template<typename T>
 std::vector<T> reverse(const std::vector<T> obj);
@@ -47,8 +43,6 @@ template<typename T>
 std::vector<T> init(const std::vector<T> obj);
 template<typename T>
 std::vector<T> take(const std::vector<T> obj, int num);
-template<typename T>
-bool null(const std::vector<T> obj);
 template<typename T>
 bool isInt(T obj);
 template<typename T>
@@ -174,18 +168,6 @@ std::vector<T> append(const std::vector<T> lst, T obj) {
     return tmp;
 }
 
-// First
-template<typename T>
-T first(const std::vector<T> obj) {
-    return obj[0];
-}
-
-// Last
-template<typename T>
-T last(const std::vector<T> obj) {
-    return obj[obj.size()-1];
-}
-
 // Length
 template<typename T>
 size_t length(const std::vector<T> obj) {
@@ -233,12 +215,6 @@ std::vector<T> take(const std::vector<T> obj, int num) {
     }
     
     return ret;
-}
-
-// null
-template<typename T>
-bool null(const std::vector<T> obj) {
-    return obj.size() == 0;
 }
 
 // Typecheck
