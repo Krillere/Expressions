@@ -74,7 +74,7 @@ class Scanner {
     // Char classes
     private let letters = NSCharacterSet.letters
     private let digits = NSCharacterSet.decimalDigits
-    private let otherNameChars = CharacterSet(charactersIn: "")
+    private let otherNameChars = CharacterSet(charactersIn: "_'?")
 
     // Input and index in input (integer of character)
     private var input:[UInt16] = []
@@ -179,7 +179,7 @@ class Scanner {
             tmp.append(Character(char))
             char = get()
         }
-        while letters.contains(char) || digits.contains(char)
+        while letters.contains(char) || digits.contains(char) || otherNameChars.contains(char)
         
         if inputIndex >= input.count-1 { }
         else {

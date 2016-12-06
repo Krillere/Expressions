@@ -32,8 +32,27 @@ define addCalendar: Calendar cal, Calendar calToAdd -> Calendar {
   Calendar(append(cal.calendars, calToAdd), cal.appointments)
 }
 
+# Are cal1 and cal2 equal?
 define equalCalendars: Calendar cal1, Calendar cal2 -> Bool {
   false
+}
+
+# Flatten a calendar (Flattens all calendars recursively)
+define flattenCalendar: Calendar cal -> Calendar {
+  let [Calendar] nestedCals = cal.calendars, 
+      [Appointment] apps = cal.appointments {
+    Calendar([], append(apps, flattenCalendarHelper(nestedCals)))
+  }
+}
+
+define flattenCalendarHelper: [Calendar] cals -> [Appointment] {
+  if length(cals) == 0 { [] }
+  {
+    let Calendar cal = first(cals), [Appointment] apps = cal.appointments, [Calendar] newCals = cal.calendars 
+    {
+      append(apps, flattenCalendarHelper(tail(cals)), flattenCalendarHelper(newCals))
+    }
+  }
 }
 
 #

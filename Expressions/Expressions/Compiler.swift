@@ -82,6 +82,12 @@ class Compiler {
             let generator = CodeGenerator(program: program)
             generator.generate()
             
+            if errors.count > 0 {
+                print("Errors during code generation.")
+                print("Errors: \(errors)")
+                return
+            }
+            
             // Save intermediate code
             let intermediate = generator.getIntermediate()
             self.intermediateCode = intermediate

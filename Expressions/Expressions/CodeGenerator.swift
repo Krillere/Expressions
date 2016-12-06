@@ -132,10 +132,12 @@ class CodeGenerator {
         // Initialization function
         
         // Function definition
+        var parNodes:[ParameterNode] = []
         var typeInit = "t_"+name+" "+name+"("
         for n in 0 ..< objType.variables.count {
             let v = objType.variables[n]
             guard let ttype = v.type, let vname = v.identifier else { continue }
+            parNodes.append(ParameterNode(type: ttype, name: vname))
             
             if ttype is NormalTypeNode {
                 guard let ttype = ttype as? NormalTypeNode else { return "" }
@@ -157,6 +159,13 @@ class CodeGenerator {
         typeInit += ")"
         
         declaredFunctions.append(typeInit)
+        
+        // Create a function definition so the parameter types can be found later
+        let functionNode = FunctionNode(identifier: name,
+                                pars: parNodes,
+                                ret: NormalTypeNode(full: "t_"+name, type: "t_"+name, nestedLevel: 0),
+                                block: BlockNode(exprs: []))
+        ParserTables.shared.functionDeclarations[name] = [functionNode]
         
         // Function block
         typeInit += " {\n"
@@ -528,6 +537,7 @@ class CodeGenerator {
                     else { // 'Normal' function
                         if let functionDecl = determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.pars.count {
+                                print("Breaking!")
                                 break
                             }
                             
@@ -539,8 +549,15 @@ class CodeGenerator {
                                     type = createTypeString(type: defParType)
                                 }
                             }
+                            else {
+                                Compiler.error(reason: "Failed determining the type of parameter.", node: expr, phase: .CodeGeneration)
+                            }
+                        }
+                        else {
+                            Compiler.error(reason: "No function node found for function call '\(ident)'", node: expr, phase: .CodeGeneration)
                         }
                     }
+                    
                     str += type+" "+newName+" = "+createArrayLiteral(lit: par)+";\n"
                 }
                 else if par is StringLiteralNode { // String literal used as parameter, replace with std::vector<char>
@@ -558,7 +575,7 @@ class CodeGenerator {
                 }
                 else if par is FunctionCallNode { // Do the same for nested function calls
                     str += createFunctionCallParameterDeclarations(expr: par)
-                    // TODO: Lav færdig
+                    // TODO: Finish this
                     /*
                     let newName = ParserTables.shared.generateNewVariableName()
                     ParserTables.shared.nameTranslation[newName] = newName
@@ -654,7 +671,7 @@ class CodeGenerator {
             
             return str
         }
-        else if expr is ArrayLiteralNode {
+        else if expr is ArrayLiteralNode { // TODO: Change content to another object here (Possibly from caller?)
             guard let expr = expr as? ArrayLiteralNode else { return "" }
             
         }
@@ -805,7 +822,7 @@ class CodeGenerator {
                 
                 n += 1
             }
-            else if c == "'" {
+            else if c == "'" { // Escape as we convert to char, so escaping single quote is necessary.
                 str += "'\\''"
             }
             else { // Regular char
@@ -1245,6 +1262,7 @@ class CodeGenerator {
             return "bool"
         }
         
+        Compiler.error(reason: "No type found for node: \(node), probably an error.", node: node, phase: .CodeGeneration)
         return ""
     }
     
