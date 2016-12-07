@@ -53,6 +53,7 @@ class TreeWalker {
     var delegate:TreeWalkerDelegate!
     
     init(program: ProgramNode, delegate: TreeWalkerDelegate) {
+        self.delegate = delegate
         self.program = program
     }
     
@@ -94,6 +95,10 @@ class TreeWalker {
         
         if let retType = node.retType {
             walkTypeNode(node: retType)
+        }
+        
+        if let block = node.block {
+            walkBlockNode(node: block)
         }
     }
     
@@ -182,7 +187,7 @@ class TreeWalker {
             walkSwitchNode(node: node as! SwitchNode)
         }
         else if node is LambdaNode {
-            
+            walkLambdaNode(node: node as! LambdaNode)
         }
         
         switch node {

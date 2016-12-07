@@ -126,6 +126,7 @@ class Parser {
         }
         
         var variables:[ObjectTypeVariableNode] = []
+        var parNodes:[ParameterNode] = []
         
         // Finds type variables
         while scanner.peekToken().type != .rcurly {
@@ -135,6 +136,8 @@ class Parser {
             let varNode = ObjectTypeVariableNode(identifier: name.content, type: type)
             variables.append(varNode)
             
+            parNodes.append(ParameterNode(type: type, name: name.content))
+            
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue } // Skip komma
         }
         
@@ -142,6 +145,12 @@ class Parser {
         if !t3.content.contains("}") {
             error("Expected '}', got \(t3.content)")
         }
+        
+        let functionNode = FunctionNode(identifier: name.content,
+                                        pars: parNodes,
+                                        ret: NormalTypeNode(full: "t_"+name.content, type: "t_"+name.content, nestedLevel: 0),
+                                        block: BlockNode(exprs: []))
+        ParserTables.shared.functionDeclarations[name.content] = [functionNode]
         
         return ObjectTypeNode(variables: variables, name: name.content)
     }
@@ -576,6 +585,7 @@ class Parser {
             propNode.name = name
             
             let functionCall = parseFunctionCall(property.content)
+            functionCall.parent = propNode
             propNode.call = functionCall
             
             return propNode

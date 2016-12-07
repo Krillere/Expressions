@@ -38,7 +38,6 @@
 		AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0321DC4E9EF00989910 /* example1.expr */; };
 		AAEAC0431DC4FE3700989910 /* example2.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0421DC4FE2D00989910 /* example2.expr */; };
 		AAF443511DC65516004F0917 /* example5.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAF443501DC65505004F0917 /* example5.expr */; };
-		AAFBD9A21DF60352009C7136 /* PreCodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBD9A11DF60352009C7136 /* PreCodeGen.swift */; };
 		AAFBD9A41DF6050B009C7136 /* TreeWalkerExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */; };
 /* End PBXBuildFile section */
 
@@ -105,7 +104,6 @@
 		AAEAC0321DC4E9EF00989910 /* example1.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example1.expr; sourceTree = "<group>"; };
 		AAEAC0421DC4FE2D00989910 /* example2.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example2.expr; sourceTree = "<group>"; };
 		AAF443501DC65505004F0917 /* example5.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example5.expr; sourceTree = "<group>"; };
-		AAFBD9A11DF60352009C7136 /* PreCodeGen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreCodeGen.swift; sourceTree = "<group>"; };
 		AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeWalkerExample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,7 +215,6 @@
 		AAEAC0381DC4EC1700989910 /* Codegen */ = {
 			isa = PBXGroup;
 			children = (
-				AAFBD9A11DF60352009C7136 /* PreCodeGen.swift */,
 				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
 				AAB4EE961DC52DE80035F875 /* std.cpp */,
 				AA09F7571DC7C27B009A9900 /* std.expr */,
@@ -298,7 +295,6 @@
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,
 				AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */,
-				AAFBD9A21DF60352009C7136 /* PreCodeGen.swift in Sources */,
 				AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */,
 				AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */,
 			);

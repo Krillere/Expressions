@@ -22,9 +22,21 @@ type Calendar {
 #  Calendar functions
 #
 
+# Creates an empty calendar (No nested calendars or appointments)
+define emptyCalendar: -> Calendar {
+  Calendar([], [])
+}
+
 # Adds an appointment to a calendar
 define addAppointment: Calendar cal, Appointment app -> Calendar {
   Calendar(cal.calendars, append(cal.appointments, app))
+}
+
+# Removes an appointment from a calendar (Removes all instances)
+define removeAppointment: Calendar cal, Appointment app -> Calendar {
+  let [Appointment] apps = cal.appointments {
+  Calendar(cal.calendars, filter(apps, lambda (Appointment testApp -> Bool) { !equalAppointments(app, testApp) }))
+  }
 }
 
 # Adds a calendar to a calendar
@@ -32,25 +44,54 @@ define addCalendar: Calendar cal, Calendar calToAdd -> Calendar {
   Calendar(append(cal.calendars, calToAdd), cal.appointments)
 }
 
+# Removes a calendar from a calendar
+define removeCalendar: Calendar cal, Calendar toRemove -> Calendar {
+  emptyCalendar()
+}
+
+# Finds a number of appointments based on a predicate
+define findAppointments: Calendar cal, (Appointment -> Bool) pred -> [Appointment] {
+  if null(cal.appointments) { [] } # Bail if no appointments are found
+  {
+    filter(cal.appointments, pred)
+  }
+}
+
 # Are cal1 and cal2 equal?
+# Flatten calendars and check appointments
 define equalCalendars: Calendar cal1, Calendar cal2 -> Bool {
-  false
+  let Calendar flatCal1 = flattenCalendar(cal1), Calendar flatCal2 = flattenCalendar(cal2),
+      [Appointment] apps1 = flatCal1.appointments, [Appointment] apps2 = flatCal2.appointments
+  {
+    if length(apps1) != length(apps2) { false } # If there isn't the same amount, they're not equal
+                                      { equalCalendarsHelper(apps1, apps2) } # Test each appointment
+  }
+}
+
+define equalCalendarsHelper: [Appointment] apps1, [Appointment] apps2 -> Bool {
+  if null(apps1) OR null(apps2) { true } {
+    let Appointment fApp1 = first(apps1), Appointment fApp2 = first(apps2)
+    {
+      if !equalAppointments(fApp1, fApp2) { false } # Nope.
+                                          { equalCalendarsHelper(tail(apps1), tail(apps2)) } # Try the next one
+    }
+  }
 }
 
 # Flatten a calendar (Flattens all calendars recursively)
 define flattenCalendar: Calendar cal -> Calendar {
-  let [Calendar] nestedCals = cal.calendars, 
-      [Appointment] apps = cal.appointments {
+  let [Calendar] nestedCals = cal.calendars, [Appointment] apps = cal.appointments 
+  {
     Calendar([], append(apps, flattenCalendarHelper(nestedCals)))
   }
 }
-
+# Appens all 'cals' appointments, and calls itself with the rest of 'cals', along with nested calendars in first(cals)
 define flattenCalendarHelper: [Calendar] cals -> [Appointment] {
-  if length(cals) == 0 { [] }
+  if length(cals) == 0 { [] } # Bail if there are no calendars remaining
   {
-    let Calendar cal = first(cals), [Appointment] apps = cal.appointments, [Calendar] newCals = cal.calendars 
+    let Calendar cal = first(cals), [Appointment] apps = cal.appointments, [Calendar] nestedCals = cal.calendars 
     {
-      append(apps, flattenCalendarHelper(tail(cals)), flattenCalendarHelper(newCals))
+      append(apps, flattenCalendarHelper(tail(cals)), flattenCalendarHelper(nestedCals))
     }
   }
 }
@@ -66,6 +107,10 @@ define equalAppointments: Appointment app1, Appointment app2 -> Bool {
   app1.description == app2.description
 }
 
+# Creates an empty appointment (Using epoch-time for start and end)
+define emptyAppointment: -> Appointment {
+  Appointment(DateTime(0, 0, 1970, 0, 0), DateTime(0, 0, 1970, 0, 0), "")
+}
 
 #
 #  DateTime functions
@@ -81,6 +126,15 @@ define equalDateTimes: DateTime t1, DateTime t2 -> Bool {
 }
 
 
+
+# The entrypoint
 define main: -> Int {
-  0
+  let Appointment app1 = Appointment(DateTime(27, 03, 1994, 13, 37), DateTime(27, 03, 1994, 14, 00), "Dette er en description"),
+      Appointment app2 = Appointment(DateTime(20, 04, 2000, 10, 00), DateTime(20, 05, 2000, 8, 00), "En anden begivenhed"),
+      Calendar c1 = Calendar([], list(app1)),
+      Calendar c2 = Calendar(list(c1), list(app2)),
+      Calendar flatCal = flattenCalendar(c2)
+  {
+    0
+  }
 }

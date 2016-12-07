@@ -1,16 +1,16 @@
-example1:   Some function definitions, recursion and if-statements
-example2:   Switch case, along with string and character
-example3:   List tests, along with some list function testing
-example4:   Custom types
-example5:   Custom types and functions inside and with these
-example6:   Side conditions and I/O
-example7:   Some strings
-example8:   Generic testing, along with some useful functions written using generics
-example9:   Higher order functions
-example10:  Variadic functions
-example11:  Lambdas
+example1:   Some function definitions, recursion and if-statements.
+example2:   Switch case, along with string and character.
+example3:   List tests, along with some list function testing.
+example4:   Custom types.
+example5:   Custom types and functions inside and with these.
+example6:   Side conditions and I/O.
+example7:   Some strings.
+example8:   Generic testing, along with some useful functions written using generics.
+example9:   Higher order functions.
+example10:  Variadic functions.
+example11:  Lambdas.
 example12:  Misc.
 
-html:       Some HTML functions
+html:       Some HTML functions.
 calendar:   Trying to rewrite a school project in Expressions.
-empty:      Used for quickly testing some code
+empty:      Used for quickly testing some code.

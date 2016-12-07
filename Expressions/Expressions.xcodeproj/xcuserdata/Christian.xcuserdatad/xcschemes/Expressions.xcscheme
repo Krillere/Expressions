@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "calendar.expr"
+            argument = "empty.expr"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

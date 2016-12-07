@@ -171,7 +171,8 @@ class Scanner {
         return test.contains(".")
     }
     
-    // Fetches string from current char, allows characters allowed in variable and function names
+    // Fetches string from current char, allows characters allowed in identifiers
+    // Should only be used for identifiers (Strings are handled in a dedicated function)
     private func getString() -> String {
         var tmp:String = ""
         
@@ -185,6 +186,9 @@ class Scanner {
         else {
             inputIndex -= 1
         }
+        
+        // Clean
+        tmp = tmp.replacingOccurrences(of: "'", with: "Q") // SHould be done at code-generation, but is here temporary
         
         return tmp
     }

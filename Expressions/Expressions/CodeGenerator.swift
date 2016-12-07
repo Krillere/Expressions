@@ -132,12 +132,10 @@ class CodeGenerator {
         // Initialization function
         
         // Function definition
-        var parNodes:[ParameterNode] = []
         var typeInit = "t_"+name+" "+name+"("
         for n in 0 ..< objType.variables.count {
             let v = objType.variables[n]
             guard let ttype = v.type, let vname = v.identifier else { continue }
-            parNodes.append(ParameterNode(type: ttype, name: vname))
             
             if ttype is NormalTypeNode {
                 guard let ttype = ttype as? NormalTypeNode else { return "" }
@@ -160,12 +158,6 @@ class CodeGenerator {
         
         declaredFunctions.append(typeInit)
         
-        // Create a function definition so the parameter types can be found later
-        let functionNode = FunctionNode(identifier: name,
-                                pars: parNodes,
-                                ret: NormalTypeNode(full: "t_"+name, type: "t_"+name, nestedLevel: 0),
-                                block: BlockNode(exprs: []))
-        ParserTables.shared.functionDeclarations[name] = [functionNode]
         
         // Function block
         typeInit += " {\n"

@@ -10,7 +10,17 @@ import Foundation
 
 // Changes a few things in the tree before doing the code generation
 class TreeWalkerExample: TreeWalkerDelegate {
+    var walker: TreeWalker!
+    var program:ProgramNode!
     
+    init(program: ProgramNode) {
+        self.program = program
+        
+        self.walker = TreeWalker(program: program, delegate: self)
+        self.walker.walk()
+    }
+    
+    // MARK: TreeWalkerDelegate functions
     func visitFunctionNode(node: FunctionNode) {
     }
     
@@ -104,4 +114,6 @@ class TreeWalkerExample: TreeWalkerDelegate {
     func visitElseNode(node: ElseNode) {
     }
     
+    
+    // MARK: Other functions
 }

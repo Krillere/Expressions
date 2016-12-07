@@ -60,7 +60,6 @@ class Compiler {
 
             // Scope check (Variables and functions)
             let scope = ScopeChecker(program: program)
-            scope.test()
             
             if errors.count > 0 {
                 print("Skipping type check due to errors during scope checking.")
