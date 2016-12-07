@@ -18,7 +18,7 @@ class CodeGenerator {
     private var program:ProgramNode?
     private var doingMainBlock = false
     
-    // Prototyper
+    // Prototypes
     private var declaredFunctions:[String] = []
     
     // Direct conversions, used when possible (Not user-defined types) (Types and operators)

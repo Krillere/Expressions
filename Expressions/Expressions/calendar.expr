@@ -46,7 +46,9 @@ define addCalendar: Calendar cal, Calendar calToAdd -> Calendar {
 
 # Removes a calendar from a calendar
 define removeCalendar: Calendar cal, Calendar toRemove -> Calendar {
-  emptyCalendar()
+  let [Calendar] cals = cal.calendars { # Create a new calendar where all calendars that are equal to 'toRemove' are not in it
+    Calendar(filter(cals, lambda (Calendar testCal -> Bool) { !equalCalendars(toRemove, testCal) }), cal.appointments)
+  }
 }
 
 # Finds a number of appointments based on a predicate
@@ -131,9 +133,10 @@ define equalDateTimes: DateTime t1, DateTime t2 -> Bool {
 define main: -> Int {
   let Appointment app1 = Appointment(DateTime(27, 03, 1994, 13, 37), DateTime(27, 03, 1994, 14, 00), "Dette er en description"),
       Appointment app2 = Appointment(DateTime(20, 04, 2000, 10, 00), DateTime(20, 05, 2000, 8, 00), "En anden begivenhed"),
-      Calendar c1 = Calendar([], list(app1)),
-      Calendar c2 = Calendar(list(c1), list(app2)),
-      Calendar flatCal = flattenCalendar(c2)
+      Calendar c1 = Calendar([], [app1]),
+      Calendar c2 = Calendar([c1], [app2]),
+      Calendar flatCal = flattenCalendar(c2),
+      Calendar removedApp = removeAppointment(flatCal, app1)
   {
     0
   }
