@@ -15,8 +15,10 @@ ToDo list:
 - ~~Functions as first-class-citizens~~ (Done)
 - ~~Generics~~ (Done)
 - ~~Higher order functions~~ (map, filter, simple ones first)
-- ~~Variadic functions~~ (Seems to work, not thoroughly tested)
+- ~~Variadic functions~~ (Done)
 - ~~Lambdas~~ (Done)
+- User defined functions with side-effects
+- Scope check (Function calls checked)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
