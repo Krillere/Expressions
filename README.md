@@ -4,19 +4,19 @@ A simple compiler for a simple functional programming language. Everything is an
 The compiler is written in Swift 3.0. The compiler compiles the Expression code to the intermediate language C++.
 
 ToDo list:
-- ~~Function implementation~~ (Done)
-- ~~Switch implementation~~ (Done)
-- ~~Let implementation~~ (Done)
-- ~~Built-in functions~~ (Done. More to come though.)
-- ~~Simple types~~ (Done)
-- ~~Lists~~ (Done)
-- ~~Objects~~ (Done)
-- ~~Side conditions~~ (Print, IO and such)
-- ~~Functions as first-class-citizens~~ (Done)
-- ~~Generics~~ (Done)
-- ~~Higher order functions~~ (map, filter, simple ones first)
-- ~~Variadic functions~~ (Done)
-- ~~Lambdas~~ (Done)
+- ~~Function implementation~~
+- ~~Switch implementation~~
+- ~~Let implementation~~
+- ~~Built-in functions~~ (More to come.)
+- ~~Simple types~~
+- ~~Lists~~
+- ~~Objects~~
+- ~~Side conditions~~
+- ~~Functions as first-class-citizens~~
+- ~~Generics~~ (Simple implementation now)
+- ~~Higher order functions~~ (map, filter implemented)
+- ~~Variadic functions~~
+- ~~Lambdas~~
 - User defined functions with side-effects
 - Scope check (Function calls checked)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
