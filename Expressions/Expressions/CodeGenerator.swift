@@ -22,7 +22,7 @@ class CodeGenerator {
     private var declaredFunctions:[String] = []
     
     // Direct conversions, used when possible (Not user-defined types) (Types and operators)
-    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool", "Generic":"T"]
+    private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool"]
     private var opConversions:[String: String] = ["AND":"&&", "OR":"||"]
     
     
@@ -254,18 +254,34 @@ class CodeGenerator {
             let identifier = function.identifier,
             let block = function.block else { return "" }
         
-        var vecFunc = "template<typename T>\n"
+        // Find number of generics
+        var vecFunc = ""
+        var foundGenericNames:[String] = []
+        for par in function.pars {
+            if par.type is NormalTypeNode {
+                guard let type = par.type as? NormalTypeNode, let clearType = type.clearType else { continue }
+                
+                if type.generic {
+                    if !foundGenericNames.contains(clearType) {
+                        foundGenericNames.append(clearType)
+                    }
+                }
+            }
+        }
+        
+        // Create typenames
+        vecFunc += "template<"
+        for n in 0 ..< foundGenericNames.count {
+            vecFunc += "typename "+foundGenericNames[n]
+            
+            if n != foundGenericNames.count-1 {
+                vecFunc += ", "
+            }
+        }
+        vecFunc += ">\n"
         
         // Return type
-        if retGen {
-            let tmpType = (retType as! NormalTypeNode).copy() as! NormalTypeNode
-            tmpType.clearType = "T"
-            
-            vecFunc += createTypeString(type: tmpType)
-        }
-        else {
-            vecFunc += createTypeString(type: retType as! NormalTypeNode)
-        }
+        vecFunc += createTypeString(type: retType as! NormalTypeNode)
         
         vecFunc += " "+identifier
         
@@ -277,16 +293,8 @@ class CodeGenerator {
             
             if par.type is NormalTypeNode {
                 guard let ptype = par.type as? NormalTypeNode else { continue }
-                if ptype.generic {
-                    let tmpType = ptype.copy() as! NormalTypeNode
-                    tmpType.clearType = "T"
-                    
-                    vecPars += createTypeString(type: tmpType)
-                }
-                else {
-                    vecPars += createTypeString(type: ptype)
-                }
                 
+                vecPars += createTypeString(type: ptype)
                 vecPars += " "+pname
             }
             else { // Function parameter

@@ -46,7 +46,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 7;
+			dstSubfolderSpec = 6;
 			files = (
 				AAE992681DD8805F00DF8CA5 /* html.expr in CopyFiles */,
 				AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */,

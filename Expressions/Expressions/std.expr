@@ -89,3 +89,10 @@ define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
     }
   }
 }
+
+# Creates a list containing the first and last element of 'lst'
+define ends: [Generic] lst -> [Generic] {
+  let Generic f = first(lst), Generic l = last(lst) {
+    append(list(f), l)
+  }
+}
