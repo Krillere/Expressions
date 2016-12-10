@@ -148,7 +148,14 @@ define ends: [Generic] lst -> [Generic] {
   }
 }
 ```
-Currently, only one type of generic can be used in a function. Meaning that if a function takes a Generic and returns a Generic, they will have to be the same type at runtime. At some point, it should be possible to define multiple types of generics in a function.
+
+Multiple types of generics can be used in functions or let-expressions. For example:
+```
+define multGen: Generic_A genA, Generic_B genB -> Int {
+ 1 + 1
+}
+```
+The only requirement is that the name starts with ```Generic```, what comes after that does not matter.
 
 ## Objects
 Objects can be defined to contain a number of different values using the *type* keyword. For example:
