@@ -232,24 +232,6 @@ class CodeGenerator {
     
     // Creates a generic function
     private func createGenericFunction(function: FunctionNode) -> String {
-        guard let retType = function.retType else { return "" }
-        
-        var retGen = false
-        if retType is NormalTypeNode {
-            guard let retType = retType as? NormalTypeNode else { return "" }
-            retGen = retType.generic
-        }
-        
-        var str = ""
-
-        // Vector function
-        str += createGenericVectorFunction(function: function, retGen: retGen)
-        
-        return str
-    }
-    
-    // Creates the generic std::vector<T> function (Called from 'createGenericFunction' to create the vector function)
-    private func createGenericVectorFunction(function: FunctionNode, retGen: Bool) -> String {
         guard let retType = function.retType,
             let identifier = function.identifier,
             let block = function.block else { return "" }
@@ -316,7 +298,7 @@ class CodeGenerator {
         
         return vecFunc
     }
-    
+
     // Creates string with function parameters - (T1 n1, T2 n2 ... )
     private func createFunctionParameters(pars: [ParameterNode]) -> String {
         var str = ""
@@ -1217,7 +1199,7 @@ class CodeGenerator {
         if node is ArrayLiteralNode {
             guard let node = node as? ArrayLiteralNode else { return "" }
             if node.contents.count < 1 {
-                return "void"
+                return "void*"
             }
             
             let fnode = node.contents[0]

@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1267"
             endingLineNumber = "1267"
-            landmarkName = "guessType(node:)"
+            landmarkName = "determineFunctionNodeForCall(call:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -127,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "827"
             endingLineNumber = "827"
-            landmarkName = "createStringLiteral(string:)"
+            landmarkName = "createArrayLiteral(lit:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -25,6 +25,13 @@ define main: -> Int {
   printLn(genericTesting("asd"))
   printLn(genericTesting(true))
   printLn(genericTesting('a'))
+
+  print("MultGen: ")
+  printLn(anotherMult(1, 2))
+
+  print("MultGenArray: ")
+  printLn(multGenerics([1], []))
+  
   0
 }
 
@@ -73,4 +80,8 @@ switch isInt(gen)    { "Integer" }
 
 define multGenerics: [Generic_A] gena, [Generic_B] genb -> Int {
   0
+}
+
+define anotherMult: Generic_A gena, Generic_B genb -> Int {
+  1+1
 }
