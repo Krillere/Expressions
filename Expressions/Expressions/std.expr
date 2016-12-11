@@ -96,3 +96,25 @@ define ends: [Generic] lst -> [Generic] {
     append(list(f), l)
   }
 }
+
+# Does the list have a specific prefix?
+define hasPrefix: [Generic] lst, [Generic] items -> Bool {
+  if null(items) OR (length(items) > length(lst)) { false }
+  {
+    prefixHelper(lst, items)
+  }
+}
+define prefixHelper: [Generic] lst, [Generic] items -> Bool {
+  if null(items) { true }
+  {
+    let Generic fLst = first(lst), Generic fItems = first(items) {
+      if fLst != fItems { false }
+                        { prefixHelper(tail(lst), tail(items)) }
+    }
+  }
+}
+
+# Does the list have a specific postfix? (Uses prefix but reverses first)
+define hasPostfix: [Generic] lst, [Generic] items -> Bool {
+  hasPrefix(reverse(lst), reverse(items))
+}
