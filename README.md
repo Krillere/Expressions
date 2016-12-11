@@ -254,6 +254,7 @@ last(list) # Returns the last object in the list
 
 tail(list) # Returns everything but the first object
 init(list) # Returns everything but the last object
+ends(lst) # Returns a list containing the first and last object in 'lst'
 
 get(list, nth) # Fetches the nth object in a list
 take(list, num) # Returns 'num' items from list
@@ -263,10 +264,12 @@ indexOf(list, obj) # Returns the first encountered index of 'obj' in 'list', or 
 list(obj) # Returns a list containing 'obj'
 reverse(list) # Reverses a list
 
-append(list, obj) # Appends 'obj' to the end of 'list'
 append(list, ... lists) # Appends all the objects from 'lists' (Variadic) to 'list'
 
 split(lst, spl) # Splits 'lst' at 'spl'. Returns a nested list. For example: split("this is test", ' ') -> ["this", "is", "test"]
+
+hasPrefix(lst, items) # Returns true of 'items' is the prefix of 'lst'
+hasPostfix(lst, items) # Returns true if 'items' is the postfix of 'lst'
 ```
 
 Functions for type checking:
@@ -301,7 +304,7 @@ convertToString(Char)
 Other functions:
 ```
 CLArguments() # returns a list of strings containing the command line arguments. first(CLArguments()) is always the path of the program
-environmentVariable(str) # Returns the environment value for 'str'
+getEnvironmentVariable(str) # Returns the environment value for 'str'
 
 factorial(num) # Returns the factorial value of 'num'
 even(int) # Returns true if int is even
