@@ -287,7 +287,7 @@ std::vector<std::vector<char>> CLArguments() {
 }
 
 // Environment variables
-std::vector<char> environmentVariable(std::vector<char> name) {
+std::vector<char> getEnvironmentVariable(std::vector<char> name) {
     std::string stringName(name.begin(), name.end());
     char const* tmp = getenv(stringName.c_str());
     
