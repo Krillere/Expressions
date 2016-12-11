@@ -7,27 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7531DC681D7009A9900 /* example4.expr */; };
-		AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7551DC7BF6B009A9900 /* example6.expr */; };
 		AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F7571DC7C27B009A9900 /* std.expr */; };
-		AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA09F75A1DC7E980009A9900 /* example8.expr */; };
-		AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BB61DCBBDA80025FE27 /* example7.expr */; };
 		AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */; };
 		AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */; };
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
-		AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA0D9BBE1DCBF27E0025FE27 /* example9.expr */; };
-		AA265DF71DDE1BEB00E6B9C7 /* example11.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA265DF61DDE1BDF00E6B9C7 /* example11.expr */; };
-		AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA3C72561DD8C80F00FD75DF /* example10.expr */; };
 		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
-		AA718B3F1DEF33EC00638028 /* example12.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA718B3E1DEF33E700638028 /* example12.expr */; };
 		AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA718B411DEF3F0D00638028 /* TreeWalker.swift */; };
-		AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA9AAFBB1DC935040013C75A /* empty.expr */; };
-		AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAA9F1EB1DC8BF2A0099538B /* calendar.expr */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
-		AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE991DC53E3D0035F875 /* example3.expr */; };
-		AAE992681DD8805F00DF8CA5 /* html.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAE992671DD87FC800DF8CA5 /* html.expr */; };
 		AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */; };
 		AAEAC02B1DC4E9E200989910 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0221DC4E9E200989910 /* main.swift */; };
 		AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0231DC4E9E200989910 /* Nodes.swift */; };
@@ -35,9 +23,6 @@
 		AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0251DC4E9E200989910 /* ParserTables.swift */; };
 		AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0261DC4E9E200989910 /* Scanner.swift */; };
 		AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0271DC4E9E200989910 /* TypeChecker.swift */; };
-		AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0321DC4E9EF00989910 /* example1.expr */; };
-		AAEAC0431DC4FE3700989910 /* example2.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAEAC0421DC4FE2D00989910 /* example2.expr */; };
-		AAF443511DC65516004F0917 /* example5.expr in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAF443501DC65505004F0917 /* example5.expr */; };
 		AAFBD9A41DF6050B009C7136 /* TreeWalkerExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,23 +33,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				AAE992681DD8805F00DF8CA5 /* html.expr in CopyFiles */,
-				AA9AAFBC1DC9350C0013C75A /* empty.expr in CopyFiles */,
-				AAB4EE9A1DC53E430035F875 /* example3.expr in CopyFiles */,
-				AA09F75B1DC7E986009A9900 /* example8.expr in CopyFiles */,
-				AA0D9BB71DCBBDAD0025FE27 /* example7.expr in CopyFiles */,
-				AA0D9BBF1DCBF2820025FE27 /* example9.expr in CopyFiles */,
-				AA3C72571DD8C81400FD75DF /* example10.expr in CopyFiles */,
-				AA718B3F1DEF33EC00638028 /* example12.expr in CopyFiles */,
-				AA09F7541DC681DB009A9900 /* example4.expr in CopyFiles */,
-				AAF443511DC65516004F0917 /* example5.expr in CopyFiles */,
-				AAEAC03C1DC4ED0600989910 /* example1.expr in CopyFiles */,
-				AA09F7561DC7BF75009A9900 /* example6.expr in CopyFiles */,
-				AA265DF71DDE1BEB00E6B9C7 /* example11.expr in CopyFiles */,
-				AAA9F1EC1DC8BF460099538B /* calendar.expr in CopyFiles */,
 				AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */,
 				AA09F7581DC7C492009A9900 /* std.expr in CopyFiles */,
-				AAEAC0431DC4FE3700989910 /* example2.expr in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +370,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = ZRKANV2HV4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = expressions;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -412,7 +382,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = ZRKANV2HV4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = expressions;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

@@ -53,14 +53,15 @@ class Parser {
             errors.append(CompilerError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
         
-        print("Found: \(program.functions.count) functions (Some might be standard functions and skew the count)!")
+        print("Parsing completed:")
+        print("Found: \(program.functions.count) functions (Standard functions included)!")
         print("Found: \(program.types.count) types!")
         
         if errors.count > 0 {
             print("Parsing Errors: \(errors)")
         }
         
-        print("Parsing completed")
+        
     }
     
     // Getters

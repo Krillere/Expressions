@@ -26,14 +26,22 @@ do {
     let cont = try String(contentsOfFile: path)
     Compiler.compile(code: cont)
     
-    // Try saving it
+    // Try saving it (If no name is specified, save on desktop)
     guard let intermediate = Compiler.intermediateCode else { exit(0) }
     do {
-        let writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
+        var writePath = ""
+        
+        if args.count == 3 {
+            writePath = args[2]
+        }
+        else {
+            writePath = NSHomeDirectory()+"/Desktop/intermediate.cpp"
+        }
+        
         try intermediate.write(toFile: writePath, atomically: true, encoding: String.Encoding.utf8)
         
-        print("To compile and run: g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate")
         // g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate
+        print("To compile and run: g++ -std=c++11 \(writePath) -o exprIntermediate; ./exprIntermediate")
     }
     catch {
         print("Error ved gem intermediate: \(error)")
