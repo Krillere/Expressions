@@ -43,6 +43,7 @@ Overview:
 3.  [Functions as objects](#functions-as-objects)
 4.  [Lambdas](#lambdas)
 6.  [Comments](#comments)
+6.  [Operators](#operators)
 7.  [Standard functions](#standard-functions--built-in-functions)
 7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
@@ -240,6 +241,37 @@ define main: -> Int {
   # This is ignored by the compiler
   0
 }
+```
+
+## Operators
+The 'usual' operators are available in Expressions, meaning:
+```
++ Addition
+- Subtraction
+* Multiplication
+/ Division
+% Modulus
+= Assign (Only allowed in 'let')
+! Negation
+== Equals
+!= Not equals
+< Smaller than
+> Larger than
+<= Less than or equal
+>= Larger than or equal
+```
+
+Besides this there exists a few operators to make things easier. Instead of using ```list(1)``` to create a list containing 1, use ```[1]```. 
+
+The ```append``` function can be replaced by ```++```, for example:
+```
+# Using append: 
+[Int] lst = [1, 2]
+append(lst, [3])
+
+# Using ++
+[Int] lst = [1, 2]
+lst ++ [3]
 ```
 
 ## Standard functions / built-in functions
