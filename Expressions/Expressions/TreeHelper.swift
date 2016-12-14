@@ -46,4 +46,24 @@ class TreeHelper {
         
         return false
     }
+    
+    public static func isObjectType(type: NormalTypeNode) -> Bool {
+        guard let nested = type.numNested, let clearType = type.clearType else { return false }
+        
+        if nested == 0 {
+            if ParserTables.shared.types.contains(clearType) {
+                return true
+            }
+        }
+        
+        for i in 0 ..< nested {
+            if i == nested-1 {
+                if ParserTables.shared.types.contains(clearType) {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
 }

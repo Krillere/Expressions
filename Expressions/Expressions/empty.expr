@@ -1,5 +1,17 @@
 define main: -> Int {
+#let [Int] tmpAr = {1, 2}, [Int] appendAr = tmpAr ++ 1 {
+#    print(appendAr)
+#  }
+let Tree root = Tree(0, null, Tree(1, root, null, null), Tree(2, root, null, null)) {
+  printLn(root.right.value)
+}
   0
 }
 
 # Functions here
+type Tree {
+  Int value,
+  Tree parent,
+  Tree left,
+  Tree right
+}

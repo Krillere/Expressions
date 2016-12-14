@@ -378,7 +378,7 @@ class Parser {
     }
 
     
-    // Parses an expression (if-else for all types of expressions)
+    // Parses an expression (All types of expressions)
     private func parseExpression() -> Node {
         let tmpToken = scanner.peekToken()
 
@@ -505,7 +505,7 @@ class Parser {
             
             let t2 = scanner.getToken() // rpar
             if !t2.content.contains(")") {
-                error("a Expected ')', got \(t2.content)")
+                error("Expected ')', got \(t2.content)")
             }
             
             let parexp = ParenthesesExpression(expr: expr)
@@ -581,6 +581,7 @@ class Parser {
         let property = scanner.getToken()
         
         let test = scanner.peekToken()
+        
         if test.type == .lpar { // Function call
             let propNode = PropertyValueNode()
             propNode.name = name

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
-               BuildableName = "Expressions"
+               BuildableName = "expressions"
                BlueprintName = "Expressions"
                ReferencedContainer = "container:Expressions.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
-            BuildableName = "Expressions"
+            BuildableName = "expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
          </BuildableReference>
@@ -56,11 +56,17 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
-            BuildableName = "Expressions"
+            BuildableName = "expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/Christian/Git/Expressions/Expressions/Expressions/empty.expr"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -75,7 +81,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AAEAC0141DC4E9CA00989910"
-            BuildableName = "Expressions"
+            BuildableName = "expressions"
             BlueprintName = "Expressions"
             ReferencedContainer = "container:Expressions.xcodeproj">
          </BuildableReference>

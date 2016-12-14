@@ -42,6 +42,7 @@ enum TokenType {
     case keyword_let    // "let"
     case keyword_switch // "switch"
     case keyword_lambda // "lambda"
+    //case keyword_null   // "null" // Used for constructors
     
     case none           // EOF usually, possibly error
 }
@@ -292,7 +293,11 @@ class Scanner {
             case "lambda":
                 type = .keyword_lambda
             break
-            
+            /*
+            case "null":
+                type = .keyword_null
+            break
+            */
             default:
                 type = .string
             break

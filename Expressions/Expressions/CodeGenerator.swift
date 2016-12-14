@@ -132,7 +132,7 @@ class CodeGenerator {
         // Initialization function
         
         // Function definition
-        var typeInit = "t_"+name+" "+name+"("
+        var typeInit = "t_"+name+" *"+name+"("
         for n in 0 ..< objType.variables.count {
             let v = objType.variables[n]
             guard let ttype = v.type, let vname = v.identifier else { continue }
@@ -162,12 +162,12 @@ class CodeGenerator {
         // Function block
         typeInit += " {\n"
         
-        typeInit += "t_"+name+" t_tmp;"
+        typeInit += "t_"+name+" *t_tmp = new t_"+name+";"
         for n in 0 ..< objType.variables.count {
             let v = objType.variables[n]
             guard let vname = v.identifier else { continue }
             
-            typeInit += "t_tmp."+vname+" = "+vname+";\n"
+            typeInit += "t_tmp->"+vname+" = "+vname+";\n"
         }
         
         typeInit += "return t_tmp;"
@@ -519,7 +519,6 @@ class CodeGenerator {
                     else { // 'Normal' function
                         if let functionDecl = determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.pars.count {
-                                print("Breaking!")
                                 break
                             }
                             
@@ -711,7 +710,7 @@ class CodeGenerator {
             }
             
             if ParserTables.shared.types.contains(clearType) {
-                return "t_"+ParserTables.shared.createRename(forIdentifier: clearType)
+                return "t_"+ParserTables.shared.createRename(forIdentifier: clearType)+" *"
             }
             
             return clearType // Må være objekt
@@ -727,7 +726,7 @@ class CodeGenerator {
                     str += converted
                 }
                 else if ParserTables.shared.types.contains(clearType) {
-                    str += "t_"+ParserTables.shared.createRename(forIdentifier: clearType)
+                    str += "t_"+ParserTables.shared.createRename(forIdentifier: clearType)+" *"
                 }
                 else {
                     str += clearType
@@ -915,7 +914,12 @@ class CodeGenerator {
             
         case is VariableNode:
             if let id = (expr as! VariableNode).identifier {
-                retString += id
+                if id == "null" {
+                    retString += "NULL"
+                }
+                else {
+                    retString += id
+                }
             }
             break
             
@@ -958,10 +962,10 @@ class CodeGenerator {
             
             if node.call == nil {
                 guard let property = node.property else { break }
-                retString += ParserTables.shared.createRename(forIdentifier: name)+"."+property
+                retString += ParserTables.shared.createRename(forIdentifier: name)+"->"+property
             }
             else {
-                retString += ParserTables.shared.createRename(forIdentifier: name)+"."+createFunctionCall(call: node.call!)
+                retString += ParserTables.shared.createRename(forIdentifier: name)+"->"+createFunctionCall(call: node.call!)
             }
             break
             
@@ -1103,7 +1107,14 @@ class CodeGenerator {
             typeString = createFunctionTypeString(type: type as! FunctionTypeNode)
         }
         
-        str += typeString+" "+identifier+";\n"
+        str += typeString+" "+identifier
+        
+        // Types require some kind of initialization
+        if type is NormalTypeNode && TreeHelper.isObjectType(type: type as! NormalTypeNode) {
+            str += " = {}"
+        }
+        
+        str += ";\n"
         str += identifier+" = "
         str += createExpression(expr: expr)
         
