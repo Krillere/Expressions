@@ -424,7 +424,7 @@ class Parser {
                 
                 opNode = funcNode
             }
-            else if funcCheck.type == .dot { // Type.property
+            /*else if funcCheck.type == .dot { // Type.property
                 let prop = parseTypeProperty(name: stringToken.content)
                 
                 // Operator?
@@ -433,7 +433,7 @@ class Parser {
                 }
                 
                 opNode = prop
-            }
+            }*/
             else { // variable
                 let variableNode = VariableNode(identifier: stringToken.content)
             

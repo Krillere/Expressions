@@ -19,7 +19,7 @@ enum TokenType {
     
     case boolLiteral   // true|false
     
-    case op // AND | OR | * | + | / | - | < | > | <= | >= | == | != | %
+    case op // AND | OR | * | + | / | - | < | > | <= | >= | == | != | % | .
     
     case number         // (0-9)
     case string         // (a-Z)+
@@ -32,7 +32,7 @@ enum TokenType {
     case returns        // ->
     case comma          // ,
     case negate         // !
-    case dot            // .
+    //case dot            // .
     case ellipsis       // ... (Used for variadic parameters)
     
     case keyword_if     // "if"
@@ -508,7 +508,7 @@ class Scanner {
                 }
                 else {
                     inputIndex -= 1
-                    token = Token(cont: ".", type: .dot, charIndex: inputIndex)
+                    token = Token(cont: ".", type: .op, charIndex: inputIndex)
                 }
             break
                 
