@@ -105,9 +105,6 @@ class ScopeChecker: TreeWalkerDelegate {
     func visitArrayLiteralNode(node: ArrayLiteralNode) {
     }
     
-    func visitPropertyValueNode(node: PropertyValueNode) {
-    }
-    
     func visitParenthesesExpression(node: ParenthesesExpression) {
     }
     

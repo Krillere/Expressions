@@ -16,21 +16,7 @@ class Parser {
     private var errorOccurred = false
     
     init(input: String) {
-        var code = ""
-        
-        if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
-            do {
-                let stdCont = try String(contentsOfFile: p)
-                code += stdCont
-            }
-            catch {
-                
-            }
-        }
- 
-        code += input
- 
-        self.scanner = Scanner(input: code)
+        self.scanner = Scanner(input: input)
         self.scanner.owner = self
     }
     
@@ -305,6 +291,7 @@ class Parser {
             
             if tmp.type == .string {
                 if !metName {
+                    print("Fundet typen: \(tmp.content)")
                     clearTypeName = tmp.content
                     metName = true
                 }
@@ -321,6 +308,7 @@ class Parser {
             }
             
             if tmp.type != .lsquare && tmp.type != .string && tmp.type != .rsquare {
+                print("Stopper ved \(tmp)")
                 break
             }
             
@@ -424,16 +412,6 @@ class Parser {
                 
                 opNode = funcNode
             }
-            /*else if funcCheck.type == .dot { // Type.property
-                let prop = parseTypeProperty(name: stringToken.content)
-                
-                // Operator?
-                if !isNextOp() {
-                    return prop
-                }
-                
-                opNode = prop
-            }*/
             else { // variable
                 let variableNode = VariableNode(identifier: stringToken.content)
             
@@ -574,31 +552,9 @@ class Parser {
         error("Error parsing expression. Got token: \(tmpToken)")
         return ErrorNode()
     }
-
-    // Parses a property type or function call ( name.name or name.name(pars) )
-    private func parseTypeProperty(name: String) -> PropertyValueNode {
-        let _ = scanner.getToken() // '.'
-        let property = scanner.getToken()
-        
-        let test = scanner.peekToken()
-        
-        if test.type == .lpar { // Function call
-            let propNode = PropertyValueNode()
-            propNode.name = name
-            
-            let functionCall = parseFunctionCall(property.content)
-            functionCall.parent = propNode
-            propNode.call = functionCall
-            
-            return propNode
-        }
-        
-        // Regular property
-        return PropertyValueNode(name: name, property: property.content)
-    }
     
-    // MARK: Specielle expressions
-    func parseArrayLiteral() -> ArrayLiteralNode {
+    // MARK: Special expressions
+    func parseArrayLiteral() -> Node {
         let t1 = scanner.getToken() // [
         if !t1.content.contains("[") {
             error("Expected '[', got \(t1.content)")
@@ -624,7 +580,20 @@ class Parser {
         let _ = scanner.getToken() // I forgot what this is.. Fuck it.
         
         let lit = ArrayLiteralNode(nodes: literalNodes)
-        return lit
+        
+        if !isNextOp() {
+            return lit
+        }
+        else {
+            let opToken = scanner.getToken()
+            let op = OperatorNode(op: opToken.content)
+            
+            let expr2 = parseExpression()
+            if expr2 is ErrorNode {
+                return ErrorNode()
+            }
+            return ExpressionNode(op: op, loperand: lit, roperand: expr2)
+        }
     }
 
     // Parser if-else node
@@ -666,7 +635,7 @@ class Parser {
             }
             
             if scanner.peekToken().type == .comma { let _ = scanner.getToken(); continue }
-            
+
             let type = parseType()
             let name = scanner.getToken().content
 

@@ -16,8 +16,19 @@ type NestedType {
   Int a
 }
 
+type Tree {
+  Int value,
+  Tree parent,
+  Tree left,
+  Tree right
+}
+
+
 define main: -> Int {
-  let TestType test = TestType(0, "asd", 'a') {
+  let TestType test = TestType(0, "asd", 'a'),
+      Tree root = Tree(0, null, Tree(1, root, null, null), Tree(2, root, null, null))
+  {
+    printLn(root.right.value)
     test.iint # 0
   }
 }

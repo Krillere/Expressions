@@ -1,5 +1,5 @@
 //
-//  TreeWalkerImplementation.swift
+//  PreCodeGeneration.swift
 //  Expressions
 //
 //  Created by Christian Lundtofte on 05/12/2016.
@@ -9,7 +9,7 @@
 import Foundation
 
 // Changes a few things in the tree before doing the code generation
-class TreeWalkerExample: TreeWalkerDelegate {
+class PreCodeGeneration: TreeWalkerDelegate {
     var walker: TreeWalker!
     var program:ProgramNode!
     
@@ -74,7 +74,7 @@ class TreeWalkerExample: TreeWalkerDelegate {
     
     func visitArrayLiteralNode(node: ArrayLiteralNode) {
     }
-
+    
     func visitParenthesesExpression(node: ParenthesesExpression) {
     }
     
@@ -88,6 +88,13 @@ class TreeWalkerExample: TreeWalkerDelegate {
     }
     
     func visitExpressionNode(node: ExpressionNode) {
+        if isAppendExpression(node: node) {
+            print("Besøger \(node)")
+            
+            let varNode = VariableNode(identifier: "test")
+            walker.replacementNode = varNode
+            walker.replaceNode = true
+        }
     }
     
     
@@ -113,4 +120,27 @@ class TreeWalkerExample: TreeWalkerDelegate {
     
     
     // MARK: Other functions
+    func isAppendExpression(node: ExpressionNode) -> Bool {
+        guard let lExpr = node.loperand, let op = node.op else { return false }
+        
+        var rExpr = node.roperand
+        while rExpr != nil {
+            guard let opString = op.op else { continue }
+            
+            
+            if opString == "++" {
+                return true
+            }
+            
+            // Should we stop or continue? (Continue only if there's more ExpressionNodes)
+            if rExpr is ExpressionNode {
+                rExpr = (rExpr as! ExpressionNode).roperand
+            }
+            else {
+                rExpr = nil
+            }
+        }
+        
+        return false
+    }
 }

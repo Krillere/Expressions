@@ -33,8 +33,7 @@ expr := if
 | number
 | call
 | letExpr
-| name . name
-| name . call
+| name
 | lambda
 
 
@@ -43,7 +42,7 @@ boolLit := "true" | "false"
 string  := """ (.*) """
 name    := (a-Z)(a-Z0-9'_-)*
 
-op := AND | OR | * | / | + | - | < | > | <= | >= | == | !=
+op := AND | OR | * | / | + | - | < | > | <= | >= | == | != | .
 
 if := "if" expr block block
 

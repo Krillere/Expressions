@@ -31,7 +31,6 @@ protocol TreeWalkerDelegate {
     func visitStringLiteralNode(node: StringLiteralNode)
     func visitCharLiteralNode(node: CharLiteralNode)
     func visitArrayLiteralNode(node: ArrayLiteralNode)
-    func visitPropertyValueNode(node: PropertyValueNode)
     func visitParenthesesExpression(node: ParenthesesExpression)
     func visitNegateExpression(node: NegateExpression)
     func visitMinusExpression(node: MinusExpression)
@@ -51,6 +50,10 @@ protocol TreeWalkerDelegate {
 class TreeWalker {
     var program:ProgramNode!
     var delegate:TreeWalkerDelegate!
+    
+    var currentNode:Node?
+    var replaceNode:Bool = false
+    var replacementNode:Node?
     
     init(program: ProgramNode, delegate: TreeWalkerDelegate) {
         self.delegate = delegate
@@ -235,11 +238,7 @@ class TreeWalker {
         case is CharLiteralNode:
             walkCharLiteralNode(node: node as! CharLiteralNode)
             break
-            
-        case is PropertyValueNode:
-            walkPropertyValueNode(node: node as! PropertyValueNode)
-            break
-            
+
         default:
             break
         }
@@ -274,14 +273,6 @@ class TreeWalker {
         }
     }
     
-    func walkPropertyValueNode(node: PropertyValueNode) {
-        delegate.visitPropertyValueNode(node: node)
-        
-        if let fc = node.call {
-            walkFunctionCallNode(node: fc)
-        }
-    }
-    
     func walkParenthesesExpressionNode(node: ParenthesesExpression) {
         delegate.visitParenthesesExpression(node: node)
         
@@ -313,7 +304,7 @@ class TreeWalker {
     // EXPR OP EXPR
     func walkExpressionNode(node: ExpressionNode) {
         delegate.visitExpressionNode(node: node)
-        
+
         if let expr = node.loperand {
             walkExpression(node: expr)
         }

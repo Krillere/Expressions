@@ -23,7 +23,7 @@ class CodeGenerator {
     
     // Direct conversions, used when possible (Not user-defined types) (Types and operators)
     private var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool"]
-    private var opConversions:[String: String] = ["AND":"&&", "OR":"||", ".":"->"]
+    private var opConversions:[String: String] = ["AND":"&&", "OR":"||", ".":"->", "++":"+"]
     
     
     init(program: ProgramNode) {
@@ -955,18 +955,6 @@ class CodeGenerator {
             
         case is CharLiteralNode:
             retString += "'"+(expr as! CharLiteralNode).content!+"'"
-            break
-            
-        case is PropertyValueNode:
-            guard let node = expr as? PropertyValueNode, let name = node.name else { break }
-            
-            if node.call == nil {
-                guard let property = node.property else { break }
-                retString += ParserTables.shared.createRename(forIdentifier: name)+"->"+property
-            }
-            else {
-                retString += ParserTables.shared.createRename(forIdentifier: name)+"->"+createFunctionCall(call: node.call!)
-            }
             break
             
         default:

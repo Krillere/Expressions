@@ -42,8 +42,25 @@ class Compiler {
     static var intermediateCode:String?
     
     static func compile(code: String) {
+        
+        // Include standard functions
+        var stdCode = ""
+        
+        if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
+            do {
+                let stdCont = try String(contentsOfFile: p)
+                stdCode += stdCont
+            }
+            catch {
+                
+            }
+        }
+        
+        let tmpCode = code //stdCode+code
+
+        
         // Run scanner and parser
-        let ps = Parser(input: code)
+        let ps = Parser(input: tmpCode)
         ps.run()
         
         let errs = ps.getErrors()
@@ -59,7 +76,7 @@ class Compiler {
             filler.run()
 
             // Scope check (Variables and functions)
-            let scope = ScopeChecker(program: program)
+            let _ = ScopeChecker(program: program)
             
             print("Scope checking completed.")
             if errors.count > 0 {
@@ -77,6 +94,9 @@ class Compiler {
                 print("Type check errors: \(errors)")
                 return
             }
+            
+            // Pre-code generation changes
+            let _ = PreCodeGeneration(program: program)
             
             // Generate intermediate code
             let generator = CodeGenerator(program: program)

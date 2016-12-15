@@ -301,3 +301,9 @@ std::vector<char> getEnvironmentVariable(std::vector<char> name) {
         return retVector;
     }
 }
+
+template<typename T>
+std::vector<T>& operator+(std::vector<T>& op, std::vector<T> obj) {
+    op.insert(op.end(), obj.begin(), obj.end());
+    return op;
+}

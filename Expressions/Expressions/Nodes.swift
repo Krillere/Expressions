@@ -342,24 +342,6 @@ class CharLiteralNode : Node, CustomStringConvertible {
     }
 }
 
-// Accessing a property from a type ( obj.property )
-class PropertyValueNode : Node, CustomStringConvertible {
-    var name:String?
-    var property:String?
-    var call:FunctionCallNode?
-    
-    override init() { }
-    
-    init(name: String, property: String) {
-        self.name = ParserTables.shared.createRename(forIdentifier: name)
-        self.property = ParserTables.shared.createRename(forIdentifier: property)
-    }
-    
-    var description: String {
-        return "\(self.name) . \(self.property)"
-    }
-}
-
 // A list of expressions: [expr, expr, expr ... ]
 class ArrayLiteralNode : Node, CustomStringConvertible {
     var contents:[Node] = []
