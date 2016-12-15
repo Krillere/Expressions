@@ -291,7 +291,6 @@ class Parser {
             
             if tmp.type == .string {
                 if !metName {
-                    print("Fundet typen: \(tmp.content)")
                     clearTypeName = tmp.content
                     metName = true
                 }

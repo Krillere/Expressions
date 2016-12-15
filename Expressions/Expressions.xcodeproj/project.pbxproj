@@ -13,6 +13,7 @@
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
 		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
 		AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA718B411DEF3F0D00638028 /* TreeWalker.swift */; };
+		AA941BA31E030A260033CC88 /* CodeGeneratorHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
 		AAB4EE971DC52DE80035F875 /* std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
 		AAB4EE981DC52E050035F875 /* std.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = AAB4EE961DC52DE80035F875 /* std.cpp */; };
@@ -24,7 +25,7 @@
 		AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0261DC4E9E200989910 /* Scanner.swift */; };
 		AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEAC0271DC4E9E200989910 /* TypeChecker.swift */; };
 		AAF386DA1E01E0E500E41037 /* PreCodeGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF386D91E01E0E500E41037 /* PreCodeGeneration.swift */; };
-		AAFBD9A41DF6050B009C7136 /* TreeWalkerExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */; };
+		AAF386DC1E02B3DF00E41037 /* CodeGeneratorModifyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF386DB1E02B3DF00E41037 /* CodeGeneratorModifyExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +58,7 @@
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AA718B3E1DEF33E700638028 /* example12.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example12.expr; sourceTree = "<group>"; };
 		AA718B411DEF3F0D00638028 /* TreeWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeWalker.swift; sourceTree = "<group>"; };
+		AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGeneratorHelpers.swift; sourceTree = "<group>"; };
 		AA9AAFBB1DC935040013C75A /* empty.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.expr; sourceTree = "<group>"; };
 		AAA9F1EB1DC8BF2A0099538B /* calendar.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calendar.expr; sourceTree = "<group>"; };
 		AAB4EE941DC518520035F875 /* ScopeChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeChecker.swift; sourceTree = "<group>"; };
@@ -75,8 +77,8 @@
 		AAEAC0321DC4E9EF00989910 /* example1.expr */ = {isa = PBXFileReference; lastKnownFileType = text; path = example1.expr; sourceTree = "<group>"; };
 		AAEAC0421DC4FE2D00989910 /* example2.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example2.expr; sourceTree = "<group>"; };
 		AAF386D91E01E0E500E41037 /* PreCodeGeneration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreCodeGeneration.swift; sourceTree = "<group>"; };
+		AAF386DB1E02B3DF00E41037 /* CodeGeneratorModifyExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGeneratorModifyExtension.swift; sourceTree = "<group>"; };
 		AAF443501DC65505004F0917 /* example5.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example5.expr; sourceTree = "<group>"; };
-		AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeWalkerExample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				AA718B411DEF3F0D00638028 /* TreeWalker.swift */,
-				AAFBD9A31DF6050B009C7136 /* TreeWalkerExample.swift */,
 			);
 			name = Treewalker;
 			sourceTree = "<group>";
@@ -187,10 +188,12 @@
 		AAEAC0381DC4EC1700989910 /* Codegen */ = {
 			isa = PBXGroup;
 			children = (
-				AAF386D91E01E0E500E41037 /* PreCodeGeneration.swift */,
-				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
 				AAB4EE961DC52DE80035F875 /* std.cpp */,
 				AA09F7571DC7C27B009A9900 /* std.expr */,
+				AAF386D91E01E0E500E41037 /* PreCodeGeneration.swift */,
+				AAEAC01F1DC4E9E200989910 /* CodeGenerator.swift */,
+				AAF386DB1E02B3DF00E41037 /* CodeGeneratorModifyExtension.swift */,
+				AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */,
 			);
 			name = Codegen;
 			sourceTree = "<group>";
@@ -255,13 +258,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAF386DC1E02B3DF00E41037 /* CodeGeneratorModifyExtension.swift in Sources */,
 				AAF386DA1E01E0E500E41037 /* PreCodeGeneration.swift in Sources */,
 				AAEAC0281DC4E9E200989910 /* CodeGenerator.swift in Sources */,
 				AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */,
 				AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
 				AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */,
-				AAFBD9A41DF6050B009C7136 /* TreeWalkerExample.swift in Sources */,
+				AA941BA31E030A260033CC88 /* CodeGeneratorHelpers.swift in Sources */,
 				AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */,
 				AAB4EE971DC52DE80035F875 /* std.cpp in Sources */,
 				AAEAC02D1DC4E9E200989910 /* Parser.swift in Sources */,

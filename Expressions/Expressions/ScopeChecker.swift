@@ -8,41 +8,11 @@
 
 import Foundation
 
-class ScopeChecker: TreeWalkerDelegate {
-    var walker: TreeWalker!
-    var program:ProgramNode!
-    
-    init(program: ProgramNode) {
-        self.program = program
-        
-        self.walker = TreeWalker(program: program, delegate: self)
-        self.walker.walk()
-    }
-    
-    // MARK: TreeWalkerDelegate
-    func visitFunctionNode(node: FunctionNode) {
-    }
-    
-    func visitParameterNode(node: ParameterNode) {
-    }
-    
-    
-    func visitObjectTypeNode(node: ObjectTypeNode) {
-    }
-    
-    func visitObjectTypeVariableNode(node: ObjectTypeVariableNode) {
-    }
-    
-    
-    func visitLambdaNode(node: LambdaNode) {
-    }
-    
-    
-    func visitBlockNode(node: BlockNode) {
-    }
+class ScopeChecker: TreeWalker {
+
     
     // Check if function is defined
-    func visitFunctionCallNode(node: FunctionCallNode) {
+    override func walkFunctionCallNode(node: FunctionCallNode) {
         if let identifier = node.identifier {
             
             // Standard function?
@@ -75,72 +45,7 @@ class ScopeChecker: TreeWalkerDelegate {
             Compiler.error(reason: "Unknown identifier: \(identifier)", node: node, phase: .ScopeCheck)
         }
     }
-    
-    
-    func visitTypeNode(node: TypeNode) {
-    }
-    
-    func visitNormalTypeNode(node: NormalTypeNode) {
-    }
-    
-    func visitFunctionTypeNode(node: FunctionTypeNode) {
-    }
-    
-    
-    func visitVariableNode(node: VariableNode) {
-    }
-    
-    func visitNumberLiteralNode(node: NumberLiteralNode) {
-    }
-    
-    func visitBooleanLiteralNode(node: BooleanLiteralNode) {
-    }
-    
-    func visitStringLiteralNode(node: StringLiteralNode) {
-    }
-    
-    func visitCharLiteralNode(node: CharLiteralNode) {
-    }
-    
-    func visitArrayLiteralNode(node: ArrayLiteralNode) {
-    }
-    
-    func visitParenthesesExpression(node: ParenthesesExpression) {
-    }
-    
-    func visitNegateExpression(node: NegateExpression) {
-    }
-    
-    func visitMinusExpression(node: MinusExpression) {
-    }
-    
-    func visitOperatorNode(node: OperatorNode) {
-    }
-    
-    func visitExpressionNode(node: ExpressionNode) {
-    }
-    
-    
-    func visitIfElseNode(node: IfElseNode) {
-    }
-    
-    
-    func visitLetNode(node: LetNode) {
-    }
-    
-    func visitLetVariableNode(node: LetVariableNode) {
-    }
-    
-    
-    func visitSwitchNode(node: SwitchNode) {
-    }
-    
-    func visitSwitchCaseNode(node: SwitchCaseNode) {
-    }
-    
-    func visitElseNode(node: ElseNode) {
-    }
-    
+
     // MARK: Other functions
     func isFunctionParameter(identifier: String, call: FunctionCallNode) -> Bool {
         if call.parent == nil {

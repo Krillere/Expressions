@@ -9,136 +9,89 @@
 import Foundation
 
 // Changes a few things in the tree before doing the code generation
-class PreCodeGeneration: TreeWalkerDelegate {
-    var walker: TreeWalker!
-    var program:ProgramNode!
-    
-    init(program: ProgramNode) {
-        self.program = program
-        
-        self.walker = TreeWalker(program: program, delegate: self)
-        self.walker.walk()
-    }
-    
-    // MARK: TreeWalkerDelegate functions
-    func visitFunctionNode(node: FunctionNode) {
-    }
-    
-    func visitParameterNode(node: ParameterNode) {
-    }
-    
-    
-    func visitObjectTypeNode(node: ObjectTypeNode) {
-    }
-    
-    func visitObjectTypeVariableNode(node: ObjectTypeVariableNode) {
-    }
-    
-    
-    func visitLambdaNode(node: LambdaNode) {
-    }
-    
-    
-    func visitBlockNode(node: BlockNode) {
-    }
-    
-    
-    func visitFunctionCallNode(node: FunctionCallNode) {
-    }
-    
-    
-    func visitTypeNode(node: TypeNode) {
-    }
-    
-    func visitNormalTypeNode(node: NormalTypeNode) {
-    }
-    
-    func visitFunctionTypeNode(node: FunctionTypeNode) {
-    }
-    
-    
-    func visitVariableNode(node: VariableNode) {
-    }
-    
-    func visitNumberLiteralNode(node: NumberLiteralNode) {
-    }
-    
-    func visitBooleanLiteralNode(node: BooleanLiteralNode) {
-    }
-    
-    func visitStringLiteralNode(node: StringLiteralNode) {
-    }
-    
-    func visitCharLiteralNode(node: CharLiteralNode) {
-    }
-    
-    func visitArrayLiteralNode(node: ArrayLiteralNode) {
-    }
-    
-    func visitParenthesesExpression(node: ParenthesesExpression) {
-    }
-    
-    func visitNegateExpression(node: NegateExpression) {
-    }
-    
-    func visitMinusExpression(node: MinusExpression) {
-    }
-    
-    func visitOperatorNode(node: OperatorNode) {
-    }
-    
-    func visitExpressionNode(node: ExpressionNode) {
-        if isAppendExpression(node: node) {
-            print("Besøger \(node)")
-            
-            let varNode = VariableNode(identifier: "test")
-            walker.replacementNode = varNode
-            walker.replaceNode = true
+class PreCodeGeneration: TreeWalker {
+    override func walkExpressionNode(node: ExpressionNode) {
+        if !expressionUsesAppend(node: node) { // If the expression does not use append
+            return
         }
-    }
-    
-    
-    func visitIfElseNode(node: IfElseNode) {
-    }
-    
-    
-    func visitLetNode(node: LetNode) {
-    }
-    
-    func visitLetVariableNode(node: LetVariableNode) {
-    }
-    
-    
-    func visitSwitchNode(node: SwitchNode) {
-    }
-    
-    func visitSwitchCaseNode(node: SwitchCaseNode) {
-    }
-    
-    func visitElseNode(node: ElseNode) {
-    }
-    
-    
-    // MARK: Other functions
-    func isAppendExpression(node: ExpressionNode) -> Bool {
-        guard let lExpr = node.loperand, let op = node.op else { return false }
         
-        var rExpr = node.roperand
-        while rExpr != nil {
-            guard let opString = op.op else { continue }
+        // Find the block, needed for later usage
+        guard let block = findParentBlock(node: node) else { return }
+        
+        // Change the parameter if one of them is an array literal
+        if node.loperand is ArrayLiteralNode {
+            let newName = ParserTables.shared.generateNewVariableName()
+            ParserTables.shared.nameTranslation[newName] = newName
             
+            // Guess the type of the node
+            let type = CodeGeneratorHelpers.guessType(node: node.loperand!)
+            let varDecl = LetVariableNode(type: type, name: newName, value: node.loperand!)
+            block.expressions.insert(varDecl, at: 0)
             
-            if opString == "++" {
-                return true
+            // Create the new variable
+            let variable = VariableNode(identifier: newName)
+            node.loperand = variable
+        }
+        if node.roperand is ArrayLiteralNode {
+            
+            let newName = ParserTables.shared.generateNewVariableName()
+            ParserTables.shared.nameTranslation[newName] = newName
+            
+            // Guess the type of the node
+            let type = CodeGeneratorHelpers.guessType(node: node.roperand!)
+            let varDecl = LetVariableNode(type: type, name: newName, value: node.roperand!)
+            block.expressions.insert(varDecl, at: 0)
+            
+            // Create the new variable
+            let variable = VariableNode(identifier: newName)
+            node.roperand = variable
+        }
+        
+        super.walkExpressionNode(node: node)
+    }
+    /*
+    override func walkArrayLiteralNode(node: ArrayLiteralNode) {
+        guard let block = findParentBlock(node: node) else { return }
+     
+        // Create a new name and refer it to itself in translation
+        let newName = ParserTables.shared.generateNewVariableName()
+        ParserTables.shared.nameTranslation[newName] = newName
+        
+        // Guess the type of the node
+        let type = CodeGeneratorHelpers.guessType(node: node)
+        let varDecl = LetVariableNode(type: type, name: newName, value: node)
+        block.expressions.insert(varDecl, at: 0)
+        
+        // Create the new variable
+        let variable = VariableNode(identifier: newName)
+        print("Node: \(node), parent: \(node.parent)")
+        self.replaceNode(replace: node, inParent: node.parent!, replacement: variable)
+    }
+    */
+    // Other functions
+    func findParentBlock(node: Node) -> BlockNode? {
+        
+        var tmpNode = node.parent
+        if tmpNode == nil {
+            return nil
+        }
+        
+        while tmpNode != nil {
+            if tmpNode is BlockNode {
+                return tmpNode as? BlockNode
             }
             
-            // Should we stop or continue? (Continue only if there's more ExpressionNodes)
-            if rExpr is ExpressionNode {
-                rExpr = (rExpr as! ExpressionNode).roperand
-            }
-            else {
-                rExpr = nil
-            }
+            tmpNode = tmpNode!.parent
+        }
+        
+        return nil
+    }
+    
+    func expressionUsesAppend(node: ExpressionNode) -> Bool {
+        guard let op = node.op, let opS = op.op else { return false }
+        
+        if opS == "++" {
+            return true
         }
         
         return false

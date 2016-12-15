@@ -76,7 +76,8 @@ class Compiler {
             filler.run()
 
             // Scope check (Variables and functions)
-            let _ = ScopeChecker(program: program)
+            let scope = ScopeChecker(program: program)
+            scope.walk()
             
             print("Scope checking completed.")
             if errors.count > 0 {
@@ -86,8 +87,8 @@ class Compiler {
             }
             
             // Type check
-            let type = TypeChecker(program: program)
-            type.test()
+            //let type = TypeChecker(program: program)
+            //type.walk()
             
             if errors.count > 0 {
                 print("Skipping code generation due to errors during type checking.")
@@ -96,7 +97,8 @@ class Compiler {
             }
             
             // Pre-code generation changes
-            let _ = PreCodeGeneration(program: program)
+            let pregen = PreCodeGeneration(program: program)
+            pregen.walk()
             
             // Generate intermediate code
             let generator = CodeGenerator(program: program)

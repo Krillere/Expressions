@@ -8,15 +8,6 @@
 
 import Foundation
 
-class TypeChecker {
-    private var program:ProgramNode?
+class TypeChecker: TreeWalker {
     
-    init(program: ProgramNode) {
-        self.program = program
-    }
-    
-    func test() {
-        guard let program = self.program else { return }
-        let _ = program
-    }
 }

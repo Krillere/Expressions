@@ -1,5 +1,5 @@
 define main: -> Int {
-  let [Int] tmpAr = [1, 2], [Int] appendAr = tmpAr ++ [1] ++ [2] {
+  let [Int] tmpAr = [1, 2], [Int] appendAr = tmpAr ++ [3] ++ [4] {
     print(appendAr)
   }
   0

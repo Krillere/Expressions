@@ -8,55 +8,10 @@
 
 import Foundation
 
-protocol TreeWalkerDelegate {
-    func visitFunctionNode(node: FunctionNode)
-    func visitParameterNode(node: ParameterNode)
-    
-    func visitObjectTypeNode(node: ObjectTypeNode)
-    func visitObjectTypeVariableNode(node: ObjectTypeVariableNode)
-    
-    func visitLambdaNode(node: LambdaNode)
-    
-    func visitBlockNode(node: BlockNode)
-    
-    func visitFunctionCallNode(node: FunctionCallNode)
-    
-    func visitTypeNode(node: TypeNode)
-    func visitNormalTypeNode(node: NormalTypeNode)
-    func visitFunctionTypeNode(node: FunctionTypeNode)
-    
-    func visitVariableNode(node: VariableNode)
-    func visitNumberLiteralNode(node: NumberLiteralNode)
-    func visitBooleanLiteralNode(node: BooleanLiteralNode)
-    func visitStringLiteralNode(node: StringLiteralNode)
-    func visitCharLiteralNode(node: CharLiteralNode)
-    func visitArrayLiteralNode(node: ArrayLiteralNode)
-    func visitParenthesesExpression(node: ParenthesesExpression)
-    func visitNegateExpression(node: NegateExpression)
-    func visitMinusExpression(node: MinusExpression)
-    func visitOperatorNode(node: OperatorNode)
-    func visitExpressionNode(node: ExpressionNode)
-    
-    func visitIfElseNode(node: IfElseNode)
-    
-    func visitLetNode(node: LetNode)
-    func visitLetVariableNode(node: LetVariableNode)
-    
-    func visitSwitchNode(node: SwitchNode)
-    func visitSwitchCaseNode(node: SwitchCaseNode)
-    func visitElseNode(node: ElseNode)
-}
-
 class TreeWalker {
     var program:ProgramNode!
-    var delegate:TreeWalkerDelegate!
     
-    var currentNode:Node?
-    var replaceNode:Bool = false
-    var replacementNode:Node?
-    
-    init(program: ProgramNode, delegate: TreeWalkerDelegate) {
-        self.delegate = delegate
+    init(program: ProgramNode) {
         self.program = program
     }
     
@@ -72,16 +27,12 @@ class TreeWalker {
     
     // MARK: Object types
     func walkObjectTypeNode(node: ObjectTypeNode) {
-        delegate.visitObjectTypeNode(node: node)
-        
         for variable in node.variables {
             walkObjectTypeVariableNode(node: variable)
         }
     }
     
     func walkObjectTypeVariableNode(node: ObjectTypeVariableNode) {
-        delegate.visitObjectTypeVariableNode(node: node)
-        
         if let type = node.type {
             walkTypeNode(node: type)
         }
@@ -90,8 +41,6 @@ class TreeWalker {
     
     // MARK: Function
     func walkFunctionNode(node: FunctionNode) {
-        delegate.visitFunctionNode(node: node)
-        
         for par in node.pars {
             walkParameterNode(node: par)
         }
@@ -106,8 +55,6 @@ class TreeWalker {
     }
     
     func walkParameterNode(node: ParameterNode) {
-        delegate.visitParameterNode(node: node)
-        
         if let type = node.type {
             walkTypeNode(node: type)
         }
@@ -115,8 +62,6 @@ class TreeWalker {
     
     // MARK: Lambda
     func walkLambdaNode(node: LambdaNode) {
-        delegate.visitLambdaNode(node: node)
-        
         for par in node.pars {
             walkParameterNode(node: par)
         }
@@ -133,8 +78,6 @@ class TreeWalker {
     
     // MARK: Block
     func walkBlockNode(node: BlockNode) {
-        delegate.visitBlockNode(node: node)
-        
         for expr in node.expressions {
             walkExpression(node: expr)
         }
@@ -142,8 +85,6 @@ class TreeWalker {
     
     // MARK: Function calls
     func walkFunctionCallNode(node: FunctionCallNode) {
-        delegate.visitFunctionCallNode(node: node)
-        
         for par in node.parameters {
             walkExpression(node: par)
         }
@@ -151,8 +92,6 @@ class TreeWalker {
     
     // Types
     func walkTypeNode(node: TypeNode) {
-        delegate.visitTypeNode(node: node)
-        
         if node is NormalTypeNode {
             walkNormalTypeNode(node: node as! NormalTypeNode)
         }
@@ -162,12 +101,9 @@ class TreeWalker {
     }
     
     func walkNormalTypeNode(node: NormalTypeNode) {
-        delegate.visitNormalTypeNode(node: node)
     }
     
     func walkFunctionTypeNode(node: FunctionTypeNode) {
-        delegate.visitFunctionTypeNode(node: node)
-        
         for inp in node.inputs {
             walkTypeNode(node: inp)
         }
@@ -246,27 +182,21 @@ class TreeWalker {
     
     
     func walkVariableNode(node: VariableNode) {
-        delegate.visitVariableNode(node: node)
     }
     
     func walkNumberLiteralNode(node: NumberLiteralNode) {
-        delegate.visitNumberLiteralNode(node: node)
     }
     
     func walkBooleanLiteralNode(node: BooleanLiteralNode) {
-        delegate.visitBooleanLiteralNode(node: node)
     }
     
     func walkStringLiteralNode(node: StringLiteralNode) {
-        delegate.visitStringLiteralNode(node: node)
     }
     
     func walkCharLiteralNode(node: CharLiteralNode) {
-        delegate.visitCharLiteralNode(node: node)
     }
     
     func walkArrayLiteralNode(node: ArrayLiteralNode) {
-        delegate.visitArrayLiteralNode(node: node)
         
         for contents in node.contents {
             walkExpression(node: contents)
@@ -274,7 +204,6 @@ class TreeWalker {
     }
     
     func walkParenthesesExpressionNode(node: ParenthesesExpression) {
-        delegate.visitParenthesesExpression(node: node)
         
         if let expr = node.expression {
             walkExpression(node: expr)
@@ -282,7 +211,6 @@ class TreeWalker {
     }
     
     func walkNegateExpressionNode(node: NegateExpression) {
-        delegate.visitNegateExpression(node: node)
         
         if let expr = node.expression {
             walkExpression(node: expr)
@@ -290,7 +218,6 @@ class TreeWalker {
     }
     
     func walkMinusExpressionNode(node: MinusExpression) {
-        delegate.visitMinusExpression(node: node)
         
         if let expr = node.expression {
             walkExpression(node: expr)
@@ -298,13 +225,11 @@ class TreeWalker {
     }
     
     func walkOperatorNode(node: OperatorNode) {
-        delegate.visitOperatorNode(node: node)
     }
     
     // EXPR OP EXPR
     func walkExpressionNode(node: ExpressionNode) {
-        delegate.visitExpressionNode(node: node)
-
+        
         if let expr = node.loperand {
             walkExpression(node: expr)
         }
@@ -320,7 +245,6 @@ class TreeWalker {
     
     // MARK: If-else
     func walkIfElseNode(node: IfElseNode) {
-        delegate.visitIfElseNode(node: node)
         
         if let cond = node.condition {
             walkExpression(node: cond)
@@ -337,7 +261,6 @@ class TreeWalker {
     
     // MARK: Let
     func walkLetNode(node: LetNode) {
-        delegate.visitLetNode(node: node)
         
         for letVar in node.vars {
             walkLetVariableNode(node: letVar)
@@ -349,7 +272,6 @@ class TreeWalker {
     }
     
     func walkLetVariableNode(node: LetVariableNode) {
-        delegate.visitLetVariableNode(node: node)
         
         if let type = node.type {
             walkTypeNode(node: type)
@@ -362,7 +284,6 @@ class TreeWalker {
     
     // MARK: Switch
     func walkSwitchNode(node: SwitchNode) {
-        delegate.visitSwitchNode(node: node)
         
         for switchCase in node.cases {
             walkSwitchCaseNode(node: switchCase)
@@ -370,7 +291,6 @@ class TreeWalker {
     }
     
     func walkSwitchCaseNode(node: SwitchCaseNode) {
-        delegate.visitSwitchCaseNode(node: node)
         
         if let expr = node.expr {
             walkExpression(node: expr)
@@ -382,6 +302,21 @@ class TreeWalker {
     }
     
     func walkElseNode(node: ElseNode) {
-        delegate.visitElseNode(node: node)
+    }
+    
+    
+    // MARK: Other
+    // Replaces 'replace' in it's parent 'inParent' with 'replacement'
+    func replaceNode(replace: Node, inParent: Node, replacement: Node) {
+        print("Parent: \(inParent)")
+        if inParent is ExpressionNode {
+            guard let inParent = inParent as? ExpressionNode else { return}
+            if inParent.loperand === replace {
+                inParent.loperand = replacement
+            }
+            else if inParent.roperand === replace {
+                inParent.roperand = replacement
+            }
+        }
     }
 }
