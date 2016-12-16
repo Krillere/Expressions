@@ -307,7 +307,6 @@ class Parser {
             }
             
             if tmp.type != .lsquare && tmp.type != .string && tmp.type != .rsquare {
-                print("Stopper ved \(tmp)")
                 break
             }
             

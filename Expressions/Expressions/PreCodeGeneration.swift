@@ -49,26 +49,9 @@ class PreCodeGeneration: TreeWalker {
         
         super.walkExpressionNode(node: node)
     }
-    /*
-    override func walkArrayLiteralNode(node: ArrayLiteralNode) {
-        guard let block = findParentBlock(node: node) else { return }
-     
-        // Create a new name and refer it to itself in translation
-        let newName = ParserTables.shared.generateNewVariableName()
-        ParserTables.shared.nameTranslation[newName] = newName
-        
-        // Guess the type of the node
-        let type = CodeGeneratorHelpers.guessType(node: node)
-        let varDecl = LetVariableNode(type: type, name: newName, value: node)
-        block.expressions.insert(varDecl, at: 0)
-        
-        // Create the new variable
-        let variable = VariableNode(identifier: newName)
-        print("Node: \(node), parent: \(node.parent)")
-        self.replaceNode(replace: node, inParent: node.parent!, replacement: variable)
-    }
-    */
-    // Other functions
+
+    // MARK: Other functions
+    // Finds the BlockNode the 'Node' resides in
     func findParentBlock(node: Node) -> BlockNode? {
         
         var tmpNode = node.parent
@@ -87,6 +70,7 @@ class PreCodeGeneration: TreeWalker {
         return nil
     }
     
+    //Does the ExpressionNode use the append operator?
     func expressionUsesAppend(node: ExpressionNode) -> Bool {
         guard let op = node.op, let opS = op.op else { return false }
         

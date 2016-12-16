@@ -56,7 +56,7 @@ class Compiler {
             }
         }
         
-        let tmpCode = code //stdCode+code
+        let tmpCode = stdCode+code
 
         
         // Run scanner and parser

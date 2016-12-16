@@ -21,18 +21,21 @@ define last: [Generic] lst -> Generic {
 # Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
-                 { append(list(func(first(items))), map(tail(items), func)) }
+                { list(func(first(items))) ++ map(tail(items), func) }
 }
+
 # Another map functions, this one takes two lists and applies a fucntion with two arguments to each element in each list
 define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
   if (length(items1) != length(items2)) OR null(items1) OR null(items2) { [] }
-  { append(list(func(first(items1), first(items2))), map(tail(items1), tail(items2), func))  }
+  {
+    list(func(first(items1), first(items2))) ++ map(tail(items1), tail(items2), func)
+  }
 }
 
 # Filter function (Tests each object using 'func', if true, add to list)
 define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
   switch null(lst) { [] } # Stop if empty
-         func(first(lst)) { append(list(first(lst)), filter(tail(lst), func)) }
+         func(first(lst)) { list(first(lst)) ++ filter(tail(lst), func) }
          else { filter(tail(lst), func) }
 }
 
@@ -52,10 +55,10 @@ define subset: [Generic] lst, Int from, Int to -> [Generic] {
 }
 define subsetHelper: [Generic] lst, Int from, Int to, Int cur -> [Generic] {
     switch null(lst) { [] } # No more in lst
-           cur < from { subsetHelper(tail(lst), from, to, cur+1) } # We haven't reached from yet
-           cur == from { append(list(first(lst)), subsetHelper(tail(lst), from, to, cur+1)) } # Start subsetting
-           cur < to AND cur > from { append(list(first(lst)), subsetHelper(tail(lst), from, to, cur+1)) }
-           cur == to { list(first(lst)) }
+           cur < from   { subsetHelper(tail(lst), from, to, cur+1) } # We haven't reached from yet
+           cur == from  { list(first(lst)) ++ subsetHelper(tail(lst), from, to, cur+1) } # Start subsetting
+           cur < to AND cur > from  { list(first(lst)) ++ subsetHelper(tail(lst), from, to, cur+1) }
+           cur == to    { list(first(lst)) }
            else { [] }
 }
 
@@ -83,7 +86,7 @@ define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
       if index == -1 { list(lst) } # Stop if it does not
       {
         let [Generic] sub = subset(lst, 0, index-1) {
-          append(list(sub), splitHelper(subset(lst, index+1, length(lst)), spl))
+          list(sub) ++ splitHelper(subset(lst, index+1, length(lst)), spl)
         }
       }
     }
@@ -93,7 +96,7 @@ define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
 # Creates a list containing the first and last element of 'lst'
 define ends: [Generic] lst -> [Generic] {
   let Generic f = first(lst), Generic l = last(lst) {
-    append(list(f), l)
+    list(f) ++ l
   }
 }
 

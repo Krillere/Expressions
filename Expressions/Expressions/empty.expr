@@ -1,6 +1,7 @@
 define main: -> Int {
-  let [Int] tmpAr = [1, 2], [Int] appendAr = tmpAr ++ [3] ++ [4] {
-    print(appendAr)
+  let [Int] tmpAr = [1, 2], [Int] appendAr = tmpAr ++ [3] ++ [4], [Int] thirdTest = [0] ++ tmpAr ++ [3] {
+    printLn(thirdTest)
+    printLn(map([1, 2, 3, 4], lambda (Int a -> Int) { a + 1 }))
   }
   0
 }
