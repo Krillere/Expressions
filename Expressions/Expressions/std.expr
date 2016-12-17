@@ -21,21 +21,21 @@ define last: [Generic] lst -> Generic {
 # Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
-                { list(func(first(items))) ++ map(tail(items), func) }
+                { [func(first(items))] ++ map(tail(items), func) }
 }
 
 # Another map function, this one takes two lists and applies a fucntion with two arguments to each element in each list
 define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
   if (length(items1) != length(items2)) OR null(items1) OR null(items2) { [] }
   {
-    list(func(first(items1), first(items2))) ++ map(tail(items1), tail(items2), func)
+    [func(first(items1), first(items2))] ++ map(tail(items1), tail(items2), func)
   }
 }
 
 # Filter function (Tests each object using 'func', if true, add to list)
 define filter: [Generic] lst, (Generic -> Bool) func -> [Generic] {
   switch null(lst) { [] } # Stop if empty
-         func(first(lst)) { list(first(lst)) ++ filter(tail(lst), func) }
+         func(first(lst)) { [first(lst)] ++ filter(tail(lst), func) }
          else { filter(tail(lst), func) }
 }
 
@@ -56,9 +56,9 @@ define subset: [Generic] lst, Int from, Int to -> [Generic] {
 define subsetHelper: [Generic] lst, Int from, Int to, Int cur -> [Generic] {
     switch null(lst) { [] } # No more in lst
            cur < from   { subsetHelper(tail(lst), from, to, cur+1) } # We haven't reached from yet
-           cur == from  { list(first(lst)) ++ subsetHelper(tail(lst), from, to, cur+1) } # Start subsetting
-           cur < to AND cur > from  { list(first(lst)) ++ subsetHelper(tail(lst), from, to, cur+1) }
-           cur == to    { list(first(lst)) }
+           cur == from  { [first(lst)] ++ subsetHelper(tail(lst), from, to, cur+1) } # Start subsetting
+           cur < to AND cur > from  { [first(lst)] ++ subsetHelper(tail(lst), from, to, cur+1) }
+           cur == to    { [first(lst)] }
            else { [] }
 }
 

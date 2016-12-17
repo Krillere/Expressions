@@ -23,7 +23,7 @@ class CodeGenerator {
     
     // Direct conversions, used when possible (Not user-defined types) (Types and operators)
     internal var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool"]
-    internal var opConversions:[String: String] = ["AND":"&&", "OR":"||", ".":"->", "++":"+"]
+    internal var opConversions:[String: String] = ["AND":"&&", "OR":"||", ".":"->", "++":"<<"]
     
     
     init(program: ProgramNode) {

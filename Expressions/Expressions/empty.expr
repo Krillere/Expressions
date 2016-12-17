@@ -1,10 +1,7 @@
 define main: -> Int {
-  printLn(maps([1, 2, 3], lambda (Int a -> Int) { a+1 }))
+  printLn(map([1, 2, 3], lambda (Int a -> Int) { a+1 }))
+  printLn(filter([1, 2, 3], even))
   0
 }
 
 # Functions here
-define maps: [Generic] items, (Generic -> Generic) func -> [Generic] {
-  if null(items) { [] }
-  { [func(first(items))] ++ map(tail(items), func) }
-}

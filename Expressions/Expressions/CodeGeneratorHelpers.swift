@@ -41,7 +41,14 @@ class CodeGeneratorHelpers {
                 
                 // Do we know this function?
                 if let decls = ParserTables.shared.functionDeclarations[identifier] {
-                    return decls[0].retType
+                    let ret = decls[0].retType
+                    if ret is NormalTypeNode {
+                        var tmp = (ret as! NormalTypeNode).copy() as! NormalTypeNode
+                        tmp.numNested = 1
+                        
+                        return tmp
+                    }
+                    return ret
                 }
                 
                 // Is it an inline function?
@@ -88,15 +95,6 @@ class CodeGeneratorHelpers {
             
             // Is it an inline function?
             if let inlineReturnType = getInlineReturnType(identifier: identifier, node: fnode) {
-                
-                // It's an array, set the numNested
-                if inlineReturnType is NormalTypeNode {
-                    let tmpType = (inlineReturnType as! NormalTypeNode).copy() as! NormalTypeNode
-                    tmpType.numNested = 1
-                    
-                    return tmpType
-                }
-                
                 return inlineReturnType
             }
         }
