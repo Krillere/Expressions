@@ -141,6 +141,22 @@ std::vector<T> list(T obj) {
     
     return ret;
 }
+template<typename T>
+std::vector<T> list(const T obj, T aObj) {
+    std::vector<T> ret;
+    ret.push_back(obj);
+    ret.push_back(aObj);
+    
+    return ret;
+}
+template <typename T, typename ... Rest>
+std::vector<T> list(const T obj, const T& aObj, const Rest&... rest) {
+    std::vector<T> ret;
+    ret.push_back(obj);
+    ret.push_back(aObj);
+    
+    return append(ret, list(rest...));
+}
 
 // Append
 template<typename T>

@@ -24,7 +24,7 @@ define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
                 { list(func(first(items))) ++ map(tail(items), func) }
 }
 
-# Another map functions, this one takes two lists and applies a fucntion with two arguments to each element in each list
+# Another map function, this one takes two lists and applies a fucntion with two arguments to each element in each list
 define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
   if (length(items1) != length(items2)) OR null(items1) OR null(items2) { [] }
   {

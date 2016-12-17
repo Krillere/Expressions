@@ -10,6 +10,7 @@ import Foundation
 
 // Changes a few things in the tree before doing the code generation
 class PreCodeGeneration: TreeWalker {
+    
     override func walkExpressionNode(node: ExpressionNode) {
         if !expressionUsesAppend(node: node) { // If the expression does not use append
             return
@@ -25,12 +26,15 @@ class PreCodeGeneration: TreeWalker {
             
             // Guess the type of the node
             let type = CodeGeneratorHelpers.guessType(node: node.loperand!)
-            let varDecl = LetVariableNode(type: type, name: newName, value: node.loperand!)
-            block.expressions.insert(varDecl, at: 0)
+            if let type = type {
+                let varDecl = LetVariableNode(type: type, name: newName, value: node.loperand!)
+                
+                block.expressions.insert(varDecl, at: 0)
             
-            // Create the new variable
-            let variable = VariableNode(identifier: newName)
-            node.loperand = variable
+                // Create the new variable
+                let variable = VariableNode(identifier: newName)
+                node.loperand = variable
+            }
         }
         if node.roperand is ArrayLiteralNode {
             
@@ -39,37 +43,21 @@ class PreCodeGeneration: TreeWalker {
             
             // Guess the type of the node
             let type = CodeGeneratorHelpers.guessType(node: node.roperand!)
-            let varDecl = LetVariableNode(type: type, name: newName, value: node.roperand!)
-            block.expressions.insert(varDecl, at: 0)
+            if let type = type {
+                let varDecl = LetVariableNode(type: type, name: newName, value: node.roperand!)
+                block.expressions.insert(varDecl, at: 0)
             
-            // Create the new variable
-            let variable = VariableNode(identifier: newName)
-            node.roperand = variable
+                // Create the new variable
+                let variable = VariableNode(identifier: newName)
+                node.roperand = variable
+            }
         }
         
         super.walkExpressionNode(node: node)
     }
 
     // MARK: Other functions
-    // Finds the BlockNode the 'Node' resides in
-    func findParentBlock(node: Node) -> BlockNode? {
-        
-        var tmpNode = node.parent
-        if tmpNode == nil {
-            return nil
-        }
-        
-        while tmpNode != nil {
-            if tmpNode is BlockNode {
-                return tmpNode as? BlockNode
-            }
-            
-            tmpNode = tmpNode!.parent
-        }
-        
-        return nil
-    }
-    
+
     //Does the ExpressionNode use the append operator?
     func expressionUsesAppend(node: ExpressionNode) -> Bool {
         guard let op = node.op, let opS = op.op else { return false }
@@ -81,3 +69,4 @@ class PreCodeGeneration: TreeWalker {
         return false
     }
 }
+    

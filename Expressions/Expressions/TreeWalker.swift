@@ -308,8 +308,8 @@ class TreeWalker {
     // MARK: Other
     // Replaces 'replace' in it's parent 'inParent' with 'replacement'
     func replaceNode(replace: Node, inParent: Node, replacement: Node) {
-        print("Parent: \(inParent)")
-        if inParent is ExpressionNode {
+        
+        if inParent is ExpressionNode { // 'Expr OP Expr'
             guard let inParent = inParent as? ExpressionNode else { return}
             if inParent.loperand === replace {
                 inParent.loperand = replacement
@@ -318,5 +318,55 @@ class TreeWalker {
                 inParent.roperand = replacement
             }
         }
+        else if inParent is LetVariableNode { // 'Int myVar = 1'
+            guard let inParent = inParent as? LetVariableNode else { return }
+            if inParent.value === replace {
+                inParent.value = replacement
+            }
+        }
+        else if inParent is BlockNode {
+            guard let inParent = inParent as? BlockNode else { return }
+            for n in 0 ..< inParent.expressions.count {
+                let expr = inParent.expressions[n]
+
+                if expr === replace {
+                    inParent.expressions[n] = replacement
+                    break
+                }
+            }
+        }
+        else if inParent is FunctionCallNode {
+            guard let inParent = inParent as? FunctionCallNode else { return }
+            for n in 0 ..< inParent.parameters.count {
+                let par = inParent.parameters[n]
+                if par === replace {
+                    inParent.parameters[n] = replacement
+                    break
+                }
+            }
+        }
+        else {
+            print("Opgiver med type: \(type(of: inParent))")
+        }
+    }
+    
+    // MARK: Other functions
+    // Finds the BlockNode the 'Node' resides in
+    func findParentBlock(node: Node) -> BlockNode? {
+        
+        var tmpNode = node.parent
+        if tmpNode == nil {
+            return nil
+        }
+        
+        while tmpNode != nil {
+            if tmpNode is BlockNode {
+                return tmpNode as? BlockNode
+            }
+            
+            tmpNode = tmpNode!.parent
+        }
+        
+        return nil
     }
 }

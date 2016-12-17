@@ -9,11 +9,11 @@
 import Foundation
 
 class CodeGeneratorHelpers {
-    static func guessType(node: Node) -> TypeNode {
+    static func guessType(node: Node) -> TypeNode? {
         if node is ArrayLiteralNode {
             guard let node = node as? ArrayLiteralNode else { return NormalTypeNode(full: "void*", type: "void*", nestedLevel: 0) }
             if node.contents.count < 1 {
-                return NormalTypeNode(full: "void*", type: "void*", nestedLevel: 1)
+                return nil
             }
             
             let fnode = node.contents[0]
@@ -36,7 +36,28 @@ class CodeGeneratorHelpers {
             else if fnode is StringLiteralNode {
                 return NormalTypeNode(full: "String", type: "String", nestedLevel: 1)
             }
-
+            else if fnode is FunctionCallNode {
+                guard let fnode = fnode as? FunctionCallNode, let identifier = fnode.identifier else { return nil }
+                
+                // Do we know this function?
+                if let decls = ParserTables.shared.functionDeclarations[identifier] {
+                    return decls[0].retType
+                }
+                
+                // Is it an inline function?
+                if let inlineReturnType = getInlineReturnType(identifier: identifier, node: fnode) {
+                    
+                    // It's an array, set the numNested
+                    if inlineReturnType is NormalTypeNode {
+                        let tmpType = (inlineReturnType as! NormalTypeNode).copy() as! NormalTypeNode
+                        tmpType.numNested = 1
+                        
+                        return tmpType
+                    }
+                    
+                    return inlineReturnType
+                }
+            }
         }
         else if node is NumberLiteralNode {
             if let node = node as? NumberLiteralNode {
@@ -57,8 +78,30 @@ class CodeGeneratorHelpers {
         else if node is BooleanLiteralNode {
             return NormalTypeNode(full: "Bool", type: "Bool", nestedLevel: 0)
         }
-
-        return NormalTypeNode(full: "void*", type: "void*", nestedLevel: 0)
+        else if node is FunctionCallNode {
+            guard let fnode = node as? FunctionCallNode, let identifier = fnode.identifier else { return nil }
+            
+            // Do we know this function?
+            if let decls = ParserTables.shared.functionDeclarations[identifier] {
+                return decls[0].retType
+            }
+            
+            // Is it an inline function?
+            if let inlineReturnType = getInlineReturnType(identifier: identifier, node: fnode) {
+                
+                // It's an array, set the numNested
+                if inlineReturnType is NormalTypeNode {
+                    let tmpType = (inlineReturnType as! NormalTypeNode).copy() as! NormalTypeNode
+                    tmpType.numNested = 1
+                    
+                    return tmpType
+                }
+                
+                return inlineReturnType
+            }
+        }
+        
+        return nil
     }
     
     // Determine (gues..) the type of a literal (Array is guessing, rest is pretty straight forward) (Guess is fine. C++ compiler catches mistakes..)
@@ -114,5 +157,59 @@ class CodeGeneratorHelpers {
         
         Compiler.error(reason: "No type found for node: \(node), probably an error.", node: node, phase: .CodeGeneration)
         return ""
+    }
+    
+    static func getInlineReturnType(identifier: String, node: Node) -> TypeNode? {
+        var parent = node.parent
+        if parent == nil {
+            return nil
+        }
+        
+        // Go up the tree until we find 'let' or 'FunctionNode'. 'Let' might have it defined, or it might be in the parameters
+        while parent != nil {
+            
+            if parent is LetNode {
+                guard let parent = parent as? LetNode else { return nil }
+                
+                for letVar in parent.vars {
+                    guard let letIdent = letVar.name, let letType = letVar.type else { continue }
+                    
+                    if letIdent == identifier && letType is FunctionTypeNode {
+                        guard let letType = letType as? FunctionTypeNode else { return nil }
+                        return letType.ret
+                    }
+                }
+            }
+            else if parent is LetVariableNode {
+                guard let parent = parent as? LetVariableNode, let letIdent = parent.name, let letType = parent.type else { return nil }
+                
+                if letIdent == identifier && letType is FunctionTypeNode {
+                    guard let letType = letType as? FunctionTypeNode else { return nil }
+                    return letType.ret
+                }
+            }
+            else if parent is FunctionNode { // Check parameters
+                guard let parent = parent as? FunctionNode else { return nil }
+                
+                for par in parent.pars {
+                    guard let parIdent = par.name else { continue }
+                    
+                    // Must be a function type
+                    if par.type is FunctionTypeNode {
+                        guard let type = par.type as? FunctionTypeNode else { continue }
+                        
+                        if parIdent == identifier { // Name match, return it
+                            return type.ret
+                        }
+                    }
+                }
+                
+                break // No reason to go further than the function scope
+            }
+            
+            parent = parent!.parent
+        }
+        
+        return nil
     }
 }
