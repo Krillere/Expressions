@@ -294,6 +294,7 @@ subset(list, from, to) # Returns a subset of the list, between and including 'fr
 indexOf(list, obj) # Returns the first encountered index of 'obj' in 'list', or -1 of 'list' does not contain 'obj'
 
 list(obj) # Returns a list containing 'obj'
+list(obj, ... objs) # Creates a list with all objects appended
 reverse(list) # Reverses a list
 
 append(list, ... lists) # Appends all the objects from 'lists' (Variadic) to 'list'
