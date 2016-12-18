@@ -14,6 +14,7 @@ class CompilerError : CustomStringConvertible {
         case Parsing
         case ScopeCheck
         case TypeCheck
+        case SanityCheck
         case CodeGeneration
     }
     
@@ -95,6 +96,10 @@ class Compiler {
                 print("Type check errors: \(errors)")
                 return
             }
+            
+            // Sanity check
+            let sanity = SanityChecker(program: program)
+            sanity.walk()
             
             // Pre-code generation changes
             let pregen = PreCodeGeneration(program: program)

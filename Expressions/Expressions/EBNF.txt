@@ -1,25 +1,36 @@
-Basic types: Char, Int, Float, Bool, String (String is implicitly [Char])
+program := func | func program | objType | objType program
 
-Everything is an expression and each block must return something.
-Some functions contains side conditions, and will therefore not return anything, and can be used inside blocks without breaking anything (For example 'print' function)
-No global variables or anything like that. The program can only contain types and functions.
-Program must contain the entry-point function; main. Defined as such: define main: -> Int { }
+func := "define " name ": " pars " -> " type block
 
-Examples in folder 'Code examples (Tests)'
-
-
-EBNF:
-
-program := func | func program | type | type program
-
-func := "define" name ": " pars " -> " type block
-
-type := "type" name "{" typeDecls "}"
+objType := "type " name "{" typeDecls "}"
 typeDecls := typeDecl | typeDecl ", " typeDecls
 typeDecl  := type name
 
 pars := type name | type name ", " pars
-block := "{" expr "}"
+block := "{" exprs "}"
+exprs = expr | expr exprs
+
+// if 1 == 2 { 1 } { 2 }
+if := "if" expr block block
+
+switch := "switch" cases "else" expr
+cases  := case | case cases
+case   := expr block
+
+// myFunc(1, 2, 1+2)
+call     := name "(" passPars ")"
+passPars := expr | expr "," passPars
+
+letExpr  := "let" varDecls block
+varDecls := varDecl | varDecl ", " varDecls
+varDecl  := type name "=" expr"
+
+// For example: (Int, Int -> Int) takes two integers as parameter and returns integer
+funcType := "(" inpTypes "->" type ")"
+inpTypes := type | type ", " inpTypes
+
+// For example: lambda (Int a, Int b -> Int) { a + b }
+lambda   := "lambda" "(" pars "->" type ")" block
 
 expr := if
 | name
@@ -33,32 +44,18 @@ expr := if
 | number
 | call
 | letExpr
-| name
 | lambda
+| arrayLit
 
 
-number  := (0-9)+ | (0-9)+.(0-9)+ | -number
-boolLit := "true" | "false"
-string  := """ (.*) """
-name    := (a-Z)(a-Z0-9'_-)*
+number   := (0-9)+ | (0-9)+.(0-9)+ | -number
+boolLit  := "true" | "false"
+string   := """ (.*) """
+name     := (a-Z)(a-Z0-9'_)*
+
+arrayLit      := "[" arrayLitConts "]"
+arrayLitConts := expr | expr ", " arrayLitConts
+
+type := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]" | funcType
 
 op := AND | OR | * | / | + | - | < | > | <= | >= | == | != | .
-
-if := "if" expr block block
-
-switch := "switch" cases "else" expr
-cases  := case | case cases
-case   := expr block
-
-call     := name "(" passPars ")"
-passPars := expr | expr "," passPars
-
-letExpr  := "let" varDecls block
-varDecls := varDecl | varDecl ", " varDecls
-varDecl  := type name "=" expr"
-type     := "String" | "Int" | "Char" | "Float" | "Bool" | "[" type "]" | funcType
-
-funcType := "(" inpTypes "->" type ")" // For example: (Int, Int -> Int) takes two integers as parameter and returns integer
-inpTypes := type | type ", " inpTypes
-
-lambda   := "lambda" "(" pars "->" type ")" block // For example: lambda (Int a, Int b -> Int) { a + b }

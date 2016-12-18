@@ -11,6 +11,7 @@
 		AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */; };
 		AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */; };
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
+		AA1324C81E06D9EF005C565A /* SanityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1324C71E06D9EF005C565A /* SanityChecker.swift */; };
 		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
 		AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA718B411DEF3F0D00638028 /* TreeWalker.swift */; };
 		AA941BA31E030A260033CC88 /* CodeGeneratorHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */; };
@@ -53,6 +54,7 @@
 		AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeHelper.swift; sourceTree = "<group>"; };
 		AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Compiler.swift; sourceTree = "<group>"; };
 		AA0D9BBE1DCBF27E0025FE27 /* example9.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example9.expr; sourceTree = "<group>"; };
+		AA1324C71E06D9EF005C565A /* SanityChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SanityChecker.swift; sourceTree = "<group>"; };
 		AA265DF61DDE1BDF00E6B9C7 /* example11.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example11.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -176,11 +178,12 @@
 		AAEAC0371DC4EC0D00989910 /* Checking */ = {
 			isa = PBXGroup;
 			children = (
+				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
 				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
+				AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */,
 				AAB4EE941DC518520035F875 /* ScopeChecker.swift */,
 				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
-				AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */,
-				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
+				AA1324C71E06D9EF005C565A /* SanityChecker.swift */,
 			);
 			name = Checking;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				AAEAC02D1DC4E9E200989910 /* Parser.swift in Sources */,
 				AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */,
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
+				AA1324C81E06D9EF005C565A /* SanityChecker.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,
 				AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */,
 				AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */,

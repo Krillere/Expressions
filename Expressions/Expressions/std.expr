@@ -1,8 +1,3 @@
-# Recursive factorial. Highly inefficient. Should replace.
-define factorial: Int num -> Int {
-  if num <= 1 { 1 } { num * factorial(num-1) }
-}
-
 # Is the list empty?
 define null: [Generic] lst -> Bool {
   length(lst) == 0
@@ -120,4 +115,9 @@ define prefixHelper: [Generic] lst, [Generic] items -> Bool {
 # Does the list have a specific postfix? (Uses prefix but reverses first)
 define hasPostfix: [Generic] lst, [Generic] items -> Bool {
   hasPrefix(reverse(lst), reverse(items))
+}
+
+# Recursive factorial. Probably not very efficient..
+define factorial: Int num -> Int {
+  if num <= 1 { 1 } { num * factorial(num-1) }
 }
