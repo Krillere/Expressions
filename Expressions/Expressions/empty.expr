@@ -1,13 +1,5 @@
+# Entrypoint
 define main: -> Int {
-  printLn(map([1, 2, 3], lambda (Int a -> Int) { a+1 }))
-  printLn(filter([1, 2, 3], even))
-  printLn(filter([1, 2, 3, 4, 5], odd))
-let Int a = 2 {
-  0
-}
-let Int a = 1 {
-  0
-}
   0
 }
 
