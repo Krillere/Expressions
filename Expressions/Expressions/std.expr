@@ -13,10 +13,20 @@ define last: [Generic] lst -> Generic {
   get(lst, length(lst)-1)
 }
 
+# Min function
+define min: Int a, Int b -> Int {
+  if a < b { a } { b }
+}
+
+# Max function
+define max: Int a, Int b -> Int {
+  if a > b { a } { b }
+}
+
 # Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
-                { [func(first(items))] ++ map(tail(items), func) }
+                 { [func(first(items))] ++ map(tail(items), func) }
 }
 
 # Another map function, this one takes two lists and applies a fucntion with two arguments to each element in each list
