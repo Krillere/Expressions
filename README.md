@@ -1,7 +1,10 @@
 # Expressions
 
-A simple compiler for a simple functional programming language. Everything is an expression, hence the name for the language; Expressions. The language is a statically typed functional language using some syntactic elements from C.
+A simple compiler for a simple functional programming language. Everything is an expression, hence the name for the language; Expressions. The language is a statically typed functional language using some syntactic elements from C, Haskell (Although not much) and Scheme.
+
 The compiler is written in Swift 3.0. The compiler compiles the Expression code to the intermediate language C++.
+
+The EBNF for the language can be found on the Wiki: [EBNF](https://github.com/Krillere/Expressions/wiki/EBNF).
 
 ToDo list:
 - ~~Function implementation~~
