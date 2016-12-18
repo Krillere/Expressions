@@ -1,6 +1,6 @@
 # Expressions
 
-A simple compiler for a simple functional programming language. Everything is an expression, hence the name for the language; Expressions. The language is a statically typed functional language using some syntactic elements from C, Haskell (Although not much) and Scheme.
+A simple compiler for a simple functional programming language. Everything is an expression, hence the name for the language; Expressions. The language is a statically typed functional language with inspiration from C, Haskell and Scheme.
 
 The compiler is written in Swift 3.0. The compiler compiles the Expression code to the intermediate language C++.
 
@@ -20,6 +20,7 @@ ToDo list:
 - ~~Higher order functions~~ (map, filter implemented)
 - ~~Variadic functions~~
 - ~~Lambdas~~
+- Module and import system
 - User defined functions with side-effects
 - Scope check (Function calls checked)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
