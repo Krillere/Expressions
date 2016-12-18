@@ -285,6 +285,9 @@ Functions to handle lists:
 length(list) # Returns the length of a list
 null(lst) # true of list is empty
 
+min(int, int) # Returns the smaller int
+max(int, int) # Returns the larger int
+
 first(list) # Returns the first object in the list
 last(list) # Returns the last object in the list
 
