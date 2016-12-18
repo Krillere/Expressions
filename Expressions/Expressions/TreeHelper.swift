@@ -15,7 +15,7 @@ class TreeHelper {
         var isGeneric = false
         
         // Return type
-        let ret = node.retType
+        let ret = node.returnType
         if ret is NormalTypeNode {
             if (ret as! NormalTypeNode).generic {
                 isGeneric = true
@@ -23,7 +23,7 @@ class TreeHelper {
         }
         
         if !isGeneric {
-            for p in node.pars {
+            for p in node.parameters {
                 if p.type is NormalTypeNode {
                     if (p.type as! NormalTypeNode).generic {
                         isGeneric = true
@@ -38,7 +38,7 @@ class TreeHelper {
     
     // Does the function have any variadic parameters?
     public static func isVariadicFunction(node: FunctionNode) -> Bool {
-        for p in node.pars {
+        for p in node.parameters {
             if p.variadic {
                 return true
             }

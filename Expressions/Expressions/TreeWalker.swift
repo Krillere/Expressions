@@ -41,11 +41,11 @@ class TreeWalker {
     
     // MARK: Function
     func walkFunctionNode(node: FunctionNode) {
-        for par in node.pars {
+        for par in node.parameters {
             walkParameterNode(node: par)
         }
         
-        if let retType = node.retType {
+        if let retType = node.returnType {
             walkTypeNode(node: retType)
         }
         
@@ -62,11 +62,11 @@ class TreeWalker {
     
     // MARK: Lambda
     func walkLambdaNode(node: LambdaNode) {
-        for par in node.pars {
+        for par in node.parameters {
             walkParameterNode(node: par)
         }
         
-        if let ret = node.retType {
+        if let ret = node.returnType {
             walkTypeNode(node: ret)
         }
         
@@ -108,7 +108,7 @@ class TreeWalker {
             walkTypeNode(node: inp)
         }
         
-        if let ret = node.ret {
+        if let ret = node.returnType {
             walkTypeNode(node: ret)
         }
     }
@@ -262,7 +262,7 @@ class TreeWalker {
     // MARK: Let
     func walkLetNode(node: LetNode) {
         
-        for letVar in node.vars {
+        for letVar in node.variables {
             walkLetVariableNode(node: letVar)
         }
         

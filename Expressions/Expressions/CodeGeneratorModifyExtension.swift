@@ -29,8 +29,8 @@ extension CodeGenerator {
                 return
             }
             
-            for n in 0 ..< funcNode.pars.count {
-                let decPar = funcNode.pars[n]
+            for n in 0 ..< funcNode.parameters.count {
+                let decPar = funcNode.parameters[n]
                 
                 if decPar.variadic {
                     var litCont:[Node] = []
@@ -80,7 +80,7 @@ extension CodeGenerator {
         }
         else if expr is LetNode {
             guard let expr = expr as? LetNode else { return }
-            for v in expr.vars {
+            for v in expr.variables {
                 guard let vnode = v.value else { continue }
                 fixVariadicFunctions(expr: vnode)
             }
@@ -136,12 +136,12 @@ extension CodeGenerator {
                     }
                     else { // 'Normal' function
                         if let functionDecl = determineFunctionNodeForCall(call: fc) {
-                            if n >= functionDecl.pars.count {
+                            if n >= functionDecl.parameters.count {
                                 break
                             }
                             
-                            if let defParType = functionDecl.pars[n].type as? NormalTypeNode {
-                                if functionDecl.pars[n].variadic {
+                            if let defParType = functionDecl.parameters[n].type as? NormalTypeNode {
+                                if functionDecl.parameters[n].variadic {
                                     type = "std::vector<"+createTypeString(type: defParType)+">"
                                 }
                                 else {
@@ -203,7 +203,7 @@ extension CodeGenerator {
                     }
                 }
                 else if par is LambdaNode {
-                    guard let par = par as? LambdaNode, let retType = par.retType, let block = par.block else { continue }
+                    guard let par = par as? LambdaNode, let retType = par.returnType, let block = par.block else { continue }
                     // Replace node with variable
                     let newName = ParserTables.shared.generateNewVariableName()
                     ParserTables.shared.nameTranslation[newName] = newName
@@ -212,7 +212,7 @@ extension CodeGenerator {
                     fc.parameters[n] = repNode
                     
                     // Create lambda definition (Create tmp function so we can reuse 'createFunctionTypeDefinition)
-                    let tmpNode = FunctionNode(identifier: "", pars: par.pars, ret: retType, block: block)
+                    let tmpNode = FunctionNode(identifier: "", pars: par.parameters, ret: retType, block: block)
                     str += createFunctionTypeDefinition(function: tmpNode)
                     
                     // Anonumous function

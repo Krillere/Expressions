@@ -183,7 +183,7 @@ class CodeGenerator {
     // MARK: Function declarations
     // Generates a function declaration
     internal func createFunction(function: FunctionNode) -> String {
-        guard let retType = function.retType,
+        guard let retType = function.returnType,
             let identifier = function.identifier,
             let block = function.block else { return "" }
         
@@ -212,7 +212,7 @@ class CodeGenerator {
                     type = createFunctionTypeString(type: retType as! FunctionTypeNode)
                 }
                 
-                let pars:String = createFunctionParameters(pars: function.pars)
+                let pars:String = createFunctionParameters(pars: function.parameters)
                 
                 var declaredFunction:String = type+" "+identifier
                 declaredFunction.append("("+pars+")")
@@ -232,14 +232,14 @@ class CodeGenerator {
     
     // Creates a generic function
     internal func createGenericFunction(function: FunctionNode) -> String {
-        guard let retType = function.retType,
+        guard let retType = function.returnType,
             let identifier = function.identifier,
             let block = function.block else { return "" }
         
         // Find number of generics
         var vecFunc = ""
         var foundGenericNames:[String] = []
-        for par in function.pars {
+        for par in function.parameters {
             if par.type is NormalTypeNode {
                 guard let type = par.type as? NormalTypeNode, let clearType = type.clearType else { continue }
                 
@@ -269,9 +269,9 @@ class CodeGenerator {
         
         // Parameters
         var vecPars = "("
-        for n in 0 ..< function.pars.count {
-            let par = function.pars[n]
-            guard let pname = par.name else { continue }
+        for n in 0 ..< function.parameters.count {
+            let par = function.parameters[n]
+            guard let pname = par.identifier else { continue }
             
             if par.type is NormalTypeNode {
                 guard let ptype = par.type as? NormalTypeNode else { continue }
@@ -286,7 +286,7 @@ class CodeGenerator {
                 vecPars += typeString+" "+pname
             }
             
-            if n != function.pars.count-1 {
+            if n != function.parameters.count-1 {
                 vecPars += ", "
             }
         }
@@ -306,7 +306,7 @@ class CodeGenerator {
         for n in 0 ..< pars.count {
             let par = pars[n]
                 
-            guard let tmpType = par.type, let name = par.name else { continue }
+            guard let tmpType = par.type, let name = par.identifier else { continue }
             
             if tmpType is NormalTypeNode { // Normal type, just 'Type Name'
                 
@@ -395,7 +395,7 @@ class CodeGenerator {
     
     // Creates a function type definition based on a FunctionNode: 'define test: Int a, Int b -> Int' becomes std::function<int(int, int)>
     func createFunctionTypeDefinition(function: FunctionNode) -> String {
-        guard let retType = function.retType else { return "" }
+        guard let retType = function.returnType else { return "" }
         
         var str = "std::function<"
         
@@ -410,8 +410,8 @@ class CodeGenerator {
         str += "("
         
         // Pars
-        for n in 0 ..< function.pars.count {
-            let p = function.pars[n]
+        for n in 0 ..< function.parameters.count {
+            let p = function.parameters[n]
         
             guard let type = p.type else { continue }
             if type is NormalTypeNode {
@@ -421,7 +421,7 @@ class CodeGenerator {
                 str += createFunctionTypeString(type: type as! FunctionTypeNode)
             }
             
-            if n != function.pars.count-1 {
+            if n != function.parameters.count-1 {
                 str += ", "
             }
         }
@@ -446,10 +446,10 @@ class CodeGenerator {
                 return "t_"+ParserTables.shared.createRename(forIdentifier: clearType)+" *"
             }
             
-            return clearType // Må være objekt
+            return clearType // Probably an object?
         }
         
-        var str = ""//"const "
+        var str = ""
         
         for i in 0 ..< nested {
             str += "std::vector<"
@@ -476,9 +476,10 @@ class CodeGenerator {
     
     
     // Creates a function type string (Other syntax than normal types)
+    // General syntax: std::function<OutputType(InpType1, InpType2, ... InpType N)>
     internal func createFunctionTypeString(type: FunctionTypeNode) -> String {
         
-        guard let ret = type.ret else { return "" }
+        guard let ret = type.returnType else { return "" }
         var str = "std::function<"
         
         if ret is NormalTypeNode {
@@ -490,6 +491,7 @@ class CodeGenerator {
         
         str += "("
         
+        // Iterate all function inputs and add these to the declaration
         for n in 0 ..< type.inputs.count {
             let t = type.inputs[n]
             
@@ -591,7 +593,7 @@ class CodeGenerator {
         str += createExpression(expr: lop)
         str += " "
         
-        // Erstat operators hvis nødvendigt
+        // Replace the operator if necessary (AND, OR, ++)
         if let replace = opConversions[ops] {
             str += replace
         }
@@ -753,6 +755,7 @@ class CodeGenerator {
         return str
     }
     
+    // Necessary for switch in let node, create and call lambda
     internal func createLetSwitchNode(node: SwitchNode) -> String {
         var str = "[=]"
         
@@ -786,10 +789,11 @@ class CodeGenerator {
         return str
     }
     
-    // Creates a lambdanode that handles the if statement
+    // Creates a lambd anode that handles the if statement
     internal func createLetIfElseNode(ifElse: IfElseNode) -> String {
         guard let _ = ifElse.ifBlock, let _ = ifElse.elseBlock, let _ = ifElse.condition, let _ = ifElse.parent else { return "" }
         
+        // Necessary for ifs in let expressions, as it would return a value otherwise.
         var str = "[=]"
         
         let newBlock = BlockNode(exprs: [ifElse])
@@ -800,14 +804,14 @@ class CodeGenerator {
     }
     
     // MARK: Let
-    // Laver let - "let" [Type name "=" expr] block
+    // Creates the let expression - "let" [Type name "=" expr] block
     internal func createLetNode(letN: LetNode) -> String {
         guard let block = letN.block else { return "" }
 
-        // Lav funktionens indhold
+        // Create a block, and inside this declare variables before creating the let expressions code block
         var str = "{\n"
         
-        for v in letN.vars {
+        for v in letN.variables {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
             fixVariadicFunctions(expr: expr)
             str += createFunctionCallParameterDeclarations(expr: expr)
@@ -855,12 +859,12 @@ class CodeGenerator {
         
         var str = "[=]"
         
-        let parString:String = createFunctionParameters(pars: node.pars)
+        let parString:String = createFunctionParameters(pars: node.parameters)
 
         str += "("+parString+")"
         
         // Lambda return value
-        if let retType = node.retType {
+        if let retType = node.returnType {
             if retType is NormalTypeNode {
                 str += " -> "+createTypeString(type: retType as! NormalTypeNode)
             }
@@ -873,7 +877,7 @@ class CodeGenerator {
     
     
     // MARK: Helpers
-    // Should this expression be returned? (No for example: 'if 1 == 2', because we don't want 'if return 1 == 2'
+    // Should this expression be returned? (No for example: 'if 1 == 2', because we don't want 'if return 1 == return 2'
     internal func shouldReturn(node: Node) -> Bool {
         
         var tmpNode:Node = node
@@ -948,12 +952,12 @@ class CodeGenerator {
         for n in 0 ..< declList.count {
             let decl = declList[n]
             
-            if highestParCount > decl.pars.count {
-                highestParCount = decl.pars.count
+            if highestParCount > decl.parameters.count {
+                highestParCount = decl.parameters.count
             }
             
             // If formal and actual parameter count matches, we can assume this is the correct one (C++ compiler will figure it out otherwise.)
-            if decl.pars.count == call.parameters.count {
+            if decl.parameters.count == call.parameters.count {
                 return decl
             }
         }
@@ -962,7 +966,7 @@ class CodeGenerator {
         if call.parameters.count > highestParCount {
             // Check for a function which contains a variadic parameter
             for decl in declList {
-                for p in decl.pars {
+                for p in decl.parameters {
                     if p.variadic {
                         return decl
                     }
@@ -971,9 +975,6 @@ class CodeGenerator {
         }
         
         // Don't know what it is.
-        print("Funktionen \(identifier) er stadig ikke fundet.. Shit.")
-        
-        
         return nil
     }
 }

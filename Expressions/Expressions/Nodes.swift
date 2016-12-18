@@ -64,14 +64,14 @@ class ObjectTypeVariableNode : Node, CustomStringConvertible {
 // MARK:
 class LambdaNode : Node, CustomStringConvertible {
     
-    var pars:[ParameterNode] = []
+    var parameters:[ParameterNode] = []
     var block:BlockNode?
-    var retType:TypeNode?
+    var returnType:TypeNode?
     
     init(pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
-        self.pars = pars
+        self.parameters = pars
         self.block = block
-        self.retType = ret
+        self.returnType = ret
     }
     
     override init() { }
@@ -86,15 +86,15 @@ class LambdaNode : Node, CustomStringConvertible {
 class FunctionNode : Node, CustomStringConvertible {
     var identifier:String?
     var block:BlockNode?
-    var pars:[ParameterNode] = []
-    var retType:TypeNode?
+    var parameters:[ParameterNode] = []
+    var returnType:TypeNode?
     
     init(identifier: String, pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
         super.init()
         
         self.identifier = ParserTables.shared.createRename(forIdentifier: identifier)
-        self.pars = pars
-        self.retType = ret
+        self.parameters = pars
+        self.returnType = ret
         self.block = block
         
         self.block?.parent = self
@@ -108,8 +108,8 @@ class FunctionNode : Node, CustomStringConvertible {
     func getParamIdentifiers() -> [String] {
         var tmp:[String] = []
         
-        for par in pars {
-            guard let ident = par.name else { continue }
+        for par in parameters {
+            guard let ident = par.identifier else { continue }
             tmp.append(ident)
         }
         
@@ -117,8 +117,8 @@ class FunctionNode : Node, CustomStringConvertible {
     }
     
     func isVariadic(varName: String) -> Bool {
-        for par in pars {
-            guard let ident = par.name else { continue }
+        for par in parameters {
+            guard let ident = par.identifier else { continue }
             if ident == varName && par.variadic {
                 return true
             }
@@ -128,16 +128,16 @@ class FunctionNode : Node, CustomStringConvertible {
     }
     
     func isVariadic(index: Int) -> Bool {
-        if index > pars.count-1 { return false }
+        if index > parameters.count-1 { return false }
         
-        let par = pars[index]
+        let par = parameters[index]
         return par.variadic
     }
     
     func isFunctionType(index: Int) -> Bool {
-        if index > pars.count-1 { print("Nope, leder efter \(index) ud af \(pars.count)"); return false }
+        if index > parameters.count-1 {return false }
         
-        let par = pars[index]
+        let par = parameters[index]
         if par.type is FunctionTypeNode {
             return true
         }
@@ -146,7 +146,7 @@ class FunctionNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        guard let ret = retType, let ident = identifier else { return "" }
+        guard let ret = returnType, let ident = identifier else { return "" }
         
         let str:String = String(describing: ret)+" "+ident
         return str
@@ -155,7 +155,7 @@ class FunctionNode : Node, CustomStringConvertible {
 
 // Parameter in function declaration
 class ParameterNode : Node, CustomStringConvertible  {
-    var name:String?
+    var identifier:String?
     var type: TypeNode?
     var variadic:Bool = false
     
@@ -163,11 +163,11 @@ class ParameterNode : Node, CustomStringConvertible  {
         super.init()
         
         self.type = type
-        self.name = ParserTables.shared.createRename(forIdentifier: name)
+        self.identifier = ParserTables.shared.createRename(forIdentifier: name)
     }
     
     var description: String {
-        return "'\(type) "+name!+"'"
+        return "'\(type) "+identifier!+"'"
     }
 }
 
@@ -205,7 +205,7 @@ class FunctionCallNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "Kald: \(identifier!), med "+String(parameters.count)+" parametre!"
+        return "Call to: \(identifier!), With "+String(parameters.count)+" parameters!"
     }
 }
 
@@ -255,11 +255,11 @@ class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
 
 // Function type (Int, Int) -> Int
 class FunctionTypeNode : TypeNode, CustomStringConvertible {
-    var ret:TypeNode?
+    var returnType:TypeNode?
     var inputs:[TypeNode] = []
     
     var description: String {
-        return "Ret: \(ret), inputs: \(inputs)"
+        return "Ret: \(returnType), inputs: \(inputs)"
     }
 }
 
@@ -479,13 +479,13 @@ class IfElseNode : Node {
 
 // MARK: Let
 class LetNode : Node, CustomStringConvertible {
-    var vars:[LetVariableNode] = []
+    var variables:[LetVariableNode] = []
     var block:BlockNode?
     
     init(vars: [LetVariableNode], block: BlockNode) {
         super.init()
         
-        self.vars = vars
+        self.variables = vars
         self.block = block
         
         self.block?.parent = self
@@ -497,7 +497,7 @@ class LetNode : Node, CustomStringConvertible {
     func getIdentifiers() -> [String] {
         var tmp:[String] = []
         
-        for v in vars {
+        for v in variables {
             guard let name = v.name else { continue }
             tmp.append(name)
         }
@@ -506,7 +506,7 @@ class LetNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "Let: \(vars)"
+        return "Let: \(variables)"
     }
 }
 

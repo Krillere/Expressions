@@ -41,7 +41,7 @@ class CodeGeneratorHelpers {
                 
                 // Do we know this function?
                 if let decls = ParserTables.shared.functionDeclarations[identifier] {
-                    let ret = decls[0].retType
+                    let ret = decls[0].returnType
                     if ret is NormalTypeNode {
                         let tmp = (ret as! NormalTypeNode).copy() as! NormalTypeNode
                         tmp.numNested = 1
@@ -95,7 +95,7 @@ class CodeGeneratorHelpers {
             
             // Do we know this function?
             if let decls = ParserTables.shared.functionDeclarations[identifier] {
-                return decls[0].retType
+                return decls[0].returnType
             }
             
             // Is it an inline function?
@@ -174,12 +174,12 @@ class CodeGeneratorHelpers {
             if parent is LetNode {
                 guard let parent = parent as? LetNode else { return nil }
                 
-                for letVar in parent.vars {
+                for letVar in parent.variables {
                     guard let letIdent = letVar.name, let letType = letVar.type else { continue }
                     
                     if letIdent == identifier && letType is FunctionTypeNode {
                         guard let letType = letType as? FunctionTypeNode else { return nil }
-                        return letType.ret
+                        return letType.returnType
                     }
                 }
             }
@@ -188,21 +188,21 @@ class CodeGeneratorHelpers {
                 
                 if letIdent == identifier && letType is FunctionTypeNode {
                     guard let letType = letType as? FunctionTypeNode else { return nil }
-                    return letType.ret
+                    return letType.returnType
                 }
             }
             else if parent is FunctionNode { // Check parameters
                 guard let parent = parent as? FunctionNode else { return nil }
                 
-                for par in parent.pars {
-                    guard let parIdent = par.name else { continue }
+                for par in parent.parameters {
+                    guard let parIdent = par.identifier else { continue }
                     
                     // Must be a function type
                     if par.type is FunctionTypeNode {
                         guard let type = par.type as? FunctionTypeNode else { continue }
                         
                         if parIdent == identifier { // Name match, return it
-                            return type.ret
+                            return type.returnType
                         }
                     }
                 }
@@ -230,7 +230,7 @@ class CodeGeneratorHelpers {
             if parent is LetNode {
                 guard let parent = parent as? LetNode else { return nil }
                 
-                for letVar in parent.vars {
+                for letVar in parent.variables {
                     guard let letName = letVar.name else { continue }
                     
                     if identifier == letName {
@@ -247,8 +247,8 @@ class CodeGeneratorHelpers {
             else if parent is FunctionNode { // Check parameters
                 guard let parent = parent as? FunctionNode else { return nil }
                 
-                for par in parent.pars {
-                    guard let parIdent = par.name else { continue }
+                for par in parent.parameters {
+                    guard let parIdent = par.identifier else { continue }
                     if parIdent == identifier {
                         return par.type
                     }

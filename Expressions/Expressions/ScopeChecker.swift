@@ -59,8 +59,8 @@ class ScopeChecker: TreeWalker {
                 guard let funcDef = parent as? FunctionNode else { return false }
                 
                 // Iterate parameters, if one is a function check identifier
-                for par in funcDef.pars {
-                    guard let parName = par.name else { continue }
+                for par in funcDef.parameters {
+                    guard let parName = par.identifier else { continue }
                     
                     if par.type is FunctionTypeNode { // We have a function type parameter
                         if parName == identifier {
@@ -92,7 +92,7 @@ class ScopeChecker: TreeWalker {
             
             if parent is LetNode { // Found let node (There might be more, so we have to check until FunctionNode
                 guard let letNode = parent as? LetNode else { continue }
-                for letVar in letNode.vars {
+                for letVar in letNode.variables {
                     guard let name = letVar.name else { continue }
                     
                     if letVar.type is FunctionTypeNode {

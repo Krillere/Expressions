@@ -357,7 +357,7 @@ class Parser {
         
         // Create type node
         let functionType = FunctionTypeNode()
-        functionType.ret = retType
+        functionType.returnType = retType
         functionType.inputs = inpTypes
         
         return functionType
