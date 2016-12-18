@@ -15,7 +15,7 @@ class ParserTables {
     var randomizeNames:Bool = true
     
     // Special functions
-    var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
+    var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents", "error"]
     
     // Builtin functions
     var functions:[String] = ["print", "printLn", "append", "list", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "main", "isInt", "isFloat", "isChar", "isString", "isBool", "convertToString", "convertToInt", "convertToChar", "convertToFloat", "CLArguments", "error"]
