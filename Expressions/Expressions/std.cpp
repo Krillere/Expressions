@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <functional>
+#include <stdexcept>
 
 // Std vars
 std::vector<std::vector<char>> internal_arguments;
@@ -33,8 +34,6 @@ template <typename T, typename ... Rest>
 std::vector<T> append(const std::vector<T> lst, const std::vector<T>& obj, const Rest&... rest);
 template<typename T>
 size_t length(const std::vector<T> obj);
-template<typename T>
-std::vector<T> reverse(const std::vector<T> obj);
 template<typename T>
 T get(const std::vector<T> obj, int index);
 template<typename T>
@@ -190,14 +189,6 @@ size_t length(const std::vector<T> obj) {
     return obj.size();
 }
 
-// Reverse
-template<typename T>
-std::vector<T> reverse(const std::vector<T> obj) {
-    std::vector<T> tmp(obj);
-    std::reverse(tmp.begin(), tmp.end());
-    return tmp;
-}
-
 // Get
 template<typename T>
 T get(const std::vector<T> obj, int index) {
@@ -323,4 +314,9 @@ std::vector<T> operator<<(std::vector<T> op, std::vector<T> obj) {
     std::vector<T> tmp(op);
     tmp.insert(tmp.end(), obj.begin(), obj.end());
     return tmp;
+}
+
+void error(std::vector<char> err) {
+    std::string errString(err.begin(), err.end());
+    throw std::runtime_error(errString);
 }

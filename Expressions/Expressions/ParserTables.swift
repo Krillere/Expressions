@@ -18,7 +18,7 @@ class ParserTables {
     var sideConditionFunctions:[String] = ["print", "printLn", "writeFileContents"]
     
     // Builtin functions
-    var functions:[String] = ["print", "printLn", "append", "list", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "main", "isInt", "isFloat", "isChar", "isString", "isBool", "convertToString", "convertToInt", "convertToChar", "convertToFloat", "CLArguments"]
+    var functions:[String] = ["print", "printLn", "append", "list", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "main", "isInt", "isFloat", "isChar", "isString", "isBool", "convertToString", "convertToInt", "convertToChar", "convertToFloat", "CLArguments", "error"]
     
     // User defined types
     var types:[String] = []
