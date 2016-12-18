@@ -43,7 +43,7 @@ class CodeGeneratorHelpers {
                 if let decls = ParserTables.shared.functionDeclarations[identifier] {
                     let ret = decls[0].retType
                     if ret is NormalTypeNode {
-                        var tmp = (ret as! NormalTypeNode).copy() as! NormalTypeNode
+                        let tmp = (ret as! NormalTypeNode).copy() as! NormalTypeNode
                         tmp.numNested = 1
                         
                         return tmp
@@ -64,6 +64,11 @@ class CodeGeneratorHelpers {
                     
                     return inlineReturnType
                 }
+            }
+            else if fnode is VariableNode {
+                guard let fnode = fnode as? VariableNode else { return nil }
+                
+                return findVariableType(node: fnode)
             }
         }
         else if node is NumberLiteralNode {
@@ -199,6 +204,53 @@ class CodeGeneratorHelpers {
                         if parIdent == identifier { // Name match, return it
                             return type.ret
                         }
+                    }
+                }
+                
+                break // No reason to go further than the function scope
+            }
+            
+            parent = parent!.parent
+        }
+        
+        return nil
+    }
+    
+    static func findVariableType(node: VariableNode) -> TypeNode? {
+        guard let identifier = node.identifier else { return nil }
+        
+        var parent = node.parent
+        if parent == nil {
+            return nil
+        }
+        
+        // Go up the tree until we find 'let' or 'FunctionNode'. 'Let' might have it defined, or it might be in the parameters
+        while parent != nil {
+            
+            if parent is LetNode {
+                guard let parent = parent as? LetNode else { return nil }
+                
+                for letVar in parent.vars {
+                    guard let letName = letVar.name else { continue }
+                    
+                    if identifier == letName {
+                        return letVar.type
+                    }
+                }
+            }
+            else if parent is LetVariableNode {
+                guard let parent = parent as? LetVariableNode, let letIdent = parent.name, let letType = parent.type else { return nil }
+                if letIdent == identifier {
+                    return letType
+                }
+            }
+            else if parent is FunctionNode { // Check parameters
+                guard let parent = parent as? FunctionNode else { return nil }
+                
+                for par in parent.pars {
+                    guard let parIdent = par.name else { continue }
+                    if parIdent == identifier {
+                        return par.type
                     }
                 }
                 

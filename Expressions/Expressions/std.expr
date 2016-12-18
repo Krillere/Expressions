@@ -86,7 +86,7 @@ define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
       if index == -1 { list(lst) } # Stop if it does not
       {
         let [Generic] sub = subset(lst, 0, index-1) {
-          list(sub) ++ splitHelper(subset(lst, index+1, length(lst)), spl)
+          [sub] ++ splitHelper(subset(lst, index+1, length(lst)), spl)
         }
       }
     }
@@ -96,7 +96,7 @@ define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
 # Creates a list containing the first and last element of 'lst'
 define ends: [Generic] lst -> [Generic] {
   let Generic f = first(lst), Generic l = last(lst) {
-    list(f) ++ l
+    [f] ++ l
   }
 }
 
