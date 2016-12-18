@@ -805,7 +805,7 @@ class CodeGenerator {
         guard let block = letN.block else { return "" }
 
         // Lav funktionens indhold
-        var str = ""
+        var str = "{\n"
         
         for v in letN.vars {
             guard let ttype = v.type, let name = v.name, let expr = v.value else { continue }
@@ -815,6 +815,7 @@ class CodeGenerator {
         }
         
         str += createBlock(block: block)
+        str += "}\n"
         
         return str
     }
