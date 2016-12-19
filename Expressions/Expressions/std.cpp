@@ -316,7 +316,3 @@ std::vector<T> operator<<(std::vector<T> op, std::vector<T> obj) {
     return tmp;
 }
 
-void error(std::vector<char> err) {
-    std::string errString(err.begin(), err.end());
-    throw std::runtime_error(errString);
-}

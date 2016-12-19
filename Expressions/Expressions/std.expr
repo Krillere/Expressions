@@ -135,5 +135,5 @@ define factorial: Int num -> Int {
 # Reverses a list
 define reverse: [Generic] lst -> [Generic] {
   if null(lst) { [] }
-  { reverse1(tail(lst)) ++ [first(lst)] }
+  { reverse(tail(lst)) ++ [first(lst)] }
 }

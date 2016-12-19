@@ -377,6 +377,11 @@ class CodeGenerator {
     internal func createFunctionCall(call: FunctionCallNode) -> String {
         guard let identifier = call.identifier else { return "" }
         
+        // Error is a special case
+        if identifier == "error" {
+            return createErrorCall(call: call)
+        }
+        
         var parString = ""
         
         for n in 0 ..< call.parameters.count {
@@ -390,6 +395,21 @@ class CodeGenerator {
         }
         
         let str = identifier+"("+parString+")"
+        return str
+    }
+    
+    // Replaces error("reason") with -> { throw std::runtime_error("reason") }
+    func createErrorCall(call: FunctionCallNode) -> String {
+        
+        if call.parameters.count != 1 {
+            Compiler.error(reason: "Error must have exactly one parameter.", node: call, phase: .CodeGeneration)
+            return ""
+        }
+        
+        // We need the replacement for the literal, and we create a nested block to make sure '_errorString_' is not leaked
+        guard let callInfo = call.parameters[0] as? VariableNode, let ident = callInfo.identifier else { return "" }
+        let str = "{ std::string _errorString_("+ident+".begin(), "+ident+".end()); throw std::runtime_error(_errorString_); }\n"
+        
         return str
     }
     
