@@ -1,12 +1,7 @@
 # Entrypoint
 define main: -> Int {
-  printLn(secondLast([1, 2, 3, 4, 5]))
-  printLn(secondLast([]))
+  printLn("Hello World!")
+  0
 }
 
 # Functions here
-define secondLast: [Generic] lst -> Generic {
-  switch null(lst) { error("List is empty.") }
-         length(lst) == 2 { first(lst) }
-         else { secondLast(tail(lst)) }
-}

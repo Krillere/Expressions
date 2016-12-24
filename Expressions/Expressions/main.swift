@@ -23,6 +23,8 @@ if args.count < 2 {
 do {
     // Read input file and compile
     let path = args[1]
+    print("Trying to read and compile code at: \(path).")
+    
     let cont = try String(contentsOfFile: path)
     Compiler.compile(code: cont)
     
