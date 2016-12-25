@@ -349,6 +349,8 @@ getEnvironmentVariable(str) # Returns the environment value for 'str'
 factorial(num) # Returns the factorial value of 'num'
 even(int) # Returns true if int is even
 odd(int) # Returns true if int is odd
+
+error(reason) # Throws an exception and stops execution. Should be used when something is wrong and execution can't continue.
 ```
 
 Higher order functions:
