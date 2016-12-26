@@ -52,13 +52,3 @@ do {
 catch {
     print("File error: \(error)")
 }
-
-/*
-if let p = Bundle.main.path(forResource: "empty", ofType: "expr") {
-    let cont = try String(contentsOfFile: p)
-    Compiler.compile(code: cont)
-}
-else {
-    print("No file found..")
-}
-*/

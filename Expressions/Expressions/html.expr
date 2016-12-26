@@ -8,11 +8,11 @@ define main: -> Int {
   {
     printLn("Content-type:text/html\n")
     printLn(HTML)
-    printLn(environmentVariable("QUERY_STRING"))
+    printLn(getEnvironmentVariable("QUERY_STRING"))
+    0
     #writeFileContents("/Users/Christian/Desktop/test.html", HTML)
     #printLn()
   }
-  0
 }
 
 # Creates a tag, with attributes and content

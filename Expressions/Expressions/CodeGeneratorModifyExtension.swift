@@ -9,95 +9,7 @@
 import Foundation
 
 extension CodeGenerator {
-    
-    // Transforms variadic parameters to array literals
-    // Changes the tree, replaces variadic arguments with a ArrayLiteral node instead containing the variadic arguments.
-    internal func fixVariadicFunctions(expr: Node) {
-        if expr is FunctionCallNode { // Found function call, declare parameters and exchange them for the variablename
-            guard let call = expr as? FunctionCallNode else { return }
-            
-            // Fix call parameters
-            for par in call.parameters {
-                if par is FunctionCallNode {
-                    fixVariadicFunctions(expr: par)
-                }
-            }
-            
-            // funcNode is the functionDeclaration
-            guard let funcNode = determineFunctionNodeForCall(call: call) else { return }
-            if !TreeHelper.isVariadicFunction(node: funcNode) {
-                return
-            }
-            
-            for n in 0 ..< funcNode.parameters.count {
-                let decPar = funcNode.parameters[n]
-                
-                if decPar.variadic {
-                    var litCont:[Node] = []
-                    
-                    if n >= call.parameters.count { } // Bail if no variadic arguments are present
-                    else {
-                        for i in n ..< call.parameters.count {
-                            let par = call.parameters[i]
-                            litCont.append(par)
-                        }
-                    }
-                    
-                    // Create array literal with variadic arguments
-                    let newLit = ArrayLiteralNode(nodes: litCont)
-                    var newCallPars:[Node] = []
-                    
-                    for i in 0 ..< (n > call.parameters.count ? call.parameters.count : n) {
-                        newCallPars.append(call.parameters[i])
-                    }
-                    newCallPars.append(newLit)
-                    call.parameters = newCallPars
-                    
-                    break
-                }
-            }
-            
-        }
-        else if expr is ParenthesesExpression { // Possibly containing a function call
-            if let tmp = (expr as! ParenthesesExpression).expression {
-                fixVariadicFunctions(expr: tmp)
-            }
-        }
-        else if expr is NegateExpression {
-            guard let expr = expr as? NegateExpression, let nested = expr.expression else { return }
-            fixVariadicFunctions(expr: nested)
-        }
-        else if expr is MinusExpression {
-            guard let expr = expr as? MinusExpression, let nested = expr.expression else { return }
-            fixVariadicFunctions(expr: nested)
-        }
-        else if expr is ExpressionNode { // expr OP expr, possible that expr is a function call
-            guard let expr = expr as? ExpressionNode else { return }
-            if let exp1 = expr.loperand, let exp2 = expr.roperand {
-                fixVariadicFunctions(expr: exp1)
-                fixVariadicFunctions(expr: exp2)
-            }
-        }
-        else if expr is LetNode {
-            guard let expr = expr as? LetNode else { return }
-            for v in expr.variables {
-                guard let vnode = v.value else { continue }
-                fixVariadicFunctions(expr: vnode)
-            }
-        }
-        else if expr is IfElseNode {
-            guard let expr = expr as? IfElseNode, let econd = expr.condition else { return }
-            fixVariadicFunctions(expr: econd)
-        }
-        else if expr is SwitchNode {
-            guard let expr = expr as? SwitchNode else { return }
-            for c in expr.cases {
-                guard let cexpr = c.expr else { continue }
-                fixVariadicFunctions(expr: cexpr)
-            }
-        }
-    }
-    
+
     // Called in 'createBlock', as to declare variables in function calls before the function call itself, at the start of a block
     // (Array and String literals are easier to handle as declarations, than they are in the calls, I think.)
     // Example: myFunc([1, 2, 3]) -> std::vector<int> tmp = {1, 2, 3}; myFunc(tmp);
@@ -135,7 +47,7 @@ extension CodeGenerator {
                         type = "std::vector<"+CodeGeneratorHelpers.guessTypeString(node: par)+">"
                     }
                     else { // 'Normal' function
-                        if let functionDecl = determineFunctionNodeForCall(call: fc) {
+                        if let functionDecl = CodeGeneratorHelpers.determineFunctionNodeForCall(call: fc) {
                             if n >= functionDecl.parameters.count {
                                 break
                             }
@@ -183,7 +95,7 @@ extension CodeGenerator {
                     
                     
                     // Figure out the exact function, based on the call (Necessary for overloading)
-                    if let funcDecl = determineFunctionNodeForCall(call: fc) {
+                    if let funcDecl = CodeGeneratorHelpers.determineFunctionNodeForCall(call: fc) {
                         let tryCallingDecl = tryCallFuncs[0]
                         
                         // If this is a function type argument, pre-declare it.

@@ -11,6 +11,7 @@ import Foundation
 // Changes a few things in the tree before doing the code generation
 class PreCodeGeneration: TreeWalker {
     
+    // Handle array literals in expressions
     override func walkExpressionNode(node: ExpressionNode) {
         if !expressionUsesAppend(node: node) { // If the expression does not use append
             return
@@ -56,6 +57,45 @@ class PreCodeGeneration: TreeWalker {
         super.walkExpressionNode(node: node)
     }
 
+    // FIxes variadic calls
+    override func walkFunctionCallNode(node: FunctionCallNode) {
+        // funcNode is the functionDeclaration
+        guard let funcNode = CodeGeneratorHelpers.determineFunctionNodeForCall(call: node) else { return }
+        if !TreeHelper.isVariadicFunction(node: funcNode) {
+            return
+        }
+        
+        for n in 0 ..< funcNode.parameters.count {
+            let decPar = funcNode.parameters[n]
+            
+            if decPar.variadic {
+                var litCont:[Node] = []
+                
+                if n >= node.parameters.count { } // Bail if no variadic arguments are present
+                else {
+                    for i in n ..< node.parameters.count {
+                        let par = node.parameters[i]
+                        litCont.append(par)
+                    }
+                }
+                
+                // Create array literal with variadic arguments
+                let newLit = ArrayLiteralNode(nodes: litCont)
+                var newCallPars:[Node] = []
+                
+                for i in 0 ..< (n > node.parameters.count ? node.parameters.count : n) {
+                    newCallPars.append(node.parameters[i])
+                }
+                newCallPars.append(newLit)
+                node.parameters = newCallPars
+                
+                break
+            }
+        }
+        
+        super.walkFunctionCallNode(node: node)
+    }
+    
     // MARK: Other functions
 
     //Does the ExpressionNode use the append operator?
