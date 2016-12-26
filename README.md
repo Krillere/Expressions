@@ -26,13 +26,15 @@ ToDo list:
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project structure
-The compiler consists of four major parts; scanner, parser, validator and code generation, with some tree handling before code generation.
+The compiler consists of four major parts; scanner, parser, validator and code generation, with some tree handling in between phases (Pre-code generation, for example).
 
 The scanner creates tokens from the input source code. The parser determines the code structure and syntactical correctness and creates the program tree. The root node being a 'program', with multiple functions and/or types.
-The validator will, at some point, validate the scope of variables, and the typechecker will determine if types are correct. Currently, this is only handled by the C++ compiler.
+The validator will, at some point, validate the scope of variables, and the typechecker will determine if types are correct. Currently, this is mostly handled by the C++ compiler.
 The code generator traverses the tree created by the parser and produces the C++ intermediate code. This intermediate code is saved on the users desktop in the file intermediate.cpp.
 
-Some standard functions are implemented in Expressions, but some are implemented in C++. The ```std.expr``` file contains the standard functions implemented in Expressions.
+Some standard functions are implemented in Expressions, but some are implemented in C++. The ```std.expr``` file contains the standard functions implemented in Expressions, and these can also be found on the Wiki.
+
+The scanner and parser is pretty good. It's easy to understand and the code works. There needs to be better error handling, but that can be added. The code generator needs some cleaning. This will be performed in increments, and is already underway.
 
 # The language
 
@@ -58,18 +60,21 @@ Overview:
 Functions are declared by using the following general syntax:
 ```
 define functionName: Type1 name1, Type2 name2 .. TypeN nameN -> ReturnType {
+  CODE
 }
 ```
 
-For example, a *min* function will look like the following:
+For example, a ```min``` function will look like the following:
 ```
 define min: Int a, Int b -> Int {
+  CODE
 }
 ```
 
 A function can be declared without any parameters, for example the required *main* function, which is the entrypoint.
 ```
 define main: -> Int {
+  CODE
 }
 ```
 
@@ -81,14 +86,14 @@ Boolean literals are either *true* or *false*, and they can be combined with the
 Comparisons are performed using the following operators: *==*, *!=*, *<*, *>*, *<=*, *>=*
 
 ### If
-The syntax for if-statements is; if CONDITIONAL { IfBlock } { ElseBlock }.
+The syntax for if-statements is; 'if' CONDITIONAL '{' IfBlock '}' '{' ElseBlock '}'.
 For example:
 ```
 if 1 > 2 { 1 } { 2 }
 ```
 Which would return 2, as 1 is not larger than 2. 
 
-A slightly more complex example:
+An example using OR:
 ```
 if (1 > 2) OR true { 1 } { 2 }
 ```
@@ -114,7 +119,7 @@ switch  1 == 2 { 1 }
 Which, of course, returns 4.
 
 ## Variables
-In order to define variables in a scope, the *let* keyword is used. The general syntax is as follows:
+In order to define variables in a scope, the ```let``` keyword is used. The general syntax is as follows:
 ```
 let Type1 name1 = expression1, Type2 name2 = expression2 ... TypeN nameN = expressionN {
 }
@@ -122,7 +127,7 @@ let Type1 name1 = expression1, Type2 name2 = expression2 ... TypeN nameN = expre
 The variables are only accessible inside the scope.
 
 ## Types
-The language contains a few simple types: Int, Float, Char, String and Boolean. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as *first* and *last* works on Strings as they would on lists of other types. Characters are declared using single-quotes: ```Char c = 'c'```
+The language contains a few simple types: ```Int```, ```Float```, ```Char```, ```String``` and ```Bool```. Lists of these are also accepted. A String is considered a list of characters in the language, so built-in functions such as ```first``` and ```last``` works on Strings as they would on lists of other types. Characters are declared using single-quotes: ```Char c = 'c'```
 
 Lists are created using square brackets. For example, a list of integers from 0-5 can be defined like this in a *let* block:
 ```
@@ -185,6 +190,17 @@ To access functions or variables inside the object, use a dot. For exampe:
 let Int tmp = myType.myInteger
 let Int tmp = myType.myFunction(1, 2) # Assume MyType contains a function called 'myFunction'
 ```
+
+In order for a value in a type to not be set, the keyword ```null``` can be used. This is necessary in, for example, a tree structure, as seen below:
+```
+type Tree {
+  Tree left,
+  Tree right,
+  Int value
+}
+```
+In order to define a leaf node, ```null``` could be used on left and right, meaning that this node does not have anything below.
+
 
 ## Functions as objects
 Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following (InpType1, InpType2, ... InpTypeN -> RetType). An example:
@@ -271,11 +287,11 @@ The ```append``` function can be replaced by ```++```, for example:
 ```
 # Using append: 
 [Int] lst = [1, 2]
-append(lst, [3])
+append(lst, [3], [4, 5])
 
 # Using ++
 [Int] lst = [1, 2]
-lst ++ [3]
+lst ++ [3] ++ [4, 5]
 ```
 
 ## Standard functions / built-in functions
