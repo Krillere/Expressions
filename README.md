@@ -25,7 +25,7 @@ ToDo list:
 - Scope check (Function calls checked)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
-## Project structure
+## Project Structure
 The compiler consists of four major parts; scanner, parser, validator and code generation, with some tree handling in between phases (Pre-code generation, for example).
 
 The scanner creates tokens from the input source code. The parser determines the code structure and syntactical correctness and creates the program tree. The root node being a 'program', with multiple functions and/or types.
@@ -36,7 +36,7 @@ Some standard functions are implemented in Expressions, but some are implemented
 
 The scanner and parser is pretty good. It's easy to understand and the code works. There needs to be better error handling, but that can be added. The code generator needs some cleaning. This will be performed in increments, and is already underway.
 
-# The language
+# The Language
 
 Overview:
 
@@ -202,7 +202,7 @@ type Tree {
 In order to define a leaf node, ```null``` could be used on left and right, meaning that this node does not have anything below.
 
 
-## Functions as objects
+## Functions as Objects
 Functions are first-class-citizens in Expression, hence they can be used as variables. The syntax for a function as a variable the following (InpType1, InpType2, ... InpTypeN -> RetType). An example:
 ```
 define add: Int a, Int b -> Int {
@@ -294,7 +294,7 @@ append(lst, [3], [4, 5])
 lst ++ [3] ++ [4, 5]
 ```
 
-## Standard functions / built-in functions
+## Standard Functions / Built-in Functions
 
 Functions to handle lists:
 ```
@@ -376,7 +376,7 @@ map(list, list, func) # Applies 'func' to elements of each list, adding them to 
 filter(list, func) # Tests each element in 'list' against 'func', if true, then it is added to the list
 ```
 
-## Higher order functions
+## Higher Order Functions
 Map and filter functions exists in Expressions. Map is used to apply a function to one or two lists, and filter is used for filtering a list using a function.
 
 A simple map example is:
@@ -404,7 +404,7 @@ define even: Int a -> Bool {
 filter([1, 2, 3, 4, 5, 6], even) # Returns: [2, 4, 6]
 ```
 
-## Side conditions
+## Side Conditions
 Certain functions, even though they have side effects, can be utilized.
 ```
 print(msg) # Prints 'msg' to console. Does not return a value.
