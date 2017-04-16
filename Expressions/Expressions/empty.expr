@@ -1,3 +1,8 @@
+type Person {
+Int asd;
+Int derp;
+}
+
 # Entrypoint
 define main: -> Int {
   printLn("Hello World!")

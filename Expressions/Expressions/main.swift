@@ -8,6 +8,12 @@
 
 import Foundation
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 ParserTables.shared.randomizeNames = false
 
 
@@ -53,6 +59,8 @@ func main() {
             
             // Run?
             if run || runclean {
+                print("Running: \n")
+                fflush(stdout)
                 let _ = shell("g++ -std=c++11 \(writePath) -o exprOut; ./exprOut")
                 
                 if(runclean) { // Remove everything

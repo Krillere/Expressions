@@ -63,7 +63,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/Christian/Git/Expressions/Expressions/Expressions/html.expr"
+            argument = "/Users/Christian/Git/Expressions/Expressions/Expressions/empty.expr"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/Christian/Desktop/test.cpp"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "run-clean"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

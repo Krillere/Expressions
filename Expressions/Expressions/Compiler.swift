@@ -62,6 +62,13 @@ class Compiler {
         
         // Run scanner and parser
         let ps = Parser(input: tmpCode)
+        let scanErrors = ps.getErrors()
+        if scanErrors.count != 0 {
+            print("Skipping parsing due to errors in scan.")
+            print(scanErrors)
+            return
+        }
+        
         ps.run()
         
         let errs = ps.getErrors()

@@ -96,6 +96,9 @@ class Scanner {
     
     init(input: String) {
         self.input = Array(input.utf16)
+    }
+    
+    func scan() {
         self.fetchAllTokens()
     }
     
@@ -526,7 +529,10 @@ class Scanner {
             break
                 
             default:
-                print("Ignores '\(char)' (Probably due to an error)")
+                if let owner = self.owner {
+                    owner.error("Unknown symbol: '\(char)'.")
+                }
+                
                 token = Token.emptyToken(inputIndex)
                 break
             }

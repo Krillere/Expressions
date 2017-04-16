@@ -18,6 +18,7 @@ class Parser {
     init(input: String) {
         self.scanner = Scanner(input: input)
         self.scanner.owner = self
+        self.scanner.scan()
     }
     
     // Runs the parser on the input.
