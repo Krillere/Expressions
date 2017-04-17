@@ -20,9 +20,9 @@ ToDo list:
 - ~~Higher order functions~~ (map, filter implemented)
 - ~~Variadic functions~~
 - ~~Lambdas~~
-- Module and import system
+- ~~Module and import system~~
 - User defined functions with side-effects
-- Scope check (Function calls checked)
+- Scope check (Function calls already validated)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
 ## Project Structure
@@ -54,6 +54,7 @@ Overview:
 7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
 9.  [Variadics](#variadics)
+10.  [Imports](#imports)
 
 ## Functions
 [functions]:asd
@@ -456,3 +457,12 @@ add(1, 2, 3, 4, 5) # Result is 15
 ```
 
 Consider variadics to be syntactic sugar for a lists as parameters.
+
+## Imports
+Imports can be used to import source from other files, making it possible to create shared libraries and less cluttered code.
+For example, we might have two files: program.expr (Main function and some helpers) and myLibrary.expr (Some often used functions).
+Because we often need myLibrary.expr, we can import it in our different programs by doing the following:
+```
+import "myLibrary.expr"
+```
+This will make all functions in this file accessible in the file where you import it.
