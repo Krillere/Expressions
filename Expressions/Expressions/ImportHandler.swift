@@ -33,15 +33,14 @@ class ImportHandler {
             do {
                 let cont = try String(contentsOfFile: name)
                 
+                // Replace import statement with contents of file
+                source = source.replacingOccurrences(of: importStatement, with: cont)
             }
             catch {
                 let err = CompilerError(reason: "Error reading import file '"+name+"'!", phase: .Pre)
                 ErrorHandler.shared.errors.append(err)
                 break
             }
-            
-            // Remove the import statement so that scanner and parser won't see it!
-            source = source.replacingOccurrences(of: importStatement, with: "")
         }
         
         

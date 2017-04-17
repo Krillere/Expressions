@@ -61,14 +61,16 @@ func main() {
             if run || runclean {
                 print("Running: \n")
                 fflush(stdout)
-                let _ = shell("g++ -std=c++11 \(writePath) -o exprOut; ./exprOut")
                 
-                if(runclean) { // Remove everything
-                    let _ = shell("rm \(writePath) && rm exprOut")
+                if(run) {
+                    let _ = shell("g++ -std=c++11 \(writePath) -o exprOut && ./exprOut")
+                }
+                else if(runclean) {
+                    let _ = shell("g++ -std=c++11 \(writePath) -o exprOut && ./exprOut && rm \(writePath) && rm exprOut")
                 }
             }
             else {
-                print("To compile and run: g++ -std=c++11 \(writePath) -o exprOut; ./exprOut")
+                print("To compile and run: g++ -std=c++11 \(writePath) -o exprOut && ./exprOut")
             }
         }
         catch {
