@@ -1,5 +1,3 @@
-# import "html.expr"
-
 # Entrypoint
 define main: -> Int {
   printLn("Hello World!")
