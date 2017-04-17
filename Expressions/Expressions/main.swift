@@ -33,7 +33,7 @@ func main() {
         
         // Read input file and compile
         let path = args[1]
-        print("Trying to read and compile code at: \(path).")
+        print("Trying to read and compile code at: \"\(path)\".")
         
         let cont = try String(contentsOfFile: path)
         Compiler.compile(code: cont)
@@ -63,14 +63,14 @@ func main() {
                 fflush(stdout)
                 
                 if(run) {
-                    let _ = shell("g++ -std=c++11 \(writePath) -o exprOut && ./exprOut")
+                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut && ./exprOut")
                 }
                 else if(runclean) {
-                    let _ = shell("g++ -std=c++11 \(writePath) -o exprOut && ./exprOut && rm \(writePath) && rm exprOut")
+                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut && ./exprOut && rm \"\(writePath)\" && rm exprOut")
                 }
             }
             else {
-                print("To compile and run: g++ -std=c++11 \(writePath) -o exprOut && ./exprOut")
+                print("To compile and run: g++ -std=c++11 \"\(writePath)\" -o exprOut && ./exprOut")
             }
         }
         catch {

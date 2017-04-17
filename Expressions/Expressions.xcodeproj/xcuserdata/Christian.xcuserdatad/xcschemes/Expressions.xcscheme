@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/Christian/Git/Expressions/Expressions/Expressions/empty.expr"
+            argument = "&quot;/Users/Christian/Dropbox/Mit lort/Programmering/Expressions/empty.expr&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
