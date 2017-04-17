@@ -167,7 +167,7 @@ class ParameterNode : Node, CustomStringConvertible  {
     }
     
     var description: String {
-        return "'\(type) "+identifier!+"'"
+        return "'\(String(describing: type)) "+identifier!+"'"
     }
 }
 
@@ -259,7 +259,7 @@ class FunctionTypeNode : TypeNode, CustomStringConvertible {
     var inputs:[TypeNode] = []
     
     var description: String {
-        return "Ret: \(returnType), inputs: \(inputs)"
+        return "Ret: \(String(describing: returnType)), inputs: \(inputs)"
     }
 }
 
@@ -338,7 +338,7 @@ class CharLiteralNode : Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "Char(\(self.content))"
+        return "Char(\(String(describing: self.content)))"
     }
 }
 
@@ -386,7 +386,7 @@ class ParenthesesExpression: Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "(\(self.expression))"
+        return "(\(String(describing: self.expression)))"
     }
 }
 
@@ -401,7 +401,7 @@ class NegateExpression: Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "!\(self.expression)"
+        return "!\(String(describing: self.expression))"
     }
 }
 
@@ -417,7 +417,7 @@ class MinusExpression: Node, CustomStringConvertible {
     }
     
     var description: String {
-        return "-\(expression)"
+        return "-\(String(describing: expression))"
     }
 }
 

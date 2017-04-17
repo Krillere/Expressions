@@ -8,38 +8,9 @@
 
 import Foundation
 
-class CompilerError : CustomStringConvertible {
-    
-    enum Phase {
-        case Parsing
-        case ScopeCheck
-        case TypeCheck
-        case SanityCheck
-        case CodeGeneration
-    }
-    
-    var reason:String?
-    var token:Token?
-    var phase:Phase?
-    
-    init(reason: String, token: Token) {
-        self.reason = reason
-        self.token = token
-    }
-    
-    init(reason: String, phase: Phase, node: Node) {
-        self.reason = reason
-        self.phase = phase
-    }
-    
-    var description: String {
-        return self.reason!
-    }
-}
 
 class Compiler {
     
-    static var errors:[CompilerError] = []
     static var intermediateCode:String?
     
     static func compile(code: String) {
@@ -57,23 +28,28 @@ class Compiler {
             }
         }
         
-        let tmpCode = stdCode+code
+        var tmpCode = stdCode+code
 
+        // Find imports
+        let importHandler = ImportHandler(source: tmpCode)
+        tmpCode = importHandler.doImports()
+        
+        
         
         // Run scanner and parser
         let ps = Parser(input: tmpCode)
-        let scanErrors = ps.getErrors()
-        if scanErrors.count != 0 {
+        if ErrorHandler.shared.errors.count != 0 {
             print("Skipping parsing due to errors in scan.")
-            print(scanErrors)
+            print(ErrorHandler.shared.errors)
             return
         }
         
         ps.run()
         
-        let errs = ps.getErrors()
-        if errs.count != 0 {
+
+        if ErrorHandler.shared.errors.count != 0 {
             print("Skipping validation and generation due to parsing errors.")
+            print(ErrorHandler.shared.errors)
             return
         }
         
@@ -88,9 +64,9 @@ class Compiler {
             scope.walk()
             
             print("Scope checking completed.")
-            if errors.count > 0 {
+            if ErrorHandler.shared.errors.count > 0 {
                 print("Skipping type check due to errors during scope checking.")
-                print("Scope check errors: \(errors)")
+                print("Scope check errors: \(ErrorHandler.shared.errors)")
                 return
             }
             
@@ -98,9 +74,9 @@ class Compiler {
             //let type = TypeChecker(program: program)
             //type.walk()
             
-            if errors.count > 0 {
+            if ErrorHandler.shared.errors.count > 0 {
                 print("Skipping code generation due to errors during type checking.")
-                print("Type check errors: \(errors)")
+                print("Type check errors: \(ErrorHandler.shared.errors)")
                 return
             }
             
@@ -116,9 +92,9 @@ class Compiler {
             let generator = CodeGenerator(program: program)
             generator.generate()
             
-            if errors.count > 0 {
+            if ErrorHandler.shared.errors.count > 0 {
                 print("Errors during code generation.")
-                print("Errors: \(errors)")
+                print(ErrorHandler.shared.errors)
                 return
             }
             
@@ -127,8 +103,5 @@ class Compiler {
             self.intermediateCode = intermediate
         }
     }
-    
-    static func error(reason: String, node: Node, phase: CompilerError.Phase) {
-        errors.append(CompilerError(reason: reason, phase: phase, node: node))
-    }
+
 }

@@ -11,7 +11,6 @@ import Foundation
 
 class Parser {
     private var scanner:Scanner!
-    private var errors:[CompilerError] = []
     private var program:ProgramNode?
     private var errorOccurred = false
     
@@ -37,25 +36,14 @@ class Parser {
         
         // No 'main' found
         if !hasEntry {
-            errors.append(CompilerError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
+            ErrorHandler.shared.errors.append(CompilerError(reason: "No entry point found! ('define main: -> Int' missing)", token: Token(cont: "", type: .none, charIndex: -1)))
         }
         
         print("Parsing completed:")
-        print("Found: \(program.functions.count) functions (Standard functions included)!")
-        print("Found: \(program.types.count) types!")
-        
-        if errors.count > 0 {
-            print("Parsing Errors: \(errors)")
-        }
-        
-        
     }
     
     // Getters
-    func getErrors() -> [CompilerError] {
-        return self.errors
-    }
-    
+
     func getProgram() -> ProgramNode? {
         return self.program
     }
@@ -224,7 +212,7 @@ class Parser {
         
         while scanner.peekToken().type != .rcurly {
             
-            if errors.count > 0 {
+            if ErrorHandler.shared.errors.count > 0 {
                 break
             }
             
@@ -765,7 +753,7 @@ class Parser {
         
         let error = CompilerError(reason: reason, token: scanner.peekToken())
         error.phase = .Parsing
-        errors.append(error)
+        ErrorHandler.shared.errors.append(error)
         
         print("ERROR: "+reason)
     }

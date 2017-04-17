@@ -61,11 +61,11 @@ extension CodeGenerator {
                                 }
                             }
                             else {
-                                Compiler.error(reason: "Failed determining the type of parameter.", node: expr, phase: .CodeGeneration)
+                                ErrorHandler.shared.error(reason: "Failed determining the type of parameter.", node: expr, phase: .CodeGeneration)
                             }
                         }
                         else {
-                            Compiler.error(reason: "No function node found for function call '\(ident)'", node: expr, phase: .CodeGeneration)
+                            ErrorHandler.shared.error(reason: "No function node found for function call '\(ident)'", node: expr, phase: .CodeGeneration)
                         }
                     }
                     

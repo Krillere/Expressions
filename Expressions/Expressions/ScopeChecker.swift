@@ -42,7 +42,7 @@ class ScopeChecker: TreeWalker {
             
             
             // Must be undefined. (Hopefully..!)
-            Compiler.error(reason: "Unknown identifier: \(identifier)", node: node, phase: .ScopeCheck)
+            ErrorHandler.shared.error(reason: "Unknown identifier: \(identifier)", node: node, phase: .ScopeCheck)
         }
     }
 

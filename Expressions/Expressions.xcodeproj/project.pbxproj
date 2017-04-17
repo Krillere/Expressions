@@ -13,6 +13,9 @@
 		AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0D9BBC1DCBDE9C0025FE27 /* Compiler.swift */; };
 		AA1324C81E06D9EF005C565A /* SanityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1324C71E06D9EF005C565A /* SanityChecker.swift */; };
 		AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */; };
+		AA4C34071EA43DFB0041B668 /* ImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C34061EA43DFB0041B668 /* ImportHandler.swift */; };
+		AA4C340A1EA43EB50041B668 /* CompilerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C34091EA43EB50041B668 /* CompilerError.swift */; };
+		AA4C340C1EA43F050041B668 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C340B1EA43F050041B668 /* ErrorHandler.swift */; };
 		AA718B421DEF3F0D00638028 /* TreeWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA718B411DEF3F0D00638028 /* TreeWalker.swift */; };
 		AA941BA31E030A260033CC88 /* CodeGeneratorHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */; };
 		AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4EE941DC518520035F875 /* ScopeChecker.swift */; };
@@ -58,6 +61,9 @@
 		AA265DF61DDE1BDF00E6B9C7 /* example11.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example11.expr; sourceTree = "<group>"; };
 		AA3C72561DD8C80F00FD75DF /* example10.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example10.expr; sourceTree = "<group>"; };
 		AA3C725A1DD8DC2900FD75DF /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		AA4C34061EA43DFB0041B668 /* ImportHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportHandler.swift; sourceTree = "<group>"; };
+		AA4C34091EA43EB50041B668 /* CompilerError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompilerError.swift; sourceTree = "<group>"; };
+		AA4C340B1EA43F050041B668 /* ErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		AA718B3E1DEF33E700638028 /* example12.expr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example12.expr; sourceTree = "<group>"; };
 		AA718B411DEF3F0D00638028 /* TreeWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeWalker.swift; sourceTree = "<group>"; };
 		AA941BA21E030A260033CC88 /* CodeGeneratorHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGeneratorHelpers.swift; sourceTree = "<group>"; };
@@ -102,6 +108,23 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		AA4C34051EA43DED0041B668 /* Importing */ = {
+			isa = PBXGroup;
+			children = (
+				AA4C34061EA43DFB0041B668 /* ImportHandler.swift */,
+			);
+			name = Importing;
+			sourceTree = "<group>";
+		};
+		AA4C34081EA43E930041B668 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				AA4C34091EA43EB50041B668 /* CompilerError.swift */,
+				AA4C340B1EA43F050041B668 /* ErrorHandler.swift */,
+			);
+			name = Error;
+			sourceTree = "<group>";
+		};
 		AA718B401DEF3EFF00638028 /* Treewalker */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +153,8 @@
 		AAEAC0171DC4E9CA00989910 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				AA4C34081EA43E930041B668 /* Error */,
+				AA4C34051EA43DED0041B668 /* Importing */,
 				AAEAC0351DC4EBEE00989910 /* Code examples (Tests) */,
 				AA718B401DEF3EFF00638028 /* Treewalker */,
 				AA3C72591DD8DC1000FD75DF /* Extensions */,
@@ -268,6 +293,7 @@
 				AAEAC02C1DC4E9E200989910 /* Nodes.swift in Sources */,
 				AAEAC02F1DC4E9E200989910 /* Scanner.swift in Sources */,
 				AA0D9BBB1DCBDD8B0025FE27 /* TreeHelper.swift in Sources */,
+				AA4C34071EA43DFB0041B668 /* ImportHandler.swift in Sources */,
 				AA941BA31E030A260033CC88 /* CodeGeneratorHelpers.swift in Sources */,
 				AA0D9BBD1DCBDE9C0025FE27 /* Compiler.swift in Sources */,
 				AAB4EE971DC52DE80035F875 /* std.cpp in Sources */,
@@ -275,10 +301,12 @@
 				AAB4EE951DC518520035F875 /* ScopeChecker.swift in Sources */,
 				AAEAC02B1DC4E9E200989910 /* main.swift in Sources */,
 				AA1324C81E06D9EF005C565A /* SanityChecker.swift in Sources */,
+				AA4C340C1EA43F050041B668 /* ErrorHandler.swift in Sources */,
 				AAEAC0301DC4E9E200989910 /* TypeChecker.swift in Sources */,
 				AA0D9BB91DCBDC0E0025FE27 /* ParseTableFiller.swift in Sources */,
 				AA3C725B1DD8DC2900FD75DF /* StringExtension.swift in Sources */,
 				AAEAC02E1DC4E9E200989910 /* ParserTables.swift in Sources */,
+				AA4C340A1EA43EB50041B668 /* CompilerError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

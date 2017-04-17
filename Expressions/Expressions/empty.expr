@@ -1,7 +1,4 @@
-type Person {
-Int asd;
-Int derp;
-}
+# import "html.expr"
 
 # Entrypoint
 define main: -> Int {

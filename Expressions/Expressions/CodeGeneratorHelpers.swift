@@ -158,7 +158,7 @@ class CodeGeneratorHelpers {
             return "bool"
         }
         
-        Compiler.error(reason: "No type found for node: \(node), probably an error.", node: node, phase: .CodeGeneration)
+        ErrorHandler.shared.error(reason: "No type found for node: \(node), probably an error.", node: node, phase: .CodeGeneration)
         return ""
     }
     

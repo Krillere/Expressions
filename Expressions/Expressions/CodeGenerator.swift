@@ -399,7 +399,7 @@ class CodeGenerator {
     func createErrorCall(call: FunctionCallNode) -> String {
         
         if call.parameters.count != 1 {
-            Compiler.error(reason: "Error must have exactly one parameter.", node: call, phase: .CodeGeneration)
+            ErrorHandler.shared.error(reason: "Error must have exactly one parameter.", node: call, phase: .CodeGeneration)
             return ""
         }
         

@@ -29,7 +29,7 @@ class SanityChecker: TreeWalker {
         }
         
         if numRegularExpressions > 1 {
-            Compiler.error(reason: "Multiple expressions does not make sense.", node: node, phase: .SanityCheck)
+            ErrorHandler.shared.error(reason: "Multiple expressions in a code block can't be done.", node: node, phase: .SanityCheck)
         }
     }
 }
