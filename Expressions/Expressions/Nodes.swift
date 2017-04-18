@@ -88,6 +88,7 @@ class FunctionNode : Node, CustomStringConvertible {
     var block:BlockNode?
     var parameters:[ParameterNode] = []
     var returnType:TypeNode?
+    var voidReturn:Bool = false
     
     init(identifier: String, pars: [ParameterNode], ret: TypeNode, block: BlockNode) {
         super.init()
@@ -214,6 +215,7 @@ class TypeNode : Node { }
 // Type declaration (Int, String, CustomType, [Int] and such)
 class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
     var fullString:String?
+    var void:Bool = false
     
     var intClearType:String?
     var clearType:String? {

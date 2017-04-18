@@ -160,6 +160,12 @@ class Parser {
         let retType = parseType()
         
         let fc = FunctionNode(identifier: funcName, pars: pars, ret: retType, block: parseBlock())
+        fc.voidReturn = (retType is NormalTypeNode && (retType as! NormalTypeNode).void)
+        
+        if fc.voidReturn {
+            ParserTables.shared.sideConditionFunctions.append(funcName)
+        }
+        
         return fc
     }
     
@@ -204,8 +210,9 @@ class Parser {
         
         let check = scanner.peekToken()
         if check.type == .rcurly {
-            error("Block has to return a value!")
-            return BlockNode()
+            // error("Block has to return a value!")
+            let _ = scanner.getToken()
+            return BlockNode(exprs: [])
         }
         
         var exprs:[Node] = []
@@ -250,7 +257,10 @@ class Parser {
         
         // Named type
         if token.type == .string {
-            return NormalTypeNode(full: token.content, type: token.content, nestedLevel: 0)
+            let type = NormalTypeNode(full: token.content, type: token.content, nestedLevel: 0)
+            type.void = (token.content == "Void")
+            
+            return type
         }
         
         // Function type?
@@ -306,6 +316,8 @@ class Parser {
         if lParCount != rParCount {
             error("Number of square brackets does not match.")
         }
+        
+        ret.void = (clearTypeName == "Void")
         
         ret.fullString = fullTypeName
         ret.numNested = lParCount

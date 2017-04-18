@@ -22,7 +22,7 @@ class CodeGenerator {
     internal var declaredFunctions:[String] = []
     
     // Direct conversions, used when possible (Not user-defined types) (Types and operators)
-    internal var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool"]
+    internal var typeConversions:[String: String] = ["Int":"int", "Char":"char", "Float":"float", "String":"std::vector<char>", "Bool":"bool", "Void":"void"]
     internal var opConversions:[String: String] = ["AND":"&&", "OR":"||", ".":"->", "++":"<<"]
     
     
@@ -910,6 +910,8 @@ class CodeGenerator {
                         return false
                     }
                 }
+                
+                // Check for lambda with 'Void'
                 
                 return true
             }
