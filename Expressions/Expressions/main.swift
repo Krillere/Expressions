@@ -59,14 +59,34 @@ func main() {
             
             // Run?
             if run || runclean {
-                print("Running: \n")
-                fflush(stdout)
-                
-                if(run) {
-                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut && ./exprOut")
+                if(run) { // Compile and run, don't clean!
+                    // Compile and print errors
+                    print("C++ compilation results: \n")
+                    fflush(stdout)
+                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut")
+                    fflush(stdout)
+                    
+                    // Run
+                    print("Running: \n")
+                    fflush(stdout)
+                    let _ = shell("./exprOut")
+                    fflush(stdout)
                 }
-                else if(runclean) {
-                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut && ./exprOut && rm \"\(writePath)\" && rm exprOut")
+                else if(runclean) { // Compile, run, and remove fiels
+                    // Compile and print errors
+                    print("C++ compilation results: \n")
+                    fflush(stdout)
+                    let _ = shell("g++ -std=c++11 \"\(writePath)\" -o exprOut")
+                    fflush(stdout)
+                    
+                    // Run
+                    print("Running: \n")
+                    fflush(stdout)
+                    let _ = shell("./exprOut")
+                    fflush(stdout)
+                    
+                    // Clean
+                    let _ = shell("rm \"\(writePath)\" && rm exprOut")
                 }
             }
             else {
