@@ -21,3 +21,12 @@ define foreachHelper: [Generic] itemsLeft, (Generic -> Void) func -> Void {
     foreachHelper(tail(itemsLeft), func)
   }
 }
+
+define anotherFunction: String str -> Int {
+  printLn(str)
+  0
+}
+
+define thirdFunc: Int a, Int b -> Int {
+  a + b
+}

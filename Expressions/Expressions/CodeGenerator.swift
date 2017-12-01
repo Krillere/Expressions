@@ -539,7 +539,8 @@ class CodeGenerator {
         var str = "{"
 
         var n = 0
-        while n < litContent.characters.count {
+        
+        while n < litContent.count {
             let c = litContent.charAt(index: n)
             
             // Escaping something?
