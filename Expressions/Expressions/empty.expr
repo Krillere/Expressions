@@ -6,6 +6,9 @@
 
 # Functions here
 
+define null: [Generic] lst -> Bool {
+  length(lst) == 0
+}
 
 define main: -> Int {
   foreach([1, 3, 3, 7], lambda (Int a -> Void) { printLn(a) })
@@ -22,11 +25,3 @@ define foreachHelper: [Generic] itemsLeft, (Generic -> Void) func -> Void {
   }
 }
 
-define anotherFunction: String str -> Int {
-  printLn(str)
-  0
-}
-
-define thirdFunc: Int a, Int b -> Int {
-  a + b
-}

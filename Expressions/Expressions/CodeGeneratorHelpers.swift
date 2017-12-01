@@ -40,8 +40,8 @@ class CodeGeneratorHelpers {
                 guard let fnode = fnode as? FunctionCallNode, let identifier = fnode.identifier else { return nil }
                 
                 // Do we know this function?
-                if let decls = ParserTables.shared.functionDeclarations[identifier] {
-                    let ret = decls[0].returnType
+                if let decl = ParserTables.shared.functionDeclarations[identifier] {
+                    let ret = decl.returnType
                     if ret is NormalTypeNode {
                         let tmp = (ret as! NormalTypeNode).copy() as! NormalTypeNode
                         tmp.numNested = 1
@@ -94,8 +94,8 @@ class CodeGeneratorHelpers {
             guard let fnode = node as? FunctionCallNode, let identifier = fnode.identifier else { return nil }
             
             // Do we know this function?
-            if let decls = ParserTables.shared.functionDeclarations[identifier] {
-                return decls[0].returnType
+            if let decl = ParserTables.shared.functionDeclarations[identifier] {
+                return decl.returnType
             }
             
             // Is it an inline function?
@@ -165,45 +165,9 @@ class CodeGeneratorHelpers {
     // Attempt to determine which version of a function is being called (For overloading purposes)
     static func determineFunctionNodeForCall(call: FunctionCallNode) -> FunctionNode? {
         guard let identifier = call.identifier else { return nil }
-        guard let declList = ParserTables.shared.functionDeclarations[identifier] else { return nil }
-        
-        // Nothing or exactly one found
-        if declList.count == 0 {
-            return nil
-        }
-        if declList.count == 1 {
-            return declList[0]
-        }
-        
-        // We have something overloaded
-        var highestParCount = 0
-        for n in 0 ..< declList.count {
-            let decl = declList[n]
-            
-            if highestParCount > decl.parameters.count {
-                highestParCount = decl.parameters.count
-            }
-            
-            // If formal and actual parameter count matches, we can assume this is the correct one (C++ compiler will figure it out otherwise.)
-            if decl.parameters.count == call.parameters.count {
-                return decl
-            }
-        }
-        
-        // Still not found, meaning that it's probably a variadic call
-        if call.parameters.count > highestParCount {
-            // Check for a function which contains a variadic parameter
-            for decl in declList {
-                for p in decl.parameters {
-                    if p.variadic {
-                        return decl
-                    }
-                }
-            }
-        }
-        
-        // Don't know what it is.
-        return nil
+        let decl = ParserTables.shared.functionDeclarations[identifier]
+
+        return decl
     }
     
     static func getInlineReturnType(identifier: String, node: Node) -> TypeNode? {

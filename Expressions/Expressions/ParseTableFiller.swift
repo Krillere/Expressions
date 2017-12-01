@@ -21,13 +21,12 @@ class ParseTableFiller {
         for f in program.functions {
             guard let ident = f.identifier else { continue }
             
-            // Function can now be found using identifier
-            if var list = ParserTables.shared.functionDeclarations[ident] {
-                list.append(f)
-                ParserTables.shared.functionDeclarations[ident] = list
+            // Function already exists, error!
+            if var _ = ParserTables.shared.functionDeclarations[ident] {
+                ErrorHandler.shared.error(reason: "Function with name '\(ident)' declared multiple times!", node: f, phase: .Pre)
             }
             else {
-                ParserTables.shared.functionDeclarations[ident] = [f]
+                ParserTables.shared.functionDeclarations[ident] = f
             }
             
             // Adds generic functions to a list of known generic functions

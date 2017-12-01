@@ -542,7 +542,6 @@ class CodeGenerator {
         
         while n < litContent.count {
             let c = litContent.charAt(index: n)
-            
             // Escaping something?
             if c == "\\" {
                 let nc = litContent.charAt(index: n+1)
@@ -563,7 +562,7 @@ class CodeGenerator {
                 str += "'"+String(c)+"'"
             }
             
-            if n != litContent.characters.count-1 {
+            if n != litContent.count-1 {
                 str += ", "
             }
             
@@ -910,9 +909,11 @@ class CodeGenerator {
                     if ParserTables.shared.sideConditionFunctions.contains(name) {
                         return false
                     }
+                    
                 }
                 
                 // Check for lambda with 'Void'
+//                print("Undersøger \(par) og \(node)")
                 
                 return true
             }

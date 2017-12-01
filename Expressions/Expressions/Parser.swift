@@ -126,7 +126,7 @@ class Parser {
                                         pars: parNodes,
                                         ret: NormalTypeNode(full: "t_"+name.content, type: "t_"+name.content, nestedLevel: 0),
                                         block: BlockNode(exprs: []))
-        ParserTables.shared.functionDeclarations[name.content] = [functionNode]
+        ParserTables.shared.functionDeclarations[name.content] = functionNode
         
         return ObjectTypeNode(variables: variables, name: name.content)
     }
