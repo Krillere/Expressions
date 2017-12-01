@@ -79,7 +79,7 @@ define main: -> Int {
 }
 ```
 
-Functions can be overloaded, meaning that different versions of the same function can be created. An example is the built in function ```map```, which has two definitions; one for a list and a function, and one for two lists and a function. The compiler should be able to figure out which one you want.
+Functions can not be overloaded.
 
 ## Conditionals
 Expressions supports two types of conditionals; If-statements and switch-statements.
@@ -87,16 +87,16 @@ Boolean literals are either *true* or *false*, and they can be combined with the
 Comparisons are performed using the following operators: *==*, *!=*, *<*, *>*, *<=*, *>=*
 
 ### If
-The syntax for if-statements is; 'if' CONDITIONAL '{' IfBlock '}' '{' ElseBlock '}'.
+The syntax for if-statements is; 'if' CONDITIONAL '{' IfBlock '}' 'else' '{' ElseBlock '}'.
 For example:
 ```
-if 1 > 2 { 1 } { 2 }
+if 1 > 2 { 1 } else { 2 }
 ```
 Which would return 2, as 1 is not larger than 2. 
 
 An example using OR:
 ```
-if (1 > 2) OR true { 1 } { 2 }
+if (1 > 2) OR true { 1 } else { 2 }
 ```
 Which would return 1.
 
@@ -148,7 +148,7 @@ Instead of defining a specific type for an object in a function, generics can be
 ```
 define length: [Generic] lst -> Int {
   if null(list) { 0 }
-                { 1 + length(tail(lst)) }
+  else { 1 + length(tail(lst)) }
 }
 ```
 Generics can also be used in *let* and as return types. The following example returns a list containing the first and last element in a list:
@@ -373,7 +373,7 @@ error(reason) # Throws an exception and stops execution. Should be used when som
 Higher order functions:
 ```
 map(list, func) # Applies 'func' to each element in 'list'
-map(list, list, func) # Applies 'func' to elements of each list, adding them to one list. 
+map2(list, list, func) # Applies 'func' to elements of each list, adding them to one list. 
 filter(list, func) # Tests each element in 'list' against 'func', if true, then it is added to the list
 ```
 
@@ -393,7 +393,7 @@ define addNumbers: Int a, Int b -> Int {
   a + b
 }
 
-map([1, 2, 3, 4], [4, 3, 2, 1], addNumbers) # Returns [5, 5, 5, 5]
+map2([1, 2, 3, 4], [4, 3, 2, 1], addNumbers) # Returns [5, 5, 5, 5]
 ```
 
 A simple filter example:
@@ -450,7 +450,7 @@ An example of a variadic function:
 ```
 define add: Int ... var -> Int {
   if null(var) { 0 }
-               { first(var) + add(tail(var)) }
+  else { first(var) + add(tail(var)) }
 }
 
 add(1, 2, 3, 4, 5) # Result is 15
