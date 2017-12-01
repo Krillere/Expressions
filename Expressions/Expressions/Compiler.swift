@@ -12,7 +12,7 @@ import Foundation
 class Compiler {
     
     static var intermediateCode:String?
-    static var includeSTD:Bool = false
+    static var includeSTD:Bool = true
     
     static func compile(code: String) {
         

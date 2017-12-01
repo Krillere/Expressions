@@ -604,6 +604,10 @@ class Parser {
         
         let ifExpr = parseExpression()
         let ifBlock = parseBlock()
+        let elseK = scanner.getToken() // 'else' keyword
+        if !elseK.content.contains("else") {
+            error("Expected 'else', got \(elseK.content)")
+        }
         let elseBlock = parseBlock()
         
         let retNode = IfElseNode(cond: ifExpr, ifBlock: ifBlock, elseBlock: elseBlock)
