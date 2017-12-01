@@ -31,5 +31,7 @@ class SanityChecker: TreeWalker {
         if numRegularExpressions > 1 {
             ErrorHandler.shared.error(reason: "Multiple expressions in a code block can't be done.", node: node, phase: .SanityCheck)
         }
+        
+        super.walkBlockNode(node: node)
     }
 }

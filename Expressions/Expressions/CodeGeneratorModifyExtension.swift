@@ -91,12 +91,12 @@ extension CodeGenerator {
                     guard let par = par as? VariableNode,
                         let variableIdentifier = par.identifier,
                         let _ = ParserTables.shared.functionDeclarations[ident], // Function we're calling
-                        let tryCallFuncs = ParserTables.shared.functionDeclarations[variableIdentifier] else { continue }
+                        let tryCallFunc = ParserTables.shared.functionDeclarations[variableIdentifier] else { continue }
                     
                     
                     // Figure out the exact function, based on the call (Necessary for overloading)
                     if let funcDecl = CodeGeneratorHelpers.determineFunctionNodeForCall(call: fc) {
-                        let tryCallingDecl = tryCallFuncs[0]
+                        let tryCallingDecl = tryCallFunc
                         
                         // If this is a function type argument, pre-declare it.
                         if funcDecl.isFunctionType(index: n) {

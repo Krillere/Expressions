@@ -15,25 +15,25 @@ define last: [Generic] lst -> Generic {
 
 # Min function
 define min: Int a, Int b -> Int {
-  if a < b { a } { b }
+  if a < b { a } else { b }
 }
 
 # Max function
 define max: Int a, Int b -> Int {
-  if a > b { a } { b }
+  if a > b { a } else { b }
 }
 
 # Map function (Applies 'func' to each object in 'items')
 define map: [Generic] items, (Generic -> Generic) func -> [Generic] {
   if null(items) { [] }
-                 { [func(first(items))] ++ map(tail(items), func) }
+  else { [func(first(items))] ++ map(tail(items), func) }
 }
 
 # Another map function, this one takes two lists and applies a fucntion with two arguments to each element in each list
-define map: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
+define map2: [Generic] items1, [Generic] items2, (Generic, Generic -> Generic) func -> [Generic] {
   if (length(items1) != length(items2)) OR null(items1) OR null(items2) { [] }
-  {
-    [func(first(items1), first(items2))] ++ map(tail(items1), tail(items2), func)
+  else {
+    [func(first(items1), first(items2))] ++ map2(tail(items1), tail(items2), func)
   }
 }
 
@@ -80,16 +80,16 @@ define indexOfHelper: [Generic] lst, Generic item, Int curIndex -> Int {
 # Split list at specific object
 define split: [Generic] lst, Generic spl -> [[Generic]] {
   if indexOf(lst, spl) == -1 { [[]] }
-                             {  splitHelper(lst, spl) }
+  else {  splitHelper(lst, spl) }
 }
 
 define splitHelper: [Generic] lst, Generic spl -> [[Generic]] {
   if null(lst) { [[]] } # Stop if lst is empty
-  {
+  else {
     let Int index = indexOf(lst, spl) # Does lst contain spl and where?
     {
       if index == -1 { list(lst) } # Stop if it does not
-      {
+      else {
         let [Generic] sub = subset(lst, 0, index-1) {
           [sub] ++ splitHelper(subset(lst, index+1, length(lst)), spl)
         }
@@ -108,16 +108,16 @@ define ends: [Generic] lst -> [Generic] {
 # Does the list have a specific prefix?
 define hasPrefix: [Generic] lst, [Generic] items -> Bool {
   if null(items) OR (length(items) > length(lst)) { false }
-  {
+  else {
     prefixHelper(lst, items)
   }
 }
 define prefixHelper: [Generic] lst, [Generic] items -> Bool {
   if null(items) { true }
-  {
+  else {
     let Generic fLst = first(lst), Generic fItems = first(items) {
       if fLst != fItems { false }
-                        { prefixHelper(tail(lst), tail(items)) }
+      else { prefixHelper(tail(lst), tail(items)) }
     }
   }
 }
@@ -129,11 +129,11 @@ define hasPostfix: [Generic] lst, [Generic] items -> Bool {
 
 # Recursive factorial. Probably not very efficient..
 define factorial: Int num -> Int {
-  if num <= 1 { 1 } { num * factorial(num-1) }
+  if num <= 1 { 1 } else { num * factorial(num-1) }
 }
 
 # Reverses a list
 define reverse: [Generic] lst -> [Generic] {
   if null(lst) { [] }
-  { reverse(tail(lst)) ++ [first(lst)] }
+  else { reverse(tail(lst)) ++ [first(lst)] }
 }

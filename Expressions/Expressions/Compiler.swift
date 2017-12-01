@@ -12,19 +12,22 @@ import Foundation
 class Compiler {
     
     static var intermediateCode:String?
+    static var includeSTD:Bool = true
     
     static func compile(code: String) {
         
         // Include standard functions
         var stdCode = ""
-        
-        if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
-            do {
-                let stdCont = try String(contentsOfFile: p)
-                stdCode += stdCont
-            }
-            catch {
-                
+
+        if Compiler.includeSTD {
+            if let p = Bundle.main.path(forResource: "std", ofType: "expr") {
+                do {
+                    let stdCont = try String(contentsOfFile: p)
+                    stdCode += stdCont
+                }
+                catch {
+
+                }
             }
         }
         
