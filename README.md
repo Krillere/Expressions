@@ -63,8 +63,7 @@ Overview:
 7.  [Standard functions](#standard-functions--built-in-functions)
 7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
-9.  [Variadics](#variadics)
-10.  [Imports](#imports)
+9.  [Imports](#imports)
 
 ## Functions
 [functions]:asd
