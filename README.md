@@ -177,7 +177,7 @@ define multGen: Generic_A genA, Generic_B genB -> Int {
  1 + 1
 }
 ```
-The only requirement is that the name starts with ```Generic```, what comes after that does not matter.
+The name of the type can be anything. The compiler will conclude that a type is generic if it is not known by the compiler by either being a standard type or defined by the developer.
 
 ## Objects
 Objects can be defined to contain a number of different values using the *type* keyword. For example:
