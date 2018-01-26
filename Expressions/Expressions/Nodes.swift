@@ -198,16 +198,22 @@ class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
     var fullString:String?
     var void:Bool = false
     
-    var intClearType:String?
+    private var intClearType:String? // Internal string
     var clearType:String? {
         set(nval) {
+            guard let nval = nval else {
+                fatalError()
+            }
+            
             self.intClearType = nval
-            self.generic = nval!.contains("Generic")
+            self.generic = !ParserTables.shared.types.contains(nval)
         }
         get {
             return intClearType
         }
     }
+    
+    
     var numNested:Int?
     var generic:Bool = false
     
@@ -218,7 +224,7 @@ class NormalTypeNode : TypeNode, CustomStringConvertible, NSCopying {
         self.intClearType = type
         self.numNested = nestedLevel
         
-        self.generic = type.contains("Generic")
+        self.generic = !ParserTables.shared.types.contains(type)
     }
     
     

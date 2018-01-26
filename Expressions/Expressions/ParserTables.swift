@@ -20,8 +20,8 @@ class ParserTables {
     // Builtin functions
     var functions:[String] = ["print", "printLn", "append", "list", "readFileContents", "writeFileContents", "length", "reverse", "get", "tail", "init", "take", "main", "isInt", "isFloat", "isChar", "isString", "isBool", "convertToString", "convertToInt", "convertToChar", "convertToFloat", "CLArguments", "error"]
     
-    // User defined types
-    var types:[String] = []
+    // Known types in the language
+    var types:[String] = ["Int", "Float", "Char", "String", "Bool"]
     
     // User defined function dictionary (identifier -> FunctionNode)
     var functionDeclarations:[String:FunctionNode] = [:]

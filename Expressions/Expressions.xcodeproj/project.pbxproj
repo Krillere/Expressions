@@ -203,8 +203,8 @@
 		AAEAC0371DC4EC0D00989910 /* Checking */ = {
 			isa = PBXGroup;
 			children = (
-				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
 				AAEAC0251DC4E9E200989910 /* ParserTables.swift */,
+				AA0D9BBA1DCBDD8B0025FE27 /* TreeHelper.swift */,
 				AA0D9BB81DCBDC0E0025FE27 /* ParseTableFiller.swift */,
 				AAB4EE941DC518520035F875 /* ScopeChecker.swift */,
 				AAEAC0271DC4E9E200989910 /* TypeChecker.swift */,
