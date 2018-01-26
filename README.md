@@ -6,12 +6,12 @@ The compiler is written in Swift 3.0. The compiler compiles the Expression code 
 
 The EBNF for the language can be found on the Wiki: [EBNF](https://github.com/Krillere/Expressions/wiki/EBNF).
 
-ToDo list:
+Working (Somewhat):
 - ~~Function implementation~~
-- ~~Switch implementation~~
 - ~~Let implementation~~
 - ~~Built-in functions~~ (More to come.)
 - ~~Simple types~~
+- ~~Switch implementation~~
 - ~~Lists~~
 - ~~Objects~~
 - ~~Side conditions~~
@@ -21,7 +21,19 @@ ToDo list:
 - ~~Variadic functions~~
 - ~~Lambdas~~
 - ~~Module and import system~~
+
+ToDo list:
+- Remove variadics
+  - They're not usable and does not fit in
+- Add 'guards' 
+  - Early return system, like how Swift does it
+- Mutable values
+  - Will require a keyword, as well as a new layer of nesting that reassigns the mutable variable
+- Fix generics
+  - Should be that every type that is not known by the compiler is presumed to be a generic type, and generated as such
 - User defined functions with side-effects
+  - For printing and stuff
+  
 - Scope check (Function calls already validated)
 - Validating (Scope check, type check and so on. Currently performed by the C++ compiler)
 
