@@ -27,6 +27,8 @@ ToDo list:
   - Early return system, like how Swift does it
 - Mutable values
   - Will require a keyword, as well as a new layer of nesting that reassigns the mutable variable
+- Module system
+  - Namespaces or modules that allow only importing some functions and types to decrease size and compile time
 - Fix generics
   - Should be that every type that is not known by the compiler is presumed to be a generic type, and generated as such
 - User defined functions with side-effects
