@@ -4,7 +4,7 @@ A simple compiler for a simple functional programming language. Everything is an
 
 The compiler is written in Swift 3.0. The compiler compiles the Expression code to the intermediate language C++.
 
-The EBNF for the language can be found on the Wiki: [EBNF](https://github.com/Krillere/Expressions/wiki/EBNF).
+The EBNF for the language can be found in the project: [EBNF](https://github.com/Krillere/Expressions/blob/master/Expressions/Expressions/EBNF.txt).
 
 Working (Somewhat):
 - ~~Function implementation~~
