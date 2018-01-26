@@ -11,7 +11,7 @@ block := "{" exprs "}"
 exprs = expr | expr exprs
 
 // if 1 == 2 { 1 } { 2 }
-if := "if" expr block block
+if := "if" expr block 'else' block
 
 switch := "switch" cases "else" expr
 cases  := case | case cases
