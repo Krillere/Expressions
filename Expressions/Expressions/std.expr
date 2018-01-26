@@ -137,6 +137,3 @@ define reverse: [Generic] lst -> [Generic] {
   if null(lst) { [] }
   else { reverse(tail(lst)) ++ [first(lst)] }
 }
-
-# Foreach
-
