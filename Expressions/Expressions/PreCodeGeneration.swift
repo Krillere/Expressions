@@ -60,38 +60,7 @@ class PreCodeGeneration: TreeWalker {
     // FIxes variadic calls
     override func walkFunctionCallNode(node: FunctionCallNode) {
         // funcNode is the functionDeclaration
-        guard let funcNode = CodeGeneratorHelpers.determineFunctionNodeForCall(call: node) else { return }
-        if !TreeHelper.isVariadicFunction(node: funcNode) {
-            return
-        }
-        
-        for n in 0 ..< funcNode.parameters.count {
-            let decPar = funcNode.parameters[n]
-            
-            if decPar.variadic {
-                var litCont:[Node] = []
-                
-                if n >= node.parameters.count { } // Bail if no variadic arguments are present
-                else {
-                    for i in n ..< node.parameters.count {
-                        let par = node.parameters[i]
-                        litCont.append(par)
-                    }
-                }
-                
-                // Create array literal with variadic arguments
-                let newLit = ArrayLiteralNode(nodes: litCont)
-                var newCallPars:[Node] = []
-                
-                for i in 0 ..< (n > node.parameters.count ? node.parameters.count : n) {
-                    newCallPars.append(node.parameters[i])
-                }
-                newCallPars.append(newLit)
-                node.parameters = newCallPars
-                
-                break
-            }
-        }
+        guard let _ = CodeGeneratorHelpers.determineFunctionNodeForCall(call: node) else { return }
         
         super.walkFunctionCallNode(node: node)
     }

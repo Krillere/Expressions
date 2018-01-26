@@ -53,12 +53,7 @@ extension CodeGenerator {
                             }
                             
                             if let defParType = functionDecl.parameters[n].type as? NormalTypeNode {
-                                if functionDecl.parameters[n].variadic {
-                                    type = "std::vector<"+createTypeString(type: defParType)+">"
-                                }
-                                else {
-                                    type = createTypeString(type: defParType)
-                                }
+                                type = createTypeString(type: defParType)
                             }
                             else {
                                 ErrorHandler.shared.error(reason: "Failed determining the type of parameter.", node: expr, phase: .CodeGeneration)

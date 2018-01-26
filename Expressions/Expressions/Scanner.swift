@@ -33,8 +33,6 @@ enum TokenType {
     case comma          // ,
     case negate         // !
 
-    case ellipsis       // ... (Used for variadic parameters)
-    
     case keyword_if     // "if"
     case keyword_else   // "else"
     case keyword_define // "define"
@@ -167,7 +165,7 @@ class Scanner {
             inputIndex -= 1
         }
         
-        return tmp//Int(tmp)!
+        return tmp
     }
     
     // Does string contain '.'
@@ -192,6 +190,7 @@ class Scanner {
         }
         
         // Clean
+        // TODO: I'm not sure what this does.
         tmp = tmp.replacingOccurrences(of: "'", with: "Q") // SHould be done at code-generation, but is here temporary
         
         return tmp
@@ -507,20 +506,7 @@ class Scanner {
                 
             case ".":
                 // Test for single dot, or variadic function
-                let test = get()
-                if test == "." {
-                    let test2 = get()
-                    if test2 == "." {
-                        token = Token(cont: "...", type: .ellipsis, charIndex: inputIndex)
-                    }
-                    else {
-                        inputIndex -= 1
-                    }
-                }
-                else {
-                    inputIndex -= 1
-                    token = Token(cont: ".", type: .op, charIndex: inputIndex)
-                }
+                token = Token(cont: ".", type: .op, charIndex: inputIndex)
             break
                 
             case "#":

@@ -16,7 +16,7 @@ define main: -> Int {
 }
 
 # Creates a tag, with attributes and content
-define makeTag: String tag, [String] attrNames, [String] attrValues, String ... content -> String {
+define makeTag: String tag, [String] attrNames, [String] attrValues, [String] content -> String {
   append("<", tag, makeAttributes(attrNames, attrValues), ">", makeContents(content), "</", tag, ">")
 }
 
@@ -40,45 +40,45 @@ define makeContents: [String] content -> String {
 }
 
 # Wrappers
-define html: String ... content -> String {
+define html: [String] content -> String {
   makeTag("html", [], [], content)
 }
-define head: String ... content -> String {
+define head: [String] content -> String {
   makeTag("head", [], [], content)
 }
-define script: String ... content -> String {
+define script: [String] content -> String {
   makeTag("script", [], [], content)
 }
-define body: String ... content -> String {
+define body: [String] content -> String {
   makeTag("body", [], [], content)
 }
 define title: String content -> String {
   makeTag("title", [], [], list(content))
 }
-define p: [String] attrNames, [String] attrValues, String ... content -> String {
+define p: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("p", attrNames, attrValues, content)
 }
-define b: String ... content -> String {
+define b: [String] content -> String {
   makeTag("b", [], [], content)
 }
-define a: [String] attrNames, [String] attrValues, String ... content -> String {
+define a: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("a", attrNames, attrValues, content)
 }
 
-define makeForm: [String] attrNames, [String] attrValues, String ... content -> String {
+define makeForm: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("form", attrNames, attrValues, content)
 }
 define input: String inputType, String value, String placeholder, String name -> String {
   makeTag("input", ["type", "value", "name", "placeholder"], [inputType, value, name, placeholder], "")
 }
 
-define table: [String] attrNames, [String] attrValues, String ... content -> String {
+define table: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("table", attrNames, attrValues, content)
 }
-define thead: [String] attrNames, [String] attrValues, String ... content -> String {
+define thead: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("thead", attrNames, attrValues, content)
 }
-define tbody: [String] attrNames, [String] attrValues, String ... content -> String {
+define tbody: [String] attrNames, [String] attrValues, [String] content -> String {
   makeTag("tbody", attrNames, attrValues, content)
 }
 

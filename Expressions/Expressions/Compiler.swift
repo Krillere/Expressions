@@ -68,20 +68,21 @@ class Compiler {
             
             print("Scope checking completed.")
             if ErrorHandler.shared.errors.count > 0 {
-                print("Skipping type check due to errors during scope checking.")
+                print("Stopping compiler due to errors during scope checking.")
                 print("Scope check errors: \(ErrorHandler.shared.errors)")
                 return
             }
             
-            // Type check
-            //let type = TypeChecker(program: program)
-            //type.walk()
-            
-            if ErrorHandler.shared.errors.count > 0 {
-                print("Skipping code generation due to errors during type checking.")
-                print("Type check errors: \(ErrorHandler.shared.errors)")
-                return
-            }
+            // Type check (Doesn't currently do anything)
+//            let type = TypeChecker(program: program)
+//            type.walk()
+//
+//            print("Type checking completed.")
+//            if ErrorHandler.shared.errors.count > 0 {
+//                print("Stopping compiler due to errors during type checking.")
+//                print("Type check errors: \(ErrorHandler.shared.errors)")
+//                return
+//            }
             
             // Sanity check
             let sanity = SanityChecker(program: program)

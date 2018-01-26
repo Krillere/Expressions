@@ -116,25 +116,7 @@ class FunctionNode : Node, CustomStringConvertible {
         
         return tmp
     }
-    
-    func isVariadic(varName: String) -> Bool {
-        for par in parameters {
-            guard let ident = par.identifier else { continue }
-            if ident == varName && par.variadic {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
-    func isVariadic(index: Int) -> Bool {
-        if index > parameters.count-1 { return false }
-        
-        let par = parameters[index]
-        return par.variadic
-    }
-    
+
     func isFunctionType(index: Int) -> Bool {
         if index > parameters.count-1 {return false }
         
@@ -158,7 +140,6 @@ class FunctionNode : Node, CustomStringConvertible {
 class ParameterNode : Node, CustomStringConvertible  {
     var identifier:String?
     var type: TypeNode?
-    var variadic:Bool = false
     
     init(type: TypeNode, name: String) {
         super.init()

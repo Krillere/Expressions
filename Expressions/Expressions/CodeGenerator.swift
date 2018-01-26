@@ -310,26 +310,13 @@ class CodeGenerator {
             
             if tmpType is NormalTypeNode { // Normal type, just 'Type Name'
                 
-                if !par.variadic {
-                    str += createTypeString(type: tmpType as! NormalTypeNode)+" "+name
-                }
-                else { // Variadic
-                    let fix = (tmpType as! NormalTypeNode).copy() as! NormalTypeNode
-                    fix.numNested = 1
-                    
-                    str += createTypeString(type: fix)+" "+name
-                }
+                str += createTypeString(type: tmpType as! NormalTypeNode)+" "+name
             }
             else if tmpType is FunctionTypeNode { // Function type, 'Type Name (Parameters)'
                 
                 let typeString = createFunctionTypeString(type: tmpType as! FunctionTypeNode)
                 
-                if !par.variadic {
-                    str += typeString+" "+name
-                }
-                else {
-                    str += "std::vector<"+typeString+"> "+name
-                }
+                str += typeString+" "+name
             }
             
             if n != pars.count-1 {

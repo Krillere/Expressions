@@ -1,31 +1,11 @@
 define main: -> Int {
   print("AddAll: ")
-  printLn(add(1, 2, 3, 4, 5))
-
-  print("myFunc2: ")
-  printLn(myFunc2(1, 2, 2, 2))
-
-  print("myFunc3: ")
-  printLn(myFunc3(1, 1, 2, 2, 2))
-
-  print("myFunc32: ")
-  printLn(myFunc3(1, 1))
-
+  printLn(add([1, 2, 3, 4, 5]))
   0
 }
-define myFunc: Int ... var -> Int {
-  0
-}
-define myFunc2: Int a, Int ... var -> Int {
-  0
-}
-define myFunc3: Int a, Int b, Int ... var -> Int {
-  0
-}
-define add: Int ... var -> Int {
+
+define add: [Int] var -> Int {
   if null(var) { 0 }
                { first(var) + add(tail(var)) }
 }
-define tests: (Int -> Bool) ... vars -> Int {
-  0
-}
+

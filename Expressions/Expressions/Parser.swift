@@ -183,16 +183,10 @@ class Parser {
             
             // Regular parameter (type name)
             let type = parseType()
-            var variadic = false
-            
-            if scanner.peekToken().type == .ellipsis {
-                let _ = scanner.getToken()
-                variadic = true
-            }
+
             let name = scanner.getToken()
             
             let parNode = ParameterNode(type: type, name: name.content)
-            parNode.variadic = variadic
             
             res.append(parNode)
         }
@@ -249,12 +243,7 @@ class Parser {
     // Type [String], [[[[[String]]]]], Int, and so on.
     private func parseType() -> TypeNode {
         let token = scanner.getToken()
-        
-        // Ellipsis?
-        if token.type == .ellipsis {
-            return NormalTypeNode(full: "...", type: "...", nestedLevel: 0)
-        }
-        
+
         // Named type
         if token.type == .string {
             let type = NormalTypeNode(full: token.content, type: token.content, nestedLevel: 0)

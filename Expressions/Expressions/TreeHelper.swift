@@ -35,18 +35,7 @@ class TreeHelper {
         
         return isGeneric
     }
-    
-    // Does the function have any variadic parameters?
-    public static func isVariadicFunction(node: FunctionNode) -> Bool {
-        for p in node.parameters {
-            if p.variadic {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
+
     public static func isObjectType(type: NormalTypeNode) -> Bool {
         guard let nested = type.numNested, let clearType = type.clearType else { return false }
         
