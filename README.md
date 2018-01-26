@@ -23,8 +23,6 @@ Working (Somewhat):
 - ~~Module and import system~~
 
 ToDo list:
-- Remove variadics
-  - They're not usable and does not fit in
 - Add 'guards' 
   - Early return system, like how Swift does it
 - Mutable values
@@ -65,8 +63,7 @@ Overview:
 7.  [Standard functions](#standard-functions--built-in-functions)
 7.  [Higher order functions](#higher-order-functions)
 8.  [Side conditions](#side-conditions)
-9.  [Variadics](#variadics)
-10.  [Imports](#imports)
+9.  [Imports](#imports)
 
 ## Functions
 [functions]:asd
@@ -455,20 +452,6 @@ define main: -> Int {
 
 The ```CLArguments``` function could be considered as a function with side effects. This function returns a string list, containing the arguments passed to the program. The first one is always the path of the executable and is always present.
 
-## Variadics
-Variadics are also possible to use in Expressions. This allows a function to take an unknown number of arguments, though they still have to be statically typed (Determinable at compile-time). When used, the argument can be accessed as a list inside the function.
-
-An example of a variadic function:
-```
-define add: Int ... var -> Int {
-  if null(var) { 0 }
-  else { first(var) + add(tail(var)) }
-}
-
-add(1, 2, 3, 4, 5) # Result is 15
-```
-
-Consider variadics to be syntactic sugar for a lists as parameters.
 
 ## Imports
 Imports can be used to import source from other files, making it possible to create shared libraries and less cluttered code.
