@@ -11,7 +11,7 @@ block := "{" exprs "}"
 exprs = expr | expr exprs
 
 // if 1 == 2 { 1 } { 2 }
-if := "if" expr block 'else' block
+if := "if" expr block "else" block
 
 switch := "switch" cases "else" expr
 cases  := case | case cases
@@ -35,6 +35,7 @@ lambda   := "lambda" "(" pars "->" type ")" block
 expr := if
 | name
 | string
+| char
 | expr op expr
 | "(" expr ")"
 | switch
@@ -52,6 +53,7 @@ number   := (0-9)+ | (0-9)+.(0-9)+ | -number
 boolLit  := "true" | "false"
 string   := """ (.*) """
 name     := (a-Z)(a-Z0-9'_)*
+char     := "'" (A-Za-z0-9\) "'"
 
 arrayLit      := "[" arrayLitConts "]"
 arrayLitConts := expr | expr ", " arrayLitConts
